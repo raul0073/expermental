@@ -1,0 +1,25 @@
+
+shot map in three js:
+3d model of football pitch with
+round elements represents shots, size of the shape is the xG
+on shot click:
+on click show shot data in side bar:
+body part
+type
+outcome
+assist?
+
+camera changes to face goal from shot location.
+angle to goal is shown faded.
+distance to goal shown faded
+
+
+
+PC
+
+mother board + ram 410
+gpu + cooling 489
+cpu 470
+
+
+
