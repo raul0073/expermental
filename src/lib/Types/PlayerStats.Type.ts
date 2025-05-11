@@ -12,7 +12,7 @@ export interface StatItem {
     data: StatItem[];   
   }
 
-  // Type to use in the frontend logic
+// Type to use in the frontend logic
 export type StatsOption =
 | "standard"
 | "keeper"

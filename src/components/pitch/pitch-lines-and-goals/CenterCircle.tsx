@@ -1,14 +1,18 @@
 "use client";
-
+import * as THREE from 'three'
 import { useMemo } from "react";
 import {
-  BufferGeometry,
-  Float32BufferAttribute,
-  LineBasicMaterial
+	BufferGeometry,
+	Float32BufferAttribute,
+	LineBasicMaterial,
 } from "three";
 import { FIELD, GEOMETRY } from "../config/pitchConfig";
 // ⚪ Center circle
-export function CenterCircle({useLineMaterial}: {useLineMaterial: ()=> LineBasicMaterial}) {
+export function CenterCircle({
+	useLineMaterial,
+}: {
+	useLineMaterial: () => LineBasicMaterial;
+}) {
 	const material = useLineMaterial();
 
 	const points = useMemo(() => {
@@ -31,6 +35,6 @@ export function CenterCircle({useLineMaterial}: {useLineMaterial: ()=> LineBasic
 		g.setAttribute("position", new Float32BufferAttribute(points, 3));
 		return g;
 	}, [points]);
-
-	return <lineSegments geometry={geometry} material={material} />
+	//eslint-disable-next-line
+	return <primitive object={new THREE.Line(geometry, material)} />
 }

@@ -1,13 +1,14 @@
 "use client";
+
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
 	SidebarHeader,
-	useSidebar
+	useSidebar,
 } from "@/components/ui/sidebar";
 import { RootState } from "@/lib/store";
-import { useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { PlayerSidebarSheet } from "./player/player.sidebar";
 import { ZoneSidebar } from "./zones/zone.sidebar";
@@ -16,34 +17,65 @@ export function AppSidebar() {
 	const player = useSelector(
 		(state: RootState) => state.selectedPlayer.selected
 	);
-	const zone = useSelector((state: RootState) => state.selectedZone);
-	const { setOpen } = useSidebar();
+	const zone = useSelector((state: RootState) => state.selectedZone.selected);
+	const { open, setOpen } = useSidebar();
+
+	const previousType = useRef<"player" | "zone" | null>(null);
 
 	useEffect(() => {
-		if (player && !zone.selected) {
+		const hasPlayer = !!player;
+		const hasZone = !!zone;
+
+		// Determine which type is now active
+		const newType = hasPlayer ? "player" : hasZone ? "zone" : null;
+
+		// If switching between player <-> zone, softly reopen
+		if (
+			open &&
+			newType &&
+			previousType.current &&
+			previousType.current !== newType
+		) {
+			setOpen(false);
+			const timeout = setTimeout(() => {
+				setOpen(true);
+			}, 150);
+			return () => clearTimeout(timeout);
+		}
+
+		// Set sidebar open when either selected
+		if (newType && !open) {
 			setOpen(true);
-		} else if (!player && zone.selected) {
-			setOpen(true);
-		} else {
+		}
+
+		// Close sidebar if nothing selected
+		if (!hasPlayer && !hasZone) {
 			setOpen(false);
 		}
-	}, [player?.id, zone.selected, setOpen, player]);
-	useEffect(() => {
-		
-		const shouldOpen = !!player || !!zone.selected;
-		setOpen(shouldOpen);
-	}, [player, zone.selected, setOpen]);
+
+		previousType.current = newType;
+	}, [player, zone, open, setOpen]);
+
 	return (
 		<Sidebar>
-	<SidebarHeader />
-	<SidebarContent className="px-2 overflow-hidden">
-		{player ? (
-			<PlayerSidebarSheet playerSelected={player} />
-		) : zone.selected ? (
-			<ZoneSidebar selectedZone={zone} />
-		) : null}
-	</SidebarContent>
-	<SidebarFooter />
-</Sidebar>
+			<SidebarHeader />
+			<SidebarContent className="px-2 overflow-hidden">
+				<Suspense
+					key={
+						player
+							? `player-${player.name}`
+							: zone
+							? `zone-${zone.id}`
+							: "empty"
+					}>
+					{player ? (
+						<PlayerSidebarSheet playerSelected={player} />
+					) : zone ? (
+						<ZoneSidebar selectedZone={{ selected: zone }} />
+					) : null}
+				</Suspense>
+			</SidebarContent>
+			<SidebarFooter />
+		</Sidebar>
 	);
 }

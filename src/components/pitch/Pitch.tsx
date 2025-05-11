@@ -2,11 +2,11 @@
 import { ReactNode, useMemo } from "react";
 import { LineBasicMaterial } from "three";
 import { FIELD } from "./config/pitchConfig";
-import { Goal } from "./Goals";
 import GrassSurface from "./materials/Grass";
-import { CenterCircle } from "./pitch-lines/CenterCircle";
-import { PenaltyArc } from "./pitch-lines/PKD";
-import { RectangleOutline } from "./pitch-lines/RectangleOutline";
+import { CenterCircle } from "./pitch-lines-and-goals/CenterCircle";
+import { PenaltyArc } from "./pitch-lines-and-goals/PKD";
+import { RectangleOutline } from "./pitch-lines-and-goals/RectangleOutline";
+import { Goal } from "./pitch-lines-and-goals/Goals";
 
 // Shared white line material
 const useLineMaterial = () =>

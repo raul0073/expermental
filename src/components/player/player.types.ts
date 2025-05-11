@@ -1,31 +1,17 @@
+import { PlayerStatsGroup } from "@/lib/Types/Team.Type";
+
 export type Player = {
-    id: string;
     name: string;
-    number: number;
+    age: string;
+    foot: string;
+    nationality: string;
+    position: FbrefPosition;
+    rating: number;
     role: PlayerRole;
-    position: [number, number];
-    avRating: number;
+    shirt_number: number;
+    stats: PlayerStatsGroup;
 };
 
-type PlayerRole =
-    | "GK"
-    | "RB" | "RCB" | "LCB" | "LB"
-    | "CDM"
-    | "RCM" | "LCM"
-    | "RW" | "CF" | "LW";
-export const arsenal433HoldingCoordinates: Record<PlayerRole, [number, number]> = {
-    GK: [-45, 0],
 
-    LB: [-20, -20],
-    LCB: [-32, -10],
-    RCB: [-32, 6],
-    RB: [-28, 22],
-
-    CDM: [-15, 1],
-    LCM: [-5, -12],
-    RCM: [5, 18],
-
-    LW: [10, -30],
-    CF: [13, 0],
-    RW: [18, 30],
-};
+export type FbrefPosition = "GK" | "DF" | "MF" | "FW" 
+export type PlayerRole =| "GK"| "LB" | "LCB" | "CB" | "RCB" | "RB"| "LWB" | "RWB"| "CDM" | "CM" | "LCM" | "RCM" | "RM" | "LM" | "CAM"| "LW" | "RW" | "SS" | "CF" | "ST" |"STR" |"STL"| "FW";

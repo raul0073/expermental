@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial } from "three";
 import { FIELD, GEOMETRY } from "../config/pitchConfig";
-
+import * as THREE from 'three'
 
 
 
@@ -43,5 +43,5 @@ export function PenaltyArc({
     return g;
   }, [positions]);
 
-  return <lineSegments geometry={geometry} material={useLineMaterial()} />;
+  return <primitive object={new THREE.Line(geometry, useLineMaterial())} />
 }

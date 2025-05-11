@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { MeshStandardMaterial } from "three";
-import { GOAL } from "./config/pitchConfig";
+import { GOAL } from "../config/pitchConfig";
 
 type GoalProps = {
 	side: "left" | "right";

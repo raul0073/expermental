@@ -1,17 +1,43 @@
-import { configureStore } from '@reduxjs/toolkit'
-import selectedPlayerReducer from "@/lib/features/SelectedPlayerSlice";
-import selectedZoneReducer from "@/lib/features/SelectedZoneSlice";
-export const makeStore = () => {
-  return configureStore({
-    reducer: {
-      selectedPlayer: selectedPlayerReducer,
-      selectedZone: selectedZoneReducer,
-    }
-  })
-}
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-// Infer the type of makeStore
-export type AppStore = ReturnType<typeof makeStore>
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
+import selectedPlayerReducer from '@/lib/features/SelectedPlayerSlice';
+import selectedZoneReducer from '@/lib/features/SelectedZoneSlice';
+import userConfigReducer from '@/lib/features/UserConfigSliceSlice';
+import teamReducer from '@/lib/features/TeamSlice';
+
+// Combine reducers
+const rootReducer = combineReducers({
+	selectedPlayer: selectedPlayerReducer,
+	selectedZone: selectedZoneReducer,
+	userConfig: userConfigReducer,
+	team: teamReducer,
+});
+
+// Persist config
+const persistConfig = {
+	key: 'root',
+	storage,
+	whitelist: ['userConfig', 'team', 'selectedPlayer', 'selectedZone'],
+};
+
+// Persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create one single store instance
+export const store = configureStore({
+	reducer: persistedReducer,
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: false,
+		}),
+});
+
+// Single shared persistor
+export const persistor = persistStore(store);
+
+// Types
+export type AppStore = typeof store;
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];

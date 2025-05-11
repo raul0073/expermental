@@ -3,43 +3,72 @@
 export type ChannelZone = {
   id: string;
   label: string;
-  position: [number, number]; // [x, z]
-  length: number;             // X-axis (goal-to-goal)
-  width: number;              // Z-axis (touchline-to-touchline)
+  position: [number, number]; // [x, z] center of the zone
+  length: number;             // size in X (goal-to-goal)
+  width: number;              // size in Z (touchline-to-touchline)
 };
 
-const PITCH_LENGTH = 105;  // meters (X)
-const PITCH_WIDTH  =  68;  // meters (Z)
+export type FullZone = ChannelZone & {
+  rating: number;
+  //eslint-disable-next-line
+  team: Record<string, any>;
+  //eslint-disable-next-line
+  players: any[];
+};
+const PITCH_LENGTH = 105;
+const PITCH_WIDTH = 68;
 
-// Percentages for each channel from left to right (Z-axis)
-const ZONE_PERCENTAGES = [0.15, 0.15, 0.40, 0.15, 0.15]; // wide, half, center, half, wide
+const ZONE_PERCENTAGES = [0.15, 0.15, 0.40, 0.15, 0.15]; // Z-axis (width)
+const X_THIRD_LENGTH = PITCH_LENGTH / 3; // 35m per third
 
 const labels = [
-  { id: "leftWide",     label: "Left Wing" },
-  { id: "leftHalf",     label: "Left Channel" },
-  { id: "central",      label: "Central Area" },
-  { id: "rightHalf",    label: "Right Channel" },
-  { id: "rightWide",    label: "Right Wing" },
+  { id: "defLeftWide", label: "Defensive Left Wing" },
+  { id: "defLeftHalf", label: "Defensive Left Channel" },
+  { id: "defCentral", label: "Defensive Central Area" },
+  { id: "defRightHalf", label: "Defensive Right Channel" },
+  { id: "defRightWide", label: "Defensive Right Wing" },
+
+  { id: "midLeftWide", label: "Middle Third Left Wing" },
+  { id: "midLeftHalf", label: "Middle Third Left Channel" },
+  { id: "midCentral", label: "Middle Third Central Area" },
+  { id: "midRightHalf", label: "Middle Third Right Channel" },
+  { id: "midRightWide", label: "Middle Third Right Wing" },
+
+  { id: "attLeftWide", label: "Attacking Left Wing" },
+  { id: "attLeftHalf", label: "Attacking Left Channel" },
+  { id: "attCentral", label: "Attacking Central Area" },
+  { id: "attRightHalf", label: "Attacking Right Channel" },
+  { id: "attRightWide", label: "Attacking Right Wing" },
 ];
 
-// Helper to compute center Z position of each zone
 function computeZones(): ChannelZone[] {
   const zones: ChannelZone[] = [];
-  let zStart = -PITCH_WIDTH / 2;
+  let labelIndex = 0;
 
-  for (let i = 0; i < ZONE_PERCENTAGES.length; i++) {
-    const width = ZONE_PERCENTAGES[i] * PITCH_WIDTH;
-    const centerZ = zStart + width / 2;
+  // Split pitch into 3 horizontal thirds (defensive to attacking)
+  for (let third = 0; third < 3; third++) {
+    const xStart = -PITCH_LENGTH / 2 + third * X_THIRD_LENGTH;
+    const xCenter = xStart + X_THIRD_LENGTH / 2;
 
-    zones.push({
-      id: labels[i].id,
-      label: labels[i].label,
-      position: [0, centerZ], // X is center (0), Z is center of this zone
-      length: PITCH_LENGTH,
-      width,
-    });
+    // Within each third, split into 5 vertical zones
+    let zStart = -PITCH_WIDTH / 2;
+    for (let z = 0; z < ZONE_PERCENTAGES.length; z++) {
+      const width = ZONE_PERCENTAGES[z] * PITCH_WIDTH;
+      const zCenter = zStart + width / 2;
 
-    zStart += width;
+      const label = labels[labelIndex];
+
+      zones.push({
+        id: label.id,
+        label: label.label,
+        position: [xCenter, zCenter],
+        length: X_THIRD_LENGTH,
+        width,
+      });
+
+      zStart += width;
+      labelIndex++;
+    }
   }
 
   return zones;

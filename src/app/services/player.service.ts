@@ -1,8 +1,10 @@
+import { PlayerRole } from "@/components/player/player.types";
 
 type FetchPlayerStatsParams = {
     team: string;
     stats_type: string;
     player_name: string;
+    player_role: PlayerRole
   };
   
   export async function fetchPlayerSeasonStats({ team, stats_type, player_name }: FetchPlayerStatsParams) {

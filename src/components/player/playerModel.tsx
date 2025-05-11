@@ -1,52 +1,62 @@
-'use client'
-import { Billboard, Text, useCursor } from "@react-three/drei";
-import { useRef, useState } from "react";
-import { Mesh } from "three";
+"use client";
+
+import { Billboard, Text, useGLTF } from "@react-three/drei";
+import { useTheme } from "next-themes";
+import { useLayoutEffect, useRef } from "react";
+import { Group } from "three";
 
 export function PlayerModel({
-  position,
-  number,
-  name,
-  avRating,
-  onClick,
+	position,
+	name,
+	isSub = false,
+	onClick,
 }: {
-  position: [number, number];
-  number: number;
-  name: string;
-  avRating: number;
-  onClick?: () => void;
+	position: [number, number];
+	shirt_number: number;
+	name: string;
+	rating: number;
+	isSub?: boolean;
+	onClick?: () => void;
 }) {
+	const ref = useRef<Group>(null);
+	const gltf = useGLTF("/models/modelV1.glb");
+	const {theme} = useTheme()
+	useLayoutEffect(() => {
+		if (gltf.scene) {
+			gltf.scene.traverse((child) => {
+				child.castShadow = true;
+				child.receiveShadow = true;
+			});
+		}
+	}, [gltf.scene]);
 
-  const meshRef = useRef<Mesh>(null);
-  const [hovered, setHovered] = useState(false);
-  useCursor(hovered); // enables CSS pointer cursor when hovered
-  return (
-    <group position={[position[0], 0.5, position[1]]} onClick={onClick}    onPointerOver={() => setHovered(true)}
-    onPointerOut={() => setHovered(false)} >
-       <mesh ref={meshRef}>
-        <sphereGeometry args={[0.6, 32, 32]}  />
-        <meshStandardMaterial color="red" />
-      </mesh>
+	const scale: [number, number, number] = isSub ? [1.8, 3.2, 1.2] : [2, 5, 3];
+	const Y_OFFSET = 4.5;
 
-      <Billboard>
-        <Text position={[0, 0, 0.65]} fontSize={0.3} color="white" anchorX="center">
-          {number}
-        </Text>
-      </Billboard>
+	return (
+		<group
+			ref={ref}
+			position={[position[0], Y_OFFSET, position[1]]}
+			scale={scale}
+			onClick={(e) => {
+				e.stopPropagation();
+				onClick?.();
+			}}>
+			<Billboard>
+				<primitive object={gltf.scene.clone()} />
+			</Billboard>
 
-      <Billboard>
-        <Text
-          position={[0, 1.1, 0]}
-          fontSize={0.8}
-          color="yellow"
-          
-          fontWeight={'bold'}
-          anchorX="center"
-          anchorY="bottom"
-        >
-          {name} ({avRating.toFixed(1)})
-        </Text>
-      </Billboard>
-    </group>
-  );
+			<Billboard>
+				<Text
+					position={[0, 1.1, 0]}
+					fontSize={0.2}
+					color={`${theme === 'dark' ? 'yellow' : 'black'}`}
+					fontWeight={`${isSub ? 'thin' : "bold"}`}
+					anchorX="center"
+					anchorY="bottom">
+					{name}
+				</Text>
+			</Billboard>
+		</group>
+	);
 }
