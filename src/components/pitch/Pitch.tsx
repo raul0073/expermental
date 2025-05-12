@@ -20,7 +20,7 @@ const useLineMaterial = () =>
 		[]
 	);
 
-export default function FootballPitch({ assets }: { assets: ReactNode }) {
+export default function FootballPitch({ children }: { children: ReactNode }) {
 	return (
 		<group>
 			<mesh position={[0, -1, 0]}>
@@ -84,7 +84,7 @@ export default function FootballPitch({ assets }: { assets: ReactNode }) {
 			{/* Goals */}
 			<Goal side="right" />
 			<Goal side="left" />
-			{assets}
+			{children}
 		</group>
 	);
 }

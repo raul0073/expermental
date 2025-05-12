@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { StatItem } from "./Types/PlayerStats.Type";
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -56,3 +57,51 @@ export function serializeServerStats(data: RawStat[]): SerializedStats {
 
 
 
+const SKIP_LABELS = new Set([
+  "league", "season", "url", "born", "nation", "pos", "age", "player", "team"
+]);
+
+/**
+ * Given the full stats object (e.g. { standard: Stat[], keeper: Stat[], … })
+ * and a statsType (e.g. "standard", "keeper_adv" etc.), return exactly the
+ * array of Stat you want to show:
+ * 1) If stats[statsType] exists, return it.
+ * 2) Otherwise, flatten everything and pick only those whose label
+ *    starts with `${statsType}_`, stripping that prefix.
+ */
+export function getStatsByType(
+  //eslint-disable-next-line
+  allStats: Record<string, any[]>,
+  statsType: string
+): StatItem[] {
+  // 1) direct hit
+  if (allStats[statsType]) {
+    return allStats[statsType];
+  }
+
+  // 2) fallback by prefix
+  const prefix = `${statsType}_`;
+  const out: StatItem[] = [];
+  for (const arr of Object.values(allStats)) {
+    for (const s of arr) {
+      if (s.label.startsWith(prefix)) {
+        out.push({
+          label: s.label.slice(prefix.length),
+          val: s.val,
+          rank: s.rank,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+
+export function filterStatsForDisplay(stats: StatItem[]): StatItem[] {
+  return stats.filter((s) => {
+    // drop anything with a null rank (often the meta‐rows)
+    if (s.rank == null) return false;
+    // drop by label
+    return !SKIP_LABELS.has(s.label.toLowerCase());
+  });
+}

@@ -12,20 +12,19 @@ type StatTypeSelectorProps = {
 
 export function StatTypeSelector({ selected, onChange, playerSelected }: StatTypeSelectorProps) {
 	const keeperOptions: StatsOption[] = [
+		"standard",
 		"keeper",
-		"keeper_adv",
-		"playing_time",
+		"playing",
 		"misc",
 	];
 	const outfieldOptions: StatsOption[] = [
 		"standard",
 		"shooting",
 		"passing",
-		"passing_types",
-		"goal_shot_creation",
+		"goal",
 		"defense",
 		"possession",
-		"playing_time",
+		"playing",
 		"misc",
 	];
 

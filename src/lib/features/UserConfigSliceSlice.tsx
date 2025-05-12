@@ -1,16 +1,14 @@
-// features/UserConfigSlice.ts
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TeamTypeInit } from "../Types/Team.Type";
-import { EPL_TEAMS } from "@/components/team-select/teams-data";
 
 export interface UserConfig {
-	team: TeamTypeInit;
+	team: TeamTypeInit | null;
 }
 
-const DEFAULT_TEAM = EPL_TEAMS.find(team => team.slug === "arsenal")!; 
 
 const initialState: UserConfig = {
-	team: DEFAULT_TEAM,
+	team: null,
 };
 
 const userConfigSlice = createSlice({

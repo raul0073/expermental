@@ -35,6 +35,5 @@ export function CenterCircle({
 		g.setAttribute("position", new Float32BufferAttribute(points, 3));
 		return g;
 	}, [points]);
-	//eslint-disable-next-line
 	return <primitive object={new THREE.Line(geometry, material)} />
 }

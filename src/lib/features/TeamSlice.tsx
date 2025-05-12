@@ -1,11 +1,18 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TeamModel } from "../Types/Team.Type";
+import { fetchAllTeamsFromDB } from "@/app/services/team.service";
 
 interface TeamState {
   [teamName: string]: TeamModel;
 }
 
 const initialState: TeamState = {};
+
+export const fetchAllTeams = createAsyncThunk(
+  "team/fetchAll",
+  async () => await fetchAllTeamsFromDB()
+);
 
 const teamSlice = createSlice({
   name: "team",
@@ -22,8 +29,15 @@ const teamSlice = createSlice({
     },
     clearTeams() {
       return {};
-    }
-  }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAllTeams.fulfilled, (state, action) => {
+      for (const team of action.payload) {
+        state[team.name] = team;
+      }
+    });
+  },
 });
 
 export const { setTeam, removeTeam, clearTeams } = teamSlice.actions;

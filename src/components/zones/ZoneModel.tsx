@@ -17,7 +17,6 @@ export function ZoneModel({
 }) {
 	const dispatch = useDispatch();
 	const {
-		label,
 		position: [x, z],
 		width,
 		length,
@@ -33,11 +32,13 @@ export function ZoneModel({
 
 	const fillColor = useMemo(() => {
 		if (hovered) return "orange";
-		if (normalizedRating >= 0.75) return "#28a745";
-		if (normalizedRating >= 0.5) return "#ffc107";
-		if (normalizedRating > 0) return "gray";
-		return "#999999";
-	}, [normalizedRating, hovered]);
+		// Hue: 0° = red, 120° = green
+		// normalizedRating 0 → hue 120 (green)
+		// normalizedRating 1 → hue 0   (red)
+		const hue = (1 - normalizedRating) * 120;
+		// 80% saturation, 50% lightness gives vivid colors
+		return `hsl(${hue}, 80%, 40%)`;
+	  }, [normalizedRating, hovered]);
 
 	return (
 		<group position={[x, 0.02, z]}>
@@ -60,7 +61,7 @@ export function ZoneModel({
 				<planeGeometry args={[length, width]} />
 				<meshStandardMaterial
 					transparent
-					opacity={0.2}
+					opacity={0.4}
 					color={fillColor}
 				/>
 				<Edges color="gray" />
@@ -69,12 +70,12 @@ export function ZoneModel({
 			<Billboard>
 				<Text
 					position={[0, 0.1, 0]}
-					fontSize={0.6}
+					fontSize={0.9}
 					color={`${theme === 'dark' ? 'lightGray' : 'lightGray'}`}
 					anchorX="center"
 					anchorY="bottom"
 				>
-					{label} ({rating.toFixed(2)})
+					{rating.toFixed(2)}
 				</Text>
 			</Billboard>
 		

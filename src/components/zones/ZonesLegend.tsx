@@ -16,7 +16,7 @@ export function ZoneRatingLegend3D({ maxRating }: { maxRating: number }) {
   });
   const {theme} = useTheme()
   return (
-    <group position={[-40, 10, -40]}>
+    <group position={[-40, 15, -40]}>
         <Billboard>
 
       {/* Rating Bar Segments */}
@@ -26,7 +26,7 @@ export function ZoneRatingLegend3D({ maxRating }: { maxRating: number }) {
           <meshStandardMaterial color={color} />
         </mesh>
       ))}
-      </Billboard>
+     
 
       {/* Label */}
       <Billboard position={[0, 0.8, 0]}>
@@ -38,13 +38,14 @@ export function ZoneRatingLegend3D({ maxRating }: { maxRating: number }) {
       {/* Min and Max Labels */}
       <Billboard position={[-barWidth / 2, -0.8, 0]}>
         <Text fontSize={0.7} color={`${theme === 'dark' ? 'yellow' : 'black'}`} anchorX="center" anchorY="top">
-          {maxRating.toFixed(2)}
+        0.00 
         </Text>
       </Billboard>
       <Billboard position={[barWidth / 2, -0.8, 0]}>
         <Text fontSize={0.7} color={`${theme === 'dark' ? 'white' : 'black'}`} anchorX="center" anchorY="top">
-        0.00
+        {maxRating.toFixed(2)}
         </Text>
+      </Billboard>
       </Billboard>
     </group>
   );

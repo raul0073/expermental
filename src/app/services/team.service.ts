@@ -33,4 +33,27 @@ type FetchTeamStatsParams = {
       throw error;
     }
   }
+  export async function fetchAllTeamsFromDB() {
+  
+    try {
+      const res = await fetch(`/api/team/all`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+      });
+  
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error?.error || 'Failed to fetch team season stats');
+      }
+  
+      return await res.json();
+       //eslint-disable-next-line
+    } catch (error: any) {
+      console.error('fetchTeamSeasonStats error:', error.message);
+      throw error;
+    }
+  }
   

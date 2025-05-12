@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/sidebar";
 import { RootState } from "@/lib/store";
 import { Suspense, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PlayerSidebarSheet } from "./player/player.sidebar";
 import { ZoneSidebar } from "./zones/zone.sidebar";
+import { clearSelectedPlayer } from "@/lib/features/SelectedPlayerSlice";
+import { clearSelectedZone } from "@/lib/features/SelectedZoneSlice";
 
 export function AppSidebar() {
 	const player = useSelector(
@@ -19,8 +21,10 @@ export function AppSidebar() {
 	);
 	const zone = useSelector((state: RootState) => state.selectedZone.selected);
 	const { open, setOpen } = useSidebar();
-
+	const dispatch = useDispatch();
 	const previousType = useRef<"player" | "zone" | null>(null);
+	const prevOpen = useRef(open);
+
 
 	useEffect(() => {
 		const hasPlayer = !!player;
@@ -55,7 +59,13 @@ export function AppSidebar() {
 
 		previousType.current = newType;
 	}, [player, zone, open, setOpen]);
-
+	useEffect(() => {
+		if (prevOpen.current && !open) {
+		  dispatch(clearSelectedPlayer());
+		  dispatch(clearSelectedZone());
+		}
+		prevOpen.current = open;
+	  }, [open, dispatch]);
 	return (
 		<Sidebar>
 			<SidebarHeader />

@@ -1,6 +1,7 @@
 import { PlayerStatsGroup } from "@/lib/Types/Team.Type";
 
 export type Player = {
+    id: string;
     name: string;
     age: string;
     foot: string;

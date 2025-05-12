@@ -14,7 +14,7 @@ export interface TeamTypeInit {
 export interface PlayerStat {
   label: string;
   val: string | number;
-  rank: number | null;
+  rank: number;
 }
 
 export interface PlayerStatsGroup {
@@ -38,6 +38,5 @@ export interface TeamModel {
   players: Player[];
   best_11: Player[];
   formation: string;
-  //eslint-disable-next-line
   zones:  Record<string, FullZone>;
 }

@@ -1,5 +1,4 @@
 "use client";
-import { initializeTeamData } from "@/app/services/team.init.service";
 import { setUserTeam } from "@/lib/features/UserConfigSliceSlice";
 import { TeamModel, TeamTypeInit } from "@/lib/Types/Team.Type";
 import Image from "next/image";
@@ -8,8 +7,9 @@ import { useDispatch } from "react-redux";
 import { Button } from "../ui/button"; // Assuming you're using shadcn/ui
 import { Card, CardContent } from "../ui/card";
 import { EPL_TEAMS } from "./teams-data";
-import { setTeam } from "@/lib/features/TeamSlice";
 import { setUserTeamService } from "@/app/services/config.service";
+import { initializeTeamData } from "@/app/services/team.init.service";
+import { setTeam } from "@/lib/features/TeamSlice";
 
 function TeamSelect() {
 	const dispatch = useDispatch();
@@ -17,8 +17,8 @@ function TeamSelect() {
 
 	const handleSelect = async (team: TeamTypeInit) => {
 		try {
-			await setUserTeamService(team.slug)
 			dispatch(setUserTeam(team));
+			await setUserTeamService(team.slug)
 			const res: TeamModel = await initializeTeamData(team);
 			dispatch(setTeam(res));
 		} catch (error) {
@@ -27,11 +27,8 @@ function TeamSelect() {
 	};
 
 	return (
-		<section className="w-full bg-muted rounded-lg  px-4">
-			<div className="flex justify-between items-center px-4 py-6">
-				<h2 className="text-2xl font-semibold font-default">
-					Select Your Team
-				</h2>
+		<section className="w-full bg-transparent rounded-lg px-4">
+			<div className="flex justify-center items-center px-4 py-6">
 				<Button onClick={() => setOpen(!open)} variant="outline">
 					{open ? "Hide Teams" : "Select Team"}
 				</Button>
@@ -41,7 +38,7 @@ function TeamSelect() {
 				className={`transition-all duration-300 ${
 					open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
 				} overflow-hidden`}>
-				<div className="pb-4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+				<div className="pb-4 grid grid-cols-1 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
 					{EPL_TEAMS.map((team) => (
 						<Card
 							key={team.slug}

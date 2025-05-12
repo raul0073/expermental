@@ -30,7 +30,7 @@ export function PlayerModel({
 		}
 	}, [gltf.scene]);
 
-	const scale: [number, number, number] = isSub ? [1.8, 3.2, 1.2] : [2, 5, 3];
+	const scale: [number, number, number] = isSub ? [1.8, 3.2, 1.2] : [3, 5, 3.5];
 	const Y_OFFSET = 4.5;
 
 	return (

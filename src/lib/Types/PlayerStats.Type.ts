@@ -1,7 +1,7 @@
 export interface StatItem {
     label: string; 
     val: number;  
-    rank: number;  
+    rank: number | null;  
   }
   
   // Interface for the API response
@@ -16,28 +16,24 @@ export interface StatItem {
 export type StatsOption =
 | "standard"
 | "keeper"
-| "keeper_adv"
 | "shooting"
 | "passing"
-| "passing_types"
-| "goal_shot_creation"
+| "goal"
 | "defense"
 | "possession"
-| "playing_time"
+| "playing"
 | "misc";
 
 // Label mapping to show in UI
 export const STAT_OPTION_LABELS: Record<StatsOption, string> = {
 	standard: "Overall",
 	keeper: "Goalkeeping",
-	keeper_adv: "Ad. Goalkeeping",
 	shooting: "Shooting & Finishing",
 	passing: "Passing",
-	passing_types: "Passing Types",
-	goal_shot_creation: "Creative Playmaking",
+	goal: "Creative Playmaking",
 	defense: "Defensive Actions",
 	possession: "Possession",
-	playing_time: "Playing Time",
+	playing: "Playing Time",
 	misc: "Other Stats",
 };
 
@@ -46,12 +42,10 @@ export const STAT_OPTIONS: StatsOption[] = [
 "standard",
 "shooting",
 "passing",
-"passing_types",
-"goal_shot_creation",
+"goal",
 "defense",
 "possession",
 "keeper",
-"keeper_adv",
-"playing_time",
+"playing",
 "misc",
 ];
