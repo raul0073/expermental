@@ -2,11 +2,11 @@
 
 import { clearSelectedPlayer } from "@/lib/features/SelectedPlayerSlice";
 import { setSelectedZone } from "@/lib/features/SelectedZoneSlice";
-import { Billboard, Edges, Text } from "@react-three/drei";
-import { useState, useMemo } from "react";
+import { Billboard, Text } from "@react-three/drei";
+import { useTheme } from "next-themes";
+import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { FullZone } from "./zones.types";
-import { useTheme } from "next-themes";
 
 export function ZoneModel({
 	zone,
@@ -64,7 +64,7 @@ export function ZoneModel({
 					opacity={0.4}
 					color={fillColor}
 				/>
-				<Edges color="gray" />
+				
 			</mesh>
 
 			<Billboard>

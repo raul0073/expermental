@@ -35,6 +35,7 @@ export interface TeamModel {
   league: string;
   season: string;
   stats: TeamStat[];
+  stats_against: TeamStat[]
   players: Player[];
   best_11: Player[];
   formation: string;

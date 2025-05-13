@@ -24,12 +24,19 @@ export function toSnakeCase(text: string): string {
 }
 export function parseKeyTuple(keyStr: string): [string, string] {
   const match = keyStr.match(/\('([^']*)',\s*'([^']*)'\)/);
-  if (!match) return [keyStr, ""]; // fallback
+  if (!match) return [keyStr, ""]; 
   return [match[1], match[2]];
 }
 
 export function formatStatKey(rawKey: string): string {
-  return rawKey.replace(/_/g, " ");
+  const spaced = rawKey.replace(/_/g, " ");
+
+  const forbiddenPrefixes = ["time", "shot creation", "types"];
+
+  const lower = spaced.toLowerCase();
+  const hit = forbiddenPrefixes.find((p) => lower.startsWith(p));
+
+  return hit ? spaced.slice(hit.length).trimStart() : spaced;
 }
 export function serializeServerStats(data: RawStat[]): SerializedStats {
   const excludedKeys = ["nation", "pos", "age", "born", "90s"];

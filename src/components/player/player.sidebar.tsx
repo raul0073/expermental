@@ -8,6 +8,9 @@ import { useEffect, useMemo, useState } from "react";
 import { filterStatsForDisplay, getStatsByType } from "@/lib/utils";
 import { PlayerStatsTable } from "./playerDataTable";
 import { PlayerAISummary } from "./player.aiSummary";
+import { useSidebar } from "../ui/sidebar";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 export function PlayerSidebarSheet({
   playerSelected,
@@ -15,6 +18,8 @@ export function PlayerSidebarSheet({
   playerSelected: Player;
 }) {
   const [statsType, setStatsType] = useState<StatsOption>("standard");
+  const { toggleSidebar } = useSidebar();
+
 
   const activeTeam: string = useSelector(
     (state: RootState) => state.userConfig.team?.name
@@ -52,6 +57,15 @@ export function PlayerSidebarSheet({
     <div className="mt-12">
       {/* Header */}
       <div className="info mt-2 mb-4 text-sm space-y-1">
+      <Button
+			data-sidebar="trigger"
+			variant="outline"
+			size="icon"
+			className={'text-white float-right'}
+			onClick={()=>toggleSidebar()}
+			>
+			<X className="text-foreground" />
+		</Button>
         <h2 className="text-2xl font-bold mb-2 text-primary">
           {playerModel.shirt_number}. {playerModel.name}
         </h2>

@@ -37,13 +37,6 @@ export const EPL_TEAMS: TeamTypeInit[] = [
     logo: "https://loodibee.com/wp-content/uploads/Brighton-Hove-Albion-logo.png",
   },
   {
-    name: "Leicester City",
-    slug: "leicester",
-    league: "ENG-Premier League",
-    season: "2425",
-    logo: "https://loodibee.com/wp-content/uploads/Leicester-City-FC-logo.png",
-  },
-  {
     name: "Chelsea",
     slug: "chelsea",
     league: "ENG-Premier League",
@@ -72,18 +65,25 @@ export const EPL_TEAMS: TeamTypeInit[] = [
     logo: "https://loodibee.com/wp-content/uploads/Fulham-FC-logo.png",
   },
   {
-    name: "Liverpool",
-    slug: "liverpool",
-    league: "ENG-Premier League",
-    season: "2425",
-    logo: "https://loodibee.com/wp-content/uploads/Liverpool-FC-logo.png",
-  },
-  {
     name: "Ipswich Town",
     slug: "ipswich",
     league: "ENG-Premier League",
     season: "2425",
     logo: "https://loodibee.com/wp-content/uploads/Ipswich-Town-FC-logo.png",
+  },
+  {
+    name: "Leicester City",
+    slug: "leicester",
+    league: "ENG-Premier League",
+    season: "2425",
+    logo: "https://loodibee.com/wp-content/uploads/Leicester-City-FC-logo.png",
+  },
+  {
+    name: "Liverpool",
+    slug: "liverpool",
+    league: "ENG-Premier League",
+    season: "2425",
+    logo: "https://loodibee.com/wp-content/uploads/Liverpool-FC-logo.png",
   },
   {
     name: "Manchester City",

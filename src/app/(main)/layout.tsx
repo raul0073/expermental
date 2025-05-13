@@ -1,7 +1,7 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import Footer from "@/components/root/footer/footer";
-import Navbar from "@/components/root/Navbar";
+import Navbar from "@/components/root/navbar/Navbar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Fragment, ReactNode } from "react";
 
@@ -11,7 +11,7 @@ function Layout({ children }: { children: ReactNode }) {
 			<SidebarProvider>
 				<Navbar />
 				<AppSidebar />
-				<main className="h-full w-full px-2 mt-12">
+				<main className="h-full w-full px-2 mt-8 ">
 					<SidebarTrigger />
 					{children}
 				</main>

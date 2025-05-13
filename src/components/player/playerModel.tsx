@@ -1,10 +1,10 @@
 "use client";
 
+import { animated, useSpring } from "@react-spring/three";
 import { Billboard, Text, useGLTF } from "@react-three/drei";
 import { useTheme } from "next-themes";
 import { useLayoutEffect, useRef } from "react";
 import { Group } from "three";
-
 export function PlayerModel({
 	position,
 	name,
@@ -31,17 +31,23 @@ export function PlayerModel({
 	}, [gltf.scene]);
 
 	const scale: [number, number, number] = isSub ? [1.8, 3.2, 1.2] : [3, 5, 3.5];
-	const Y_OFFSET = 4.5;
-
+  // entrance spring
+  const { pos} = useSpring({
+    from: {  opacity: 0, pos: [position[0], -5, position[1]], scale: [0, 0, 0] },
+    to:   {  opacity: 1, pos: [position[0], 4.5, position[1]], scale: scale },
+    config: { mass: 1, tension: 170, friction: 18 },
+  });
 	return (
-		<group
-			ref={ref}
-			position={[position[0], Y_OFFSET, position[1]]}
-			scale={scale}
-			onClick={(e) => {
-				e.stopPropagation();
-				onClick?.();
-			}}>
+		<animated.group
+		ref={ref}
+		position={pos}
+		scale={scale}
+		//eslint-disable-next-line
+		onClick={(e: any) => {
+		  e.stopPropagation();
+		  onClick?.();
+		}}
+	  >
 			<Billboard>
 				<primitive object={gltf.scene.clone()} />
 			</Billboard>
@@ -57,6 +63,6 @@ export function PlayerModel({
 					{name}
 				</Text>
 			</Billboard>
-		</group>
+		</animated.group>
 	);
 }
