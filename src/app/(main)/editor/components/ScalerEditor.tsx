@@ -47,7 +47,6 @@ export function ZoneScalerEditor({ zoneId, title = "Scalers" }: ZoneScalerEditor
 
   const handleChange = (key: string, value: number) => {
     dispatch(updateScaler({ zoneId, key, value }));
-    console.log(zoneId, key, value);
   };
   useEffect(() => {
     liveKeys.forEach((key) => {

@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import * as React from "react";
-
+import { CiMenuKebab } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -24,7 +24,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -277,7 +277,7 @@ const SidebarTrigger = React.forwardRef<
 			data-sidebar="trigger"
 			variant="ghost"
 			size="icon"
-			className={cn("absolute left-2 translate-y-1/2 top-1/2 h-16 w-2 z-50 hover:bg-transparent", className)}
+			className={cn("group absolute left-1 translate-y-1/2 top-1/2 h-24 w-4 z-50 hover:bg-transparent", className)}
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();
@@ -285,9 +285,9 @@ const SidebarTrigger = React.forwardRef<
 			{...props}>
 		{
 			open ? (
-				<PanelLeftClose className="text-3xl" style={{scale: 1.5}}/>
+				<PanelLeftClose className="text-3xl opacity-50 group-hover:opacity-100" style={{scale: 1.5}}/>
 			) : (
-				<PanelLeftOpen className="text-3xl" style={{scale: 1.5}} />
+				<CiMenuKebab size={200} className="text-3xl opacity-50 group-hover:opacity-100" style={{scale: 3}} />
 			)
 		}
 		</Button>

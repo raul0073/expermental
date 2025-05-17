@@ -1,31 +1,35 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { savePlayersConfig } from "@/app/services/config.service";
 import { Button } from "@/components/ui/button";
-import { RootState } from "@/lib/store";
 import {
   markSaved,
   setDraft,
 } from "@/lib/features/PlayerConfigEditorSlice";
-import { PlayersConfig } from "@/lib/Types/PlayerConfig.Type";
+import { RootState } from "@/lib/store";
+import { ScoreConfig } from "@/lib/Types/PlayerConfig.Type";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
-function PlayerEditorToolbar() {
+function PlayerEditorToolbar({activeRole}: { activeRole: keyof ScoreConfig}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { draftConfig, dirty } = useSelector((state: RootState) => state.playerEditor);
   const initialDraft = useSelector((state: RootState) => state.playerEditor.initial_config);
-
+  const userId = useSelector((state: RootState) => state.userConfig.userId);
   const handleSave = async () => {
     try {
       setLoading(true);
-      // TODO: replace this with actual save logic/API call
-      console.log("Saving player config:", draftConfig);
-      toast.success("Player config saved.", {
-        description: new Date().toLocaleTimeString(),
-      });
-      dispatch(markSaved());
+      if(userId){
+        const res = await savePlayersConfig(userId, draftConfig)
+        console.log("Saving player config:", res);
+        toast.success("Player config saved.", {
+          description: new Date().toLocaleTimeString(),
+        });
+        dispatch(markSaved());
+      }
+      
     } catch (err) {
       console.error(err);
       toast.error("Failed to save player config.");
@@ -39,16 +43,16 @@ function PlayerEditorToolbar() {
   };
 
   const handleClear = () => {
-    const emptyDraft: PlayersConfig = {
+    const emptyRoleConfig = { pros: {}, cons: {}, important: {} };
+  
+    dispatch(setDraft({
+      ...draftConfig,
       score_config: {
-        GK: { pros: {}, cons: {}, important: {} },
-        DEF: { pros: {}, cons: {}, important: {} },
-        MID: { pros: {}, cons: {}, important: {} },
-        FWD: { pros: {}, cons: {}, important: {} },
+        ...draftConfig.score_config,
+        [activeRole]: emptyRoleConfig
       },
-      score_weights: { pros: 1, cons: -1, important: 2 },
-    };
-    dispatch(setDraft(emptyDraft));
+      score_weights: draftConfig.score_weights // keep existing weights
+    }));
   };
 
   return (

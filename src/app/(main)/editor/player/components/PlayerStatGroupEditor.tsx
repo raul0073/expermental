@@ -34,15 +34,13 @@ export function PlayerStatGroupEditor({
 
   useDndMonitor({
     onDragEnd({ active, over }) {
-      console.log("active", active);
-      console.log("over", over);
+
       const from = active.data.current;
       const to = over?.data?.current;
   
       if (!over || !to || !from?.fromBank || !from.key || !from.statType) return;
   
       if (to.category === category && to.role === activeRole) {
-        console.log("✅ VALID DROP");
         dispatch(
           addStat({
             role: activeRole,

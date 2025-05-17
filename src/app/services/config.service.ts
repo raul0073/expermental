@@ -1,4 +1,4 @@
-import {  UserConfigModel } from "@/lib/Types/PlayerConfig.Type";
+import {  PlayersConfig, UserConfigModel } from "@/lib/Types/PlayerConfig.Type";
 import { ZonesConfig } from "@/lib/Types/Zones.Types";
 
 export const setUserTeamService = async (slug: string) => {
@@ -50,6 +50,26 @@ export async function saveZonesConfig(
       body: JSON.stringify({
         user_id: userId,
         zones_config: zones_config
+      }),
+    });
+    const data = await res.json();
+    return data
+  } catch (err) {
+    console.error("saveZonesConfig error:", err);
+    return false;
+  }
+}
+export async function savePlayersConfig(
+  userId: string,
+  players_config: PlayersConfig
+): Promise<boolean> {
+  try {
+    const res = await fetch("/api/config/players", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: userId,
+        players_config: players_config
       }),
     });
     const data = await res.json();

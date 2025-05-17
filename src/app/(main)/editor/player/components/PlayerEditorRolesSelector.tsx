@@ -20,7 +20,7 @@ export function RoleSelector() {
           onClick={() => dispatch(setActiveRole(role as  keyof ScoreConfig))}
           className={`px-3 py-1 text-sm rounded border font-medium transition ${
             role === activeRole
-              ? " dark:bg-emerald-300 bg-emerald-600"
+              ? " dark:bg-amber-800 bg-emerald-600"
               : "bg-background text-foreground border-muted"
           }`}
         >

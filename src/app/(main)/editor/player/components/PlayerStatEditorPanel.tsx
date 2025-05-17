@@ -11,7 +11,6 @@ import { StatsLabelsBankPlayer } from "./StatsLabelsBank";
 function PlayerStatEditorPanel() {
 	const playerEditor = useSelector((state: RootState) => state.playerEditor);
 	const activeRole = playerEditor.activeRole;
-    console.log(activeRole);
 	return (
 		<ZoneEditorDndProvider>
 			<div className="mb-4">
@@ -26,7 +25,7 @@ function PlayerStatEditorPanel() {
 					<PlayerStatGroupEditor category="important" />
 				</div>
                 <div className="my-4">
-                    <PlayerEditorToolbar />
+                    <PlayerEditorToolbar activeRole={activeRole} />
                 </div>
 			</div>
 		</ZoneEditorDndProvider>
