@@ -22,6 +22,7 @@ const teamSlice = createSlice({
       const teamName = action.payload.name;
       if (!state[teamName]) {
         state[teamName] = action.payload;
+        
       }
     },
     removeTeam(state, action: PayloadAction<string>) {

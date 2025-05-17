@@ -15,4 +15,4 @@ export type Player = {
 
 
 export type FbrefPosition = "GK" | "DF" | "MF" | "FW" 
-export type PlayerRole =| "GK"| "LB" | "LCB" | "CB" | "RCB" | "RB"| "LWB" | "RWB"| "CDM" | "CM" | "LCM" | "RCM" | "RM" | "LM" | "CAM"| "LW" | "RW" | "SS" | "CF" | "ST" |"STR" |"STL"| "FW";
+export type PlayerRole =| "GK"| "LB" | "LCB" | "CB" | "RCB" | "RB"| "LWB" | "RWB"| "CDM"|"LDM"|"RDM" | "CM" | "LCM" | "RCM" | "RM" | "LM" | "CAM"| "LW" | "RW" | "SS" | "CF" | "ST" |"STR" |"STL"| "FW";

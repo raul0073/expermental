@@ -4,11 +4,12 @@ import { TeamTypeInit } from "../Types/Team.Type";
 
 export interface UserConfig {
 	team: TeamTypeInit | null;
+	userId: string | null;
 }
-
 
 const initialState: UserConfig = {
 	team: null,
+	userId: null,
 };
 
 const userConfigSlice = createSlice({
@@ -18,8 +19,11 @@ const userConfigSlice = createSlice({
 		setUserTeam(state, action: PayloadAction<TeamTypeInit>) {
 			state.team = action.payload;
 		},
+		setUserId(state, action: PayloadAction<string>) {
+			state.userId = action.payload;
+		},
 	},
 });
 
-export const { setUserTeam } = userConfigSlice.actions;
+export const { setUserTeam, setUserId } = userConfigSlice.actions;
 export default userConfigSlice.reducer;

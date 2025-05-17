@@ -23,10 +23,13 @@ import {
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "24rem";
+const SIDEBAR_EDITOR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
@@ -62,7 +65,7 @@ const SidebarProvider = React.forwardRef<
 >(
 	(
 		{
-			defaultOpen = true,
+			defaultOpen = false,
 			open: openProp,
 			onOpenChange: setOpenProp,
 			className,
@@ -133,14 +136,14 @@ const SidebarProvider = React.forwardRef<
 			}),
 			[state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
 		);
-
+		const path = usePathname()
 		return (
 			<SidebarContext.Provider value={contextValue}>
 				<TooltipProvider delayDuration={0}>
 					<div
 						style={
 							{
-								"--sidebar-width": SIDEBAR_WIDTH,
+								"--sidebar-width": path.includes("editor") ?  SIDEBAR_EDITOR_WIDTH : SIDEBAR_WIDTH,
 								"--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
 								...style,
 							} as React.CSSProperties
@@ -266,7 +269,7 @@ const SidebarTrigger = React.forwardRef<
 	React.ElementRef<typeof Button>,
 	React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-	const { toggleSidebar } = useSidebar();
+	const { toggleSidebar, open } = useSidebar();
 
 	return (
 		<Button
@@ -274,13 +277,19 @@ const SidebarTrigger = React.forwardRef<
 			data-sidebar="trigger"
 			variant="ghost"
 			size="icon"
-			className={cn("h-7 w-7", className)}
+			className={cn("absolute left-2 translate-y-1/2 top-1/2 h-16 w-2 z-50 hover:bg-transparent", className)}
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();
 			}}
 			{...props}>
-			<span className="sr-only">Toggle Sidebar</span>
+		{
+			open ? (
+				<PanelLeftClose className="text-3xl" style={{scale: 1.5}}/>
+			) : (
+				<PanelLeftOpen className="text-3xl" style={{scale: 1.5}} />
+			)
+		}
 		</Button>
 	);
 });

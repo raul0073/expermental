@@ -4,8 +4,8 @@ import { Billboard, Text } from "@react-three/drei";
 import { useTheme } from "next-themes";
 
 export function ZoneRatingLegend3D({ maxRating }: { maxRating: number }) {
-  const barWidth = 20;
-  const barHeight = 0.8;
+  const barWidth = 30;
+  const barHeight = 1;
   const segments = 20;
 
   const colors = [...Array(segments)].map((_, i) => {
@@ -30,19 +30,19 @@ export function ZoneRatingLegend3D({ maxRating }: { maxRating: number }) {
 
       {/* Label */}
       <Billboard position={[0, 0.8, 0]}>
-        <Text fontSize={0.9} color={`${theme === 'dark' ? 'orange' : 'black'}`} anchorX="center" anchorY="bottom">
+        <Text fontSize={1.5} color={`${theme === 'dark' ? 'orange' : 'black'}`} anchorX="center" anchorY="bottom">
           Zone Rating
         </Text>
       </Billboard>
 
       {/* Min and Max Labels */}
       <Billboard position={[-barWidth / 2, -0.8, 0]}>
-        <Text fontSize={0.7} color={`${theme === 'dark' ? 'yellow' : 'black'}`} anchorX="center" anchorY="top">
+        <Text fontSize={1.2} color={`${theme === 'dark' ? 'yellow' : 'black'}`} anchorX="center" anchorY="top">
         0.00 
         </Text>
       </Billboard>
       <Billboard position={[barWidth / 2, -0.8, 0]}>
-        <Text fontSize={0.7} color={`${theme === 'dark' ? 'white' : 'black'}`} anchorX="center" anchorY="top">
+        <Text fontSize={1.2} color={`${theme === 'dark' ? 'white' : 'black'}`} anchorX="center" anchorY="top">
         {maxRating.toFixed(2)}
         </Text>
       </Billboard>

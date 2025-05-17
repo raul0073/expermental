@@ -1,5 +1,6 @@
+"use client";
 import { useMemo } from "react";
-import { MeshStandardMaterial } from "three";
+import { useGLTF } from "@react-three/drei";
 import { GOAL } from "../config/pitchConfig";
 
 type GoalProps = {
@@ -8,33 +9,18 @@ type GoalProps = {
 
 export function Goal({ side }: GoalProps) {
 	const isLeft = side === "left";
-	const postRadius = GOAL.POST_RADIUS
-	const crossbarLength = GOAL.WIDTH
-	const x = isLeft ? -52.5 - postRadius : 52.5 + postRadius;
-	const goalPostMaterial = useMemo(
-		() => new MeshStandardMaterial({ color: "#ffffff" }),
-		[]
-	);
+	const x = isLeft ? -55 - GOAL.POST_RADIUS : 55 + GOAL.POST_RADIUS;
 
-	return (
-		<group>
-			{/* Vertical posts */}
-			<mesh position={[x, 1.22, -crossbarLength / 2]}>
-				<cylinderGeometry args={[postRadius, postRadius, 2.44, 16]} />
-				<primitive object={goalPostMaterial} attach="material" />
-			</mesh>
-			<mesh position={[x, 1.22, crossbarLength / 2]}>
-				<cylinderGeometry args={[postRadius, postRadius, 2.44, 16]} />
-				<primitive object={goalPostMaterial} attach="material" />
-			</mesh>
+	const { scene } = useGLTF("/models/goal_post.glb");
 
-			{/* Crossbar */}
-			<mesh rotation={[Math.PI / 2, 0, 0]} position={[x, 2.44, 0]}>
-				<cylinderGeometry args={[postRadius, postRadius, 7.32, 16]} />
-				<primitive object={goalPostMaterial} attach="material" />
-			</mesh>
+	const goalModel = useMemo(() => {
+		const clone = scene.clone();
+		clone.scale.set(3, 3, 3); 
+		clone.position.set(x, 0, 0);
+		clone.rotation.y =  Math.PI / 2
+		if (!isLeft) clone.rotation.y = isLeft ? Math.PI / 2 : -Math.PI / 2;
+		return clone;
+	}, [scene, x, isLeft]);
 
-			{/* Net */}
-		</group>
-	);
+	return <primitive object={goalModel} />;
 }

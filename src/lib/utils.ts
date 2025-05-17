@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { StatItem } from "./Types/PlayerStats.Type";
+import { FORMATION_MAP, POSITION_FALLBACK } from "./Types/Formation.Type";
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -107,8 +108,30 @@ export function getStatsByType(
 export function filterStatsForDisplay(stats: StatItem[]): StatItem[] {
   return stats.filter((s) => {
     // drop anything with a null rank (often the meta‐rows)
-    if (s.rank == null) return false;
+    if (s.rank == null || s.val === 0) return false;
     // drop by label
     return !SKIP_LABELS.has(s.label.toLowerCase());
   });
+}
+
+
+export function getAssignedPosition(
+  formation: string,
+  playerRole: string
+): string | undefined {
+  const roles = FORMATION_MAP[formation];
+  if (roles.includes(playerRole)) {
+    return playerRole;
+  }
+
+  // try each fallback in order
+  const fallbacks = POSITION_FALLBACK[playerRole] || [];
+  for (const fb of fallbacks) {
+    if (roles.includes(fb)) {
+      return fb;
+    }
+  }
+
+  // no match found
+  return undefined;
 }

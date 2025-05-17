@@ -1,91 +1,73 @@
 "use client";
 
+import { ZoneEditorSidebar } from "@/app/(main)/editor/components/ZoneEditorSidebar";
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarFooter,
-	SidebarHeader,
-	useSidebar,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { RootState } from "@/lib/store";
-import { Suspense, useEffect, useRef } from "react";
+import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerSidebarSheet } from "./player/player.sidebar";
 import { ZoneSidebar } from "./zones/zone.sidebar";
-import { clearSelectedPlayer } from "@/lib/features/SelectedPlayerSlice";
-import { clearSelectedZone } from "@/lib/features/SelectedZoneSlice";
 
 export function AppSidebar() {
-	const player = useSelector(
-		(state: RootState) => state.selectedPlayer.selected
-	);
-	const zone = useSelector((state: RootState) => state.selectedZone.selected);
-	const { open, setOpen } = useSidebar();
-	const dispatch = useDispatch();
-	const previousType = useRef<"player" | "zone" | null>(null);
-	const prevOpen = useRef(open);
+  const dispatch = useDispatch();
+  const player = useSelector((s: RootState) => s.selectedPlayer.selected);
+  const zone   = useSelector((s: RootState) => s.selectedZone.selected);
+  const path = usePathname()
+  const isEditorRoute = path.includes("editor") && !path.includes("player");
 
 
-	useEffect(() => {
-		const hasPlayer = !!player;
-		const hasZone = !!zone;
+  const { open, toggleSidebar } = useSidebar();
 
-		// Determine which type is now active
-		const newType = hasPlayer ? "player" : hasZone ? "zone" : null;
+  useEffect(() => {
 
-		// If switching between player <-> zone, softly reopen
-		if (
-			open &&
-			newType &&
-			previousType.current &&
-			previousType.current !== newType
-		) {
-			setOpen(false);
-			const timeout = setTimeout(() => {
-				setOpen(true);
-			}, 150);
-			return () => clearTimeout(timeout);
-		}
+  }, [open, dispatch]);
 
-		// Set sidebar open when either selected
-		if (newType && !open) {
-			setOpen(true);
-		}
+  return (
+    <Sidebar>
+      <SidebarHeader>
+        <div className="flex items-center justify-between px-4">
+          <span className="font-semibold uppercase text-sm">Menu</span>
+          <button
+            aria-label="Toggle sidebar"
+            onClick={toggleSidebar}
+            className="p-1 hover:bg-gray-200 rounded"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      </SidebarHeader>
 
-		// Close sidebar if nothing selected
-		if (!hasPlayer && !hasZone) {
-			setOpen(false);
-		}
+      <SidebarContent className="px-2 overflow-hidden">
+        <Suspense
+          key={
+            player
+              ? `player-${player.name}`
+              : zone
+              ? `zone-${zone.id}`
+              : isEditorRoute
+              ? "zone-editor"
+              : "empty"
+          }
+        >
+          {player ? (
+            <PlayerSidebarSheet playerSelected={player} />
+          ) : zone ? (
+            <ZoneSidebar selectedZone={{ selected: zone }} />
+          ) : isEditorRoute ? (
+            <ZoneEditorSidebar />
+          ) : null}
+        </Suspense>
+      </SidebarContent>
 
-		previousType.current = newType;
-	}, [player, zone, open, setOpen]);
-	useEffect(() => {
-		if (prevOpen.current && !open) {
-		  dispatch(clearSelectedPlayer());
-		  dispatch(clearSelectedZone());
-		}
-		prevOpen.current = open;
-	  }, [open, dispatch]);
-	return (
-		<Sidebar>
-			<SidebarHeader />
-			<SidebarContent className="px-2 overflow-hidden">
-				<Suspense
-					key={
-						player
-							? `player-${player.name}`
-							: zone
-							? `zone-${zone.id}`
-							: "empty"
-					}>
-					{player ? (
-						<PlayerSidebarSheet playerSelected={player} />
-					) : zone ? (
-						<ZoneSidebar selectedZone={{ selected: zone }} />
-					) : null}
-				</Suspense>
-			</SidebarContent>
-			<SidebarFooter />
-		</Sidebar>
-	);
+      <SidebarFooter />
+    </Sidebar>
+  );
 }

@@ -6,6 +6,8 @@ import selectedPlayerReducer from '@/lib/features/SelectedPlayerSlice';
 import selectedZoneReducer from '@/lib/features/SelectedZoneSlice';
 import userConfigReducer from '@/lib/features/UserConfigSliceSlice';
 import teamReducer from '@/lib/features/TeamSlice';
+import zoneReducer from '@/lib/features/ZoneEditorSlice';
+import playerConfigReducer from '@/lib/features/PlayerConfigEditorSlice';
 
 // Combine reducers
 const rootReducer = combineReducers({
@@ -13,13 +15,15 @@ const rootReducer = combineReducers({
 	selectedZone: selectedZoneReducer,
 	userConfig: userConfigReducer,
 	team: teamReducer,
+	zoneEditor: zoneReducer,
+	playerEditor: playerConfigReducer
 });
 
 // Persist config
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['userConfig', 'team', 'selectedPlayer', 'selectedZone'],
+	whitelist: ['userConfig', 'selectedPlayer', 'selectedZone', 'zoneEditor'],
 };
 
 // Persisted reducer

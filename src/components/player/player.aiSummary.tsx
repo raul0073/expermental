@@ -54,7 +54,7 @@ export function PlayerAISummary({
   return (
     <div className="my-4">
       <Button onClick={handleClick} variant="default" disabled={loading}>
-        {loading ? "Generating summary..." : "Analysis Report"}
+        {loading ? "Generating summary..." : "Get Analyst Report"}
       </Button>
       {summary && (
         <div className="mt-3 p-3 border rounded bg-muted text-sm text-muted-foreground whitespace-pre-line">

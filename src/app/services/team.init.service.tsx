@@ -17,7 +17,6 @@ import { TeamModel, TeamTypeInit } from "@/lib/Types/Team.Type";
       }
   
       const data: TeamModel =  await res.json();
-      console.log(data);
       return data
       //eslint-disable-next-line
     } catch (error: any) {

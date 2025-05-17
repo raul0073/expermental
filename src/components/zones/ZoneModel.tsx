@@ -6,7 +6,8 @@ import { Billboard, Text } from "@react-three/drei";
 import { useTheme } from "next-themes";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FullZone } from "./zones.types";
+import { FullSelectableZone, FullZone } from "./zones.types";
+import { useSidebar } from "../ui/sidebar";
 
 export function ZoneModel({
 	zone,
@@ -16,6 +17,7 @@ export function ZoneModel({
 	maxRating: number;
 }) {
 	const dispatch = useDispatch();
+	const {toggleSidebar, open} = useSidebar()
 	const {
 		position: [x, z],
 		width,
@@ -55,8 +57,9 @@ export function ZoneModel({
 				}}
 				onClick={() => {
 					dispatch(clearSelectedPlayer());
-					dispatch(setSelectedZone(zone));
-				}}
+					dispatch(setSelectedZone(zone as unknown as FullSelectableZone));
+					if (!open) toggleSidebar();
+				  }}
 			>
 				<planeGeometry args={[length, width]} />
 				<meshStandardMaterial

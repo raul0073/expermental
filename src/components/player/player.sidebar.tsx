@@ -11,6 +11,8 @@ import { PlayerAISummary } from "./player.aiSummary";
 import { useSidebar } from "../ui/sidebar";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
+import { LoadingSpinner } from "../root/loading/Loading";
 
 export function PlayerSidebarSheet({
   playerSelected,
@@ -26,7 +28,7 @@ export function PlayerSidebarSheet({
   ) || "Arsenal"; 
   const players = useSelector(
     (state: RootState) => state.team[activeTeam]?.players
-  );
+  ) || [];
   const playerModel = players.find((p) => p.name === playerSelected.name);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export function PlayerSidebarSheet({
   );
 
   if (!playerModel) {
-    return <div className="p-4 text-center">Loading player…</div>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -91,7 +93,8 @@ export function PlayerSidebarSheet({
           playerSelected={playerModel}
         />
       </div>
-
+      <ScrollArea className="h-[60vh] p-3">
+      
       {/* Stats Table */}
       <PlayerStatsTable stats={cleanStats} loading={false} />
 
@@ -101,6 +104,7 @@ export function PlayerSidebarSheet({
         statsType={statsType}
         player={playerModel}
       />
+      </ScrollArea>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-// src/config/pitchZones.ts
+import { Player } from "../player/player.types";
 
 export type ChannelZone = {
   id: string;
@@ -7,13 +7,31 @@ export type ChannelZone = {
   length: number;             // size in X (goal-to-goal)
   width: number;              // size in Z (touchline-to-touchline)
 };
-
-export type FullZone = ChannelZone & {
+type ZoneBreakdown = {
+  team: TeamZoneBreakdown
+  against: TeamZoneBreakdown
+  players: PlayersZoneBreakdown
+}
+type TeamZoneBreakdown = {
+  score: number;
+  keys: string[]
+}
+type PlayersZoneBreakdown = {
+  score: number;
+  players: Player[]
+  
+}
+export type FullSelectableZone = ChannelZone & {
   rating: number;
   //eslint-disable-next-line
-  team: Record<string, any>;
-  //eslint-disable-next-line
   players: any[];
+  //eslint-disable-next-line
+  team: Record<string, any>;
+};
+export type FullZone = ChannelZone & {
+  rating: number;
+  breakdown: ZoneBreakdown
+  raw?: {team: number, against: number, players: number}
 };
 const PITCH_LENGTH = 105;
 const PITCH_WIDTH = 68;
@@ -21,7 +39,7 @@ const PITCH_WIDTH = 68;
 const ZONE_PERCENTAGES = [0.15, 0.15, 0.40, 0.15, 0.15]; // Z-axis (width)
 const X_THIRD_LENGTH = PITCH_LENGTH / 3; // 35m per third
 
-const labels = [
+export const Zoneslabels = [
   { id: "defLeftWide", label: "Defensive Left Wing" },
   { id: "defLeftHalf", label: "Defensive Left Channel" },
   { id: "defCentral", label: "Defensive Central Area" },
@@ -56,7 +74,7 @@ function computeZones(): ChannelZone[] {
       const width = ZONE_PERCENTAGES[z] * PITCH_WIDTH;
       const zCenter = zStart + width / 2;
 
-      const label = labels[labelIndex];
+      const label = Zoneslabels[labelIndex];
 
       zones.push({
         id: label.id,

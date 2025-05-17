@@ -1,6 +1,7 @@
 import React from "react";
 import ScraperSvgComp from "@/app/assets/svgs/ScraperSvgComp";
 import clsx from "clsx";
+import Link from "next/link";
 
 
 const textSize: Record<LogoSize, string> = {
@@ -24,7 +25,8 @@ interface LogoProps {
 
 function Logo({ size = "small", className }: LogoProps) {
   return (
-    <div
+    <Link href={'/'}>
+      <div
       className={clsx(
         "logo font-default flex items-center gap-1", 
         textSize[size],
@@ -41,6 +43,7 @@ function Logo({ size = "small", className }: LogoProps) {
         )}
       />
     </div>
+    </Link>
   );
 }
 
