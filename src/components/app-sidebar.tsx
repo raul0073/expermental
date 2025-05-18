@@ -61,7 +61,9 @@ export function AppSidebar() {
               : zone
               ? `zone-${zone.id}`
               : isZoneEditorRoute
-              ? "zone-editor"
+              ? "zone-editor" 
+              : isPlayerEditorRoute ?
+              `player-editor`
               : "empty"
           }
         >

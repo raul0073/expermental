@@ -37,7 +37,6 @@ export default function Home() {
 		dispatch(fetchAllTeams());
 		dispatch(setUserId(uid));
 		dispatch(setActive(false))
-		dispatch(setActive(true))
 		dispatch(setActivePlayerEditor(false))
 	}, [dispatch]);
 

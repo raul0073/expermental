@@ -7,14 +7,18 @@ import PlayerEditorToolbar from "./PlayerEditorToolbar";
 import { PlayerStatGroupEditor } from "./PlayerStatGroupEditor";
 import { StatsLabelsBankPlayer } from "./StatsLabelsBank";
 import ZoneEditorDndProvider from "../../zone/components/ZoneEditorProvider";
+import { useSidebar } from "@/components/ui/sidebar";
 
 function PlayerStatEditorPanel() {
 	const playerEditor = useSelector((state: RootState) => state.playerEditor);
 	const activeRole = playerEditor.activeRole;
+	const {open} = useSidebar()
 	return (
 		<ZoneEditorDndProvider>
 			<div className="mb-4">
+			<div className={`${open ? 'hidden' : ''}`}>
 			<RoleSelector />
+			</div>
 				<div className="w-full my-4 justify-center flex">
 				<StatsLabelsBankPlayer />
 					

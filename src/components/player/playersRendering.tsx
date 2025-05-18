@@ -101,7 +101,14 @@ export function Team({ teamName }: { teamName: string }) {
             onClick={() => {
               dispatch(clearSelectedZone());
               dispatch(setSelectedPlayer(sub));
-            }}
+              if(open){
+          
+              }else {
+        
+                toggleSidebar();
+              } 
+            }
+            }
           />
         );
       })}
