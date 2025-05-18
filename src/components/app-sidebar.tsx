@@ -81,7 +81,7 @@ export function AppSidebar() {
           )
           : (
             <div className="text-muted-foreground text-center text-sm p-6">
-              Select a <strong>player</strong> or a <strong>zone</strong> to begin editing.
+              Select a <strong>player</strong> or a <strong>zone</strong> for more info.
             </div>
           )}
         </Suspense>
