@@ -24,7 +24,7 @@ export default function FootballPitch({ children }: { children: ReactNode }) {
 	return (
 		<group>
 			<mesh position={[0, -0.2, 0]}>
-				<boxGeometry args={[120, 0.2, 68]} />
+				<boxGeometry args={[120, 0.1, 68]} />
 				<meshStandardMaterial color="darkGreen" />
 			</mesh>
 			{/* Grass base */}

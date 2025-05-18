@@ -24,7 +24,7 @@ function PlayerEditorToolbar({activeRole}: { activeRole: keyof ScoreConfig}) {
       if(userId){
         const res = await savePlayersConfig(userId, draftConfig)
         console.log("Saving player config:", res);
-        toast.success("Player config saved.", {
+        toast.success(`Player config for ${activeRole} saved.`, {
           description: new Date().toLocaleTimeString(),
         });
         dispatch(markSaved());

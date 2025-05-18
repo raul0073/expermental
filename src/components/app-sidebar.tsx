@@ -1,6 +1,6 @@
 "use client";
 
-import { ZoneEditorSidebar } from "@/app/(main)/editor/components/ZoneEditorSidebar";
+import { RoleSelector } from "@/app/(main)/editor/player/components/PlayerEditorRolesSelector";
 import {
   Sidebar,
   SidebarContent,
@@ -15,13 +15,21 @@ import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerSidebarSheet } from "./player/player.sidebar";
 import { ZoneSidebar } from "./zones/zone.sidebar";
+import { ZoneEditorSidebar } from "@/app/(main)/editor/zone/components/ZoneEditorSidebar";
 
 export function AppSidebar() {
   const dispatch = useDispatch();
   const player = useSelector((s: RootState) => s.selectedPlayer.selected);
   const zone   = useSelector((s: RootState) => s.selectedZone.selected);
+  const isZoneEditing = useSelector(
+		(state: RootState) => state.zoneEditor.active
+	);
+  const isPlayerEditing = useSelector(
+		(state: RootState) => state.playerEditor.active
+	);
   const path = usePathname()
-  const isEditorRoute = path.includes("editor") && !path.includes("player");
+  const isZoneEditorRoute = path.includes("zone");
+  const isPlayerEditorRoute = path.includes("player");
 
 
   const { open, toggleSidebar } = useSidebar();
@@ -52,18 +60,22 @@ export function AppSidebar() {
               ? `player-${player.name}`
               : zone
               ? `zone-${zone.id}`
-              : isEditorRoute
+              : isZoneEditorRoute
               ? "zone-editor"
               : "empty"
           }
         >
-          {player ? (
+          {
+          player ? (
             <PlayerSidebarSheet playerSelected={player} />
           ) : zone ? (
             <ZoneSidebar selectedZone={{ selected: zone }} />
-          ) : isEditorRoute ? (
-            <ZoneEditorSidebar />
-          ) : null}
+          ) : isZoneEditorRoute && isZoneEditing ? (
+            <ZoneEditorSidebar  />
+          ) : isPlayerEditing && isPlayerEditorRoute ? (
+            <RoleSelector />
+          ) 
+          : null}
         </Suspense>
       </SidebarContent>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { loadPlayerEditorConfig } from "@/app/services/config.service";
-import { setDraft, setInitPlayerConfig } from "@/lib/features/PlayerConfigEditorSlice";
+import { setActive, setDraft, setInitPlayerConfig } from "@/lib/features/PlayerConfigEditorSlice";
 import { RootState } from "@/lib/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +24,7 @@ export default function PlayerEditorPage() {
 	}
 	useEffect(() => {
 		loadUserConfig();
+		dispatch(setActive(true))
 	}, []);
 	return (
 		<div className="flex h-full">

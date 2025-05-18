@@ -12,8 +12,10 @@ import ZoneEditorDndProvider from "./ZoneEditorProvider";
 import ZoneEditorToolbar from "./ZoneEditorToolbar";
 import { ZonePositionEditor } from "./ZonePositionEditor";
 import { ZoneStatGroupEditor } from "./ZoneStatGroupEditor";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export function ZoneStatEditorPanel() {
+	const {open} = useSidebar()
 	const zoneId = useSelector(
 		(state: RootState) => state.zoneEditor.selectedZoneId
 	);
@@ -34,7 +36,7 @@ export function ZoneStatEditorPanel() {
 
 						<div className="space-y-4">
 							<StatsLabelsBank />
-							<RolesLabelsBank />
+							<div className={`${open ? 'hidden' : ''}`}><RolesLabelsBank /></div>
 						</div>
 						<div className="py-4">
 							{zoneId && (

@@ -7,6 +7,9 @@ import { setUserId } from "@/lib/features/UserConfigSliceSlice";
 import { useAppDispatch } from "@/lib/hooks";
 import { useEffect } from "react";
 import { userInitService } from "../services/user.init.service";
+import { setActive } from "@/lib/features/ZoneEditorSlice";
+import {  setActive as setActivePlayerEditor} from "@/lib/features/PlayerConfigEditorSlice";
+
 (() => {
 	const bytesPerChar = 2;           // UTF-16 in most browsers
 	let total = 0;
@@ -33,10 +36,13 @@ export default function Home() {
 		const uid = userInitService();
 		dispatch(fetchAllTeams());
 		dispatch(setUserId(uid));
+		dispatch(setActive(false))
+		dispatch(setActive(true))
+		dispatch(setActivePlayerEditor(false))
 	}, [dispatch]);
 
 	return (
-		<section className="home p-1">
+		<section className="home p-1 py-8">
 			<TeamSelect />
 			<PitchCanvas />
 			<Separator />

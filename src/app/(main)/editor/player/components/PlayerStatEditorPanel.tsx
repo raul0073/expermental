@@ -2,11 +2,11 @@
 
 import type { RootState } from "@/lib/store";
 import { useSelector } from "react-redux";
-import ZoneEditorDndProvider from "../../components/ZoneEditorProvider";
 import { RoleSelector } from "./PlayerEditorRolesSelector";
 import PlayerEditorToolbar from "./PlayerEditorToolbar";
 import { PlayerStatGroupEditor } from "./PlayerStatGroupEditor";
 import { StatsLabelsBankPlayer } from "./StatsLabelsBank";
+import ZoneEditorDndProvider from "../../zone/components/ZoneEditorProvider";
 
 function PlayerStatEditorPanel() {
 	const playerEditor = useSelector((state: RootState) => state.playerEditor);

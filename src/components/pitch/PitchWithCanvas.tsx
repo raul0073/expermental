@@ -26,9 +26,7 @@ export default function PitchWithCanvas({
 					console.warn("WebGL context lost. Try reloading the page.");
 				});
 			}}
-			style={{
-				backgroundColor: `${theme === "dark" ? "#1c1917" : "#f5f5f4"}`,
-			}}>
+			>
 			<color
 				attach="background"
 				args={[theme === "dark" ? "#1c1917" : "#e8f1ee"]}

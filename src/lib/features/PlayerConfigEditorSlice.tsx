@@ -7,6 +7,7 @@ interface EditorState {
   weights: ScoreWeights;
   initial_config: PlayersConfig;
   dirty: boolean;
+  active: boolean
 }
 
 const initialState: EditorState = {
@@ -23,6 +24,7 @@ const initialState: EditorState = {
   initial_config: {} as PlayersConfig,
   weights: { pros: 1, cons: -1, important: 2 },
   dirty: false,
+  active: false
 };
 
 export const scoreConfigEditorSlice = createSlice({
@@ -31,6 +33,9 @@ export const scoreConfigEditorSlice = createSlice({
   reducers: {
     setActiveRole(state, action: PayloadAction<keyof ScoreConfig>) {
       state.activeRole = action.payload;
+    },
+    setActive(state, action: PayloadAction<boolean>) {
+      state.active = action.payload;
     },
     setInitPlayerConfig(state, action: PayloadAction<PlayersConfig>) {
       state.initial_config = action.payload;
@@ -112,6 +117,7 @@ export const {
   setWeight,
   setDraft,
   markSaved,
+  setActive,
   setInitPlayerConfig
 } = scoreConfigEditorSlice.actions;
 

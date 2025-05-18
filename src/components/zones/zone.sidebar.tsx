@@ -28,7 +28,7 @@ export function ZoneSidebar({ selectedZone }: { selectedZone: ZoneState }) {
 	}, [zones, selectedZone.selected?.id]);
 
 	if (!teamName || !selectedZone.selected?.id || !zone) {
-		return null;
+		return <h3 className="w-full text-center flex justify-center items-center h-full">Select Zone</h3>;
 	}
 	return (
 		<div className="mt-12 px-2">

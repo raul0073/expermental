@@ -1,37 +1,29 @@
-"use client";
+import About from "@/components/root/about/About";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-import { loadZoneEditorConfig } from "@/app/services/config.service";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { ZoneStatEditorPanel } from "./components/ZoneStatEditorPanel";
-import {  setSelectedZoneId, setUserZoneConfig } from "@/lib/features/ZoneEditorSlice";
-import { Zoneslabels } from "@/components/zones/zones.types";
-
-export default function ZoneEditorPage() {
-  const dispatch = useDispatch()
-
-  async function loadUserConfig(){
-    try {
-      const user_id = "anon_test_user_001"; 
-      const data = await loadZoneEditorConfig(user_id);
-        if(data){
-          dispatch(setUserZoneConfig(data))
-        dispatch(setSelectedZoneId(Zoneslabels[0].id))
-        }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  useEffect(() => {
-		loadUserConfig()
-	}, [dispatch]);
-  return (
-    
-    <div className="flex h-full">
-      <div className="flex-1 p-2">
-        <ZoneStatEditorPanel />
-      </div>
-    </div>
-
-  );
+function Page() {
+	return (
+		<section className="editor-home pt-12">
+      <div className="w-full flex justify-center gap-12">
+				<Link href={'/editor/player'} className="flex items-center ">
+        <Button variant={'outline'} className="py-8 px-12">Player Config Editor
+        <ArrowRight />
+       
+           </Button>
+       
+        </Link>
+        <Link href={'/editor/zone'} className="flex items-center ">
+				<Button variant={'outline'} className="py-8 px-12">Zones Config Editor
+        <ArrowRight />
+           </Button>
+       
+        </Link>
+			</div>
+			<About />
+		</section>
+	);
 }
+
+export default Page;
