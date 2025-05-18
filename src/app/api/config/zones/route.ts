@@ -31,7 +31,6 @@ export async function POST(req: NextRequest) {
 		} = await req.json();
 		const { user_id } = body;
 		const zonesConfig = body.zones_config
-
 		if (!user_id) {
 			return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
 		}
@@ -39,7 +38,8 @@ export async function POST(req: NextRequest) {
 			user_id: user_id,
 			zones_config: zonesConfig
 		}
-		const res = await fetch(`${API_URL}/user/config`, {
+		console.log(DTO);
+		const res = await fetch(`${API_URL}/user/zones-config`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(DTO),

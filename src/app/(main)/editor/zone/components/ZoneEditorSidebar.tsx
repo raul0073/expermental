@@ -1,12 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useSidebar } from "@/components/ui/sidebar";
 import { Zoneslabels } from "@/components/zones/zones.types";
 import { setSelectedZoneId } from "@/lib/features/ZoneEditorSlice";
 import { RootState } from "@/lib/store";
-import { X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 
 export function ZoneEditorSidebar() {
@@ -14,7 +11,6 @@ export function ZoneEditorSidebar() {
 		(state: RootState) => state.zoneEditor.selectedZoneId
 	);
 	const dispatch = useDispatch();
-    const {toggleSidebar} = useSidebar()
 	return (
         
 		<div className="space-y-2">
@@ -23,16 +19,7 @@ export function ZoneEditorSidebar() {
 			<div className="info mt-2 mb-4 text-sm space-y-1">
 				<div className="flex justify-between items-center w-full">
                     <h2 className="text-xl font-bold mb-2 text-primary">{"All Pitch Zones"}</h2>
-                <Button
-					data-sidebar="trigger"
-					variant="outline"
-					size="icon"
-					className={""}
-					onClick={() => toggleSidebar()}>
-					<X className="text-foreground" />
-				</Button>
                 </div>
-				<Separator />
 			</div>
             </div>
 			{Object.entries(Zoneslabels).map(([id, zone]) => (

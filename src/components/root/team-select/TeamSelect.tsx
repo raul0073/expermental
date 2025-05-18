@@ -1,41 +1,56 @@
 "use client";
-import { setUserTeamService } from "@/app/services/config.service";
-import { initializeTeamData } from "@/app/services/team.init.service";
-import { setTeam } from "@/lib/features/TeamSlice";
 import { setUserTeam } from "@/lib/features/UserConfigSliceSlice";
-import { TeamModel, TeamTypeInit } from "@/lib/Types/Team.Type";
+import { RootState } from "@/lib/store";
+import { TeamTypeInit } from "@/lib/Types/Team.Type";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button"; // Assuming you're using shadcn/ui
 import { Card, CardContent } from "../../ui/card";
 import { EPL_TEAMS } from "./teams-data";
+import { LoadingSpinner } from "../loading/Loading";
 
 function TeamSelect() {
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const teams = useSelector((state: RootState) => state.team);
+	useEffect(()=>{
+		setOpen(true)
+	},[])
 	// const teams = useSelector((state: RootState) => state.team)
 	const handleSelect = async (team: TeamTypeInit) => {
+		setLoading(true)
 		try {
 			dispatch(setUserTeam(team));
-			await setUserTeamService(team.slug)
-			const res: TeamModel = await initializeTeamData(team);
-			dispatch(setTeam(res));
+			// await setUserTeamService(team.slug)
+			// const res: TeamModel = await initializeTeamData(team);
+			// dispatch(setTeam(res));
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false)
 		}
 	};
 
+	if (loading) return <LoadingSpinner />
 	return (
 		<section className="w-full bg-transparent rounded-lg py-1">
 			<div className="flex justify-center items-center px-4 py-1">
-				<Button onClick={() => setOpen(!open)} variant="outline" className="flex justify-center items-center">
+				<Button
+					onClick={() => setOpen(!open)}
+					variant="outline"
+					className="flex justify-center items-center">
 					{open ? (
-						<span>{"Hide Teams"}{" "}<ArrowUp className="inline mx-1" /></span>
+						<span>
+							{"Hide Teams"} <ArrowUp className="inline mx-1" />
+						</span>
 					) : (
-						<span>{"Select Team"}{" "}<ArrowDown className="inline mx-1" /></span>
-					)} 
+						<span>
+							{"Select Team"} <ArrowDown className="inline mx-1" />
+						</span>
+					)}
 				</Button>
 			</div>
 
@@ -44,7 +59,7 @@ function TeamSelect() {
 					open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
 				} overflow-hidden`}>
 				<div className="p-4 grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-10 gap-2">
-					{EPL_TEAMS.map((team) => (
+					{EPL_TEAMS.filter((team) => teams[team.name]).map((team) => (
 						<Card
 							key={team.slug}
 							onClick={() => handleSelect(team)}
@@ -57,7 +72,9 @@ function TeamSelect() {
 									width={80}
 									height={80}
 								/>
-								<p className="font-semibold text-center text-xs sm:text-sm text-foreground/80">{team.name}</p>
+								<p className="font-semibold text-center text-xs sm:text-sm text-foreground/80">
+									{team.name}
+								</p>
 							</CardContent>
 						</Card>
 					))}

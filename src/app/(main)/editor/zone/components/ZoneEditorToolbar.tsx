@@ -1,6 +1,6 @@
 "use client";
 import { useSelector } from "react-redux";
-import { clearAll, clearZone, resetToInitial } from "@/lib/features/ZoneEditorSlice";
+import { applyPreset, clearAll, clearZone, resetToInitial, savePreset } from "@/lib/features/ZoneEditorSlice";
 import { Button } from "@/components/ui/button";
 import { RootState } from "@/lib/store";
 import { useAppDispatch } from "@/lib/hooks";
@@ -14,7 +14,21 @@ export default function ZoneEditorToolbar() {
   const zone = useSelector((s: RootState) => s.zoneEditor);
   const userId = "anon_test_user_001"; 
   const zoneId = zone.selectedZoneId
+  const presets = useSelector((s: RootState) => s.zoneEditor.presets);
 
+  const handleSavePreset = () => {
+    const name = prompt("Save preset as:");
+    if (name && zoneId) {
+      dispatch(savePreset({ name, zoneId }));
+    }
+  };
+
+  const handleApplyPreset = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const name = e.target.value;
+    if (name && zoneId) {
+      dispatch(applyPreset({ name, zoneId }));
+    }
+  };
   const handleSave = async () => {
    try {
     setLoading(true)
@@ -45,6 +59,25 @@ export default function ZoneEditorToolbar() {
       <Button size="lg" variant="secondary" onClick={() => dispatch(resetToInitial())} disabled={loading}>
         Reset zone settings (resets all to first load)
       </Button>
+      <div className="flex items-center gap-4">
+      <Button value={'outline'} onClick={handleSavePreset} className="">
+        Save Preset
+      </Button>
+      <select
+        className="text-sm px-4 py-3 border rounded"
+        onChange={handleApplyPreset}
+        defaultValue=""
+      >
+        <option value="" disabled>
+           Apply Preset
+        </option>
+        {presets && Object.keys(presets).map((name) => (
+          <option key={name} value={name}>
+            {name}
+          </option>
+        ))}
+      </select>
+    </div>
      </div>
     <div className="flex  items-center gap-6">
     <Button

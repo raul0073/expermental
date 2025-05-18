@@ -6,6 +6,7 @@ export interface ZoneEditorState {
   selectedZoneId: string | null;
   zones_config: ZonesConfig;
   initial_config: ZonesConfig | null;
+  presets?: Record<string, ZoneConfig>;
 }
 
 const initialState: ZoneEditorState = {
@@ -13,6 +14,7 @@ const initialState: ZoneEditorState = {
   selectedZoneId: null,
   zones_config: { zone_config: {}, zone_scalers: {}, zone_players: {} },
   initial_config: null,
+  presets: {}
 };
 
 const zoneEditorSlice = createSlice({
@@ -137,6 +139,29 @@ const zoneEditorSlice = createSlice({
           [key]: value,
         },
       }
+    },
+    savePreset: (
+      state,
+      action: PayloadAction<{ name: string; zoneId: string }>
+    ) => {
+      const { name, zoneId } = action.payload;
+      const config = state.zones_config.zone_config[zoneId];
+      if (config) {
+        state.presets![name] = JSON.parse(JSON.stringify(config));
+      }
+    },
+    applyPreset: (
+      state,
+      action: PayloadAction<{ name: string; zoneId: string }>
+    ) => {
+      const { name, zoneId } = action.payload;
+      const preset = state.presets?.[name];
+      if (preset) {
+        state.zones_config.zone_config[zoneId] = JSON.parse(JSON.stringify(preset));
+      }
+    },
+    deletePreset: (state, action: PayloadAction<string>) => {
+      delete state.presets?.[action.payload];
     }
   }
 });
@@ -144,6 +169,9 @@ const zoneEditorSlice = createSlice({
 export const {
   setSelectedZoneId,
   setActive,
+  savePreset,
+  deletePreset,
+  applyPreset,
   clearAll,
   resetToInitial, 
   setUserZoneConfig,

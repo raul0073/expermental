@@ -1,18 +1,15 @@
 "use client";
-import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { StatTypeSelector } from "../root/stats-type-select/StatsTypeBtns";
 import { StatsOption } from "@/lib/Types/PlayerStats.Type";
-import { Player } from "./player.types";
-import { useEffect, useMemo, useState } from "react";
 import { filterStatsForDisplay, getStatsByType } from "@/lib/utils";
-import { PlayerStatsTable } from "./playerDataTable";
-import { PlayerAISummary } from "./player.aiSummary";
-import { useSidebar } from "../ui/sidebar";
-import { Button } from "../ui/button";
-import { X } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { LoadingSpinner } from "../root/loading/Loading";
+import { StatTypeSelector } from "../root/stats-type-select/StatsTypeBtns";
+import { ScrollArea } from "../ui/scroll-area";
+import { PlayerAISummary } from "./player.aiSummary";
+import { Player } from "./player.types";
+import { PlayerStatsTable } from "./playerDataTable";
 
 export function PlayerSidebarSheet({
   playerSelected,
@@ -20,7 +17,6 @@ export function PlayerSidebarSheet({
   playerSelected: Player;
 }) {
   const [statsType, setStatsType] = useState<StatsOption>("standard");
-  const { toggleSidebar } = useSidebar();
 
 
   const activeTeam: string = useSelector(
@@ -56,32 +52,24 @@ export function PlayerSidebarSheet({
   }
 
   return (
-    <div className="mt-12">
+    <div className="">
       {/* Header */}
       <div className="info mt-2 mb-4 text-sm space-y-1">
-      <Button
-			data-sidebar="trigger"
-			variant="outline"
-			size="icon"
-			className={'text-white float-right'}
-			onClick={()=>toggleSidebar()}
-			>
-			<X className="text-foreground" />
-		</Button>
+    
         <h2 className="text-2xl font-bold mb-2 text-primary">
           {playerModel.shirt_number}. {playerModel.name}
         </h2>
-        <div className="flex gap-2 items-center">
-          <label className="uppercase text-xs text-muted-foreground">
+        <div className="flex gap-2 items-center justify-between">
+          <label className="uppercase  text-muted-foreground">
             Role
           </label>
-          <p className="font-semibold">{playerModel.role}</p>
+          <p className="font-semibold ">{playerModel.role}</p>
         </div>
-        <div className="flex gap-2 items-center">
-          <label className="uppercase text-xs text-muted-foreground">
+        <div className="flex gap-2 items-center justify-between">
+          <label className="uppercase  text-muted-foreground">
             Rating
           </label>
-          <p className="font-semibold">{playerModel.rating}</p>
+          <p className="font-semibold ">{playerModel.rating}</p>
         </div>
       </div>
 

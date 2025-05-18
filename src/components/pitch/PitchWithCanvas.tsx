@@ -29,7 +29,7 @@ export default function PitchWithCanvas({
 			>
 			<color
 				attach="background"
-				args={[theme === "dark" ? "#1c1917" : "#e8f1ee"]}
+				args={[theme === "dark" ? "#1c1917" : "#6d8c76"]}
 			/>
 
 			{/* soft skylight that shifts with the theme */}
@@ -57,7 +57,7 @@ export default function PitchWithCanvas({
 			<directionalLight
 				position={[-60, 50, -80]}
 				intensity={0.4}
-				color={theme === "dark" ? "#145" : "#88bbff"}
+				color={theme === "dark" ? "#145" : "#145"}
 			/>
 
 			{/* low, warm fill to soften faces / kits */}

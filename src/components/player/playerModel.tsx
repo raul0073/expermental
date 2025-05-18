@@ -56,7 +56,7 @@ export function PlayerModel({
         <Text
           position={[0, 1, 0]}
           fontSize={0.2}
-          color={theme === 'dark' ? 'yellow' : 'orange'}
+          color={theme === 'dark' ? 'yellow' : 'white'}
           fontWeight={isSub ? 'thin' : 'bold'}
           anchorX="center"
           anchorY="bottom"

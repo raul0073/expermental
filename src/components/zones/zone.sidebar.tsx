@@ -1,17 +1,12 @@
 "use client";
 import { ZoneState } from "@/lib/features/SelectedZoneSlice";
 import { RootState } from "@/lib/store";
-import { X } from "lucide-react";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Player } from "../player/player.types";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
-import { useSidebar } from "../ui/sidebar";
 import { FullZone } from "./zones.types";
 
 export function ZoneSidebar({ selectedZone }: { selectedZone: ZoneState }) {
-	const { toggleSidebar } = useSidebar();
 	const teamName = useSelector(
 		(state: RootState) => state.userConfig?.team?.name
 	);
@@ -31,25 +26,16 @@ export function ZoneSidebar({ selectedZone }: { selectedZone: ZoneState }) {
 		return <h3 className="w-full text-center flex justify-center items-center h-full">Select Zone</h3>;
 	}
 	return (
-		<div className="mt-12 px-2">
+		<div className="px-2">
 			{/* Header */}
 			<div className="info mt-2 mb-4 text-sm space-y-1">
-				<Button
-					data-sidebar="trigger"
-					variant="outline"
-					size="icon"
-					className={"text-white float-right"}
-					onClick={() => toggleSidebar()}>
-					<X className="text-foreground" />
-				</Button>
 				<h2 className="text-xl font-bold mb-2 text-primary">{zone.label}</h2>
-				<div className="flex gap-2 items-center">
-					<label className="uppercase text-xs text-muted-foreground">
-						Zone Rating
-					</label>
-					<strong className="text-primary text-xl">{zone.rating}</strong>
-				</div>
-				<Separator />
+				<div className="flex gap-2 items-center justify-between">
+          <label className="uppercase text-muted-foreground">
+		  Zone Rating
+          </label>
+          <p className="font-semibold ">{zone.rating}</p>
+        </div>
 			</div>
 			<div className="space-y-4 mt-8">
 				{/* TEAM CONTRIBUTION */}

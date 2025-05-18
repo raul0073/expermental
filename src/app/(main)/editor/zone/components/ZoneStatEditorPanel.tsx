@@ -12,10 +12,8 @@ import ZoneEditorDndProvider from "./ZoneEditorProvider";
 import ZoneEditorToolbar from "./ZoneEditorToolbar";
 import { ZonePositionEditor } from "./ZonePositionEditor";
 import { ZoneStatGroupEditor } from "./ZoneStatGroupEditor";
-import { useSidebar } from "@/components/ui/sidebar";
 
 export function ZoneStatEditorPanel() {
-	const {open} = useSidebar()
 	const zoneId = useSelector(
 		(state: RootState) => state.zoneEditor.selectedZoneId
 	);
@@ -24,7 +22,7 @@ export function ZoneStatEditorPanel() {
 		<ZoneEditorDndProvider>
 			{zoneId ? (
 				<Fragment>
-					  <div className="flex-1 py-4 px-2">
+					<div className="flex-1 py-4 px-2">
 						<header className="py-2">
 							<h2 className="text-2xl font-bold">
 								{zoneId ? zoneLabel : "ASd"}
@@ -36,7 +34,7 @@ export function ZoneStatEditorPanel() {
 
 						<div className="space-y-4">
 							<StatsLabelsBank />
-							<div className={`${open ? 'hidden' : ''}`}><RolesLabelsBank /></div>
+							<RolesLabelsBank />
 						</div>
 						<div className="py-4">
 							{zoneId && (

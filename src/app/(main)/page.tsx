@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { userInitService } from "../services/user.init.service";
 import { setActive } from "@/lib/features/ZoneEditorSlice";
 import {  setActive as setActivePlayerEditor} from "@/lib/features/PlayerConfigEditorSlice";
+import { useSidebar } from "@/components/ui/sidebar";
 
 (() => {
 	const bytesPerChar = 2;           // UTF-16 in most browsers
@@ -32,11 +33,13 @@ import {  setActive as setActivePlayerEditor} from "@/lib/features/PlayerConfigE
   })();
 export default function Home() {
 	const dispatch = useAppDispatch();
+	const {setOpen} = useSidebar()
 	useEffect(() => {
 		const uid = userInitService();
 		dispatch(fetchAllTeams());
 		dispatch(setUserId(uid));
 		dispatch(setActive(false))
+		setOpen(false)
 		dispatch(setActivePlayerEditor(false))
 	}, [dispatch]);
 

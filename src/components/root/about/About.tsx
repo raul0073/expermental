@@ -1,5 +1,4 @@
 import { Separator } from "@/components/ui/separator";
-import Logo from "../logo/Logo";
 
 interface ConfigExplanation {
 	title: string;
@@ -56,12 +55,12 @@ const headerClass =
 function About() {
 	return (
 		<section className="about min-h-screen w-full bg-background text-foreground">
-			<div className="container py-8 px-12 space-y-20">
+			<div className="container py-8 px-12 space-y-20" id="editor-intro">
 				<article className="space-y-10">
 					<section className="space-y-4">
-						<h2 className="w-full text-right">
-							<Logo size="big" />
-						</h2>
+						<h3 className={headerClass} id="players-explain">
+							Introduction
+						</h3>
 						<p className="leading-relaxed text-xl">
 							Our goal is to give you the tools to build a football intelligence
 							model that reflects your footballing beliefs. Every team, every
@@ -107,11 +106,13 @@ export const ZonesGuidanceComp = ({
 		team: string;
 		against: string;
 		players: string;
-	}
+	};
 }) => {
 	return (
 		<section className="space-y-4">
-			<h3 className={headerClass}>How to configure zones rating</h3>
+			<h3 className={headerClass} id="zone-explain">
+				How to configure zones rating
+			</h3>
 
 			<h3 className="text-3xl font-semibold"></h3>
 			<div className="bg-muted/40 border border-muted-foreground rounded-xl p-6 space-y-4 text-base leading-relaxed">
@@ -137,7 +138,9 @@ export const ZonesGuidanceComp = ({
 			</div>
 
 			<div className="mt-10 text-base leading-relaxed space-y-4 border border-muted bg-muted rounded-xl p-6">
-				<h4 className="text-2xl font-bold">Zone Editor Guide</h4>
+				<h4 className="text-2xl font-bold" id="zones-guide">
+					Zone Editor Guide
+				</h4>
 				<p>
 					<strong>Zone Selection:</strong>{" "}
 					{`Click a zone in the sidebar to
@@ -187,11 +190,13 @@ export const PlayerGuidanceComp = ({
 	headerClass: string;
 	playerConfigExplanation: Record<string, ConfigExplanation | string> & {
 		tip: string;
-	}
+	};
 }) => {
 	return (
 		<section className="space-y-4">
-			<h3 className={headerClass}>How to configure player scoring</h3>
+			<h3 className={headerClass} id="players-explain">
+				How to configure player scoring
+			</h3>
 			{(
 				Object.entries(playerConfigExplanation) as [string, ConfigExplanation][]
 			).map(
@@ -218,7 +223,9 @@ export const PlayerGuidanceComp = ({
 					)
 			)}
 			<div className="mt-10 text-base leading-relaxed space-y-4 border border-muted bg-muted rounded-xl p-6">
-				<h4 className="text-2xl font-bold">Player Config Editor Guide</h4>
+				<h4 className="text-2xl font-bold" id="players-guide">
+					Player Config Editor Guide
+				</h4>
 				<p>
 					<strong>Position Selection:</strong>{" "}
 					{`Choose the player role

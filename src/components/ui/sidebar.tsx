@@ -1,9 +1,5 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
-import { VariantProps, cva } from "class-variance-authority";
-import * as React from "react";
-import { CiMenuKebab } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -23,8 +19,11 @@ import {
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
+import { VariantProps, cva } from "class-variance-authority";
 import { usePathname } from "next/navigation";
-import { PanelLeftClose } from "lucide-react";
+import * as React from "react";
+import { CiMenuKebab } from "react-icons/ci";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -284,9 +283,7 @@ const SidebarTrigger = React.forwardRef<
 			}}
 			{...props}>
 		{
-			open ? (
-				<PanelLeftClose className="text-3xl opacity-50 group-hover:opacity-100" style={{scale: 1.5}}/>
-			) : (
+			!open &&  (
 				<CiMenuKebab size={200} className="text-3xl opacity-50 group-hover:opacity-100" style={{scale: 3}} />
 			)
 		}
@@ -768,5 +765,6 @@ export {
 	SidebarRail,
 	SidebarSeparator,
 	SidebarTrigger,
-	useSidebar,
+	useSidebar
 };
+

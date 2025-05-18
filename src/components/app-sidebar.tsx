@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { PlayerSidebarSheet } from "./player/player.sidebar";
 import { ZoneSidebar } from "./zones/zone.sidebar";
 import { ZoneEditorSidebar } from "@/app/(main)/editor/zone/components/ZoneEditorSidebar";
+import AboutSidebar from "./root/about/AboutSidebar";
 
 export function AppSidebar() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export function AppSidebar() {
   const path = usePathname()
   const isZoneEditorRoute = path.includes("zone");
   const isPlayerEditorRoute = path.includes("player");
+  const isEditorHome = path==="/editor";
 
 
   const { open, toggleSidebar } = useSidebar();
@@ -41,18 +43,16 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center justify-between px-4">
-          <span className="font-semibold uppercase text-sm">Menu</span>
+        <div className="flex items-center justify-end px-1 mt-14">
           <button
             aria-label="Toggle sidebar"
             onClick={toggleSidebar}
-            className="p-1 hover:bg-gray-200 rounded"
+            className="p-1 rounded"
           >
             <X size={16} />
           </button>
         </div>
       </SidebarHeader>
-
       <SidebarContent className="px-2 overflow-hidden">
         <Suspense
           key={
@@ -76,8 +76,14 @@ export function AppSidebar() {
             <ZoneEditorSidebar  />
           ) : isPlayerEditing && isPlayerEditorRoute ? (
             <RoleSelector />
-          ) 
-          : null}
+          ) : isEditorHome ? (
+            <AboutSidebar />
+          )
+          : (
+            <div className="text-muted-foreground text-center text-sm p-6">
+              Select a <strong>player</strong> or a <strong>zone</strong> to begin editing.
+            </div>
+          )}
         </Suspense>
       </SidebarContent>
 

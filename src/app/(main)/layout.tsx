@@ -16,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
 				<Toaster />
 				<ScrollArea className="h-screen w-full">
 
-				<main className="h-full min-h-screen w-full px-2 mt-8 pb-24">
+				<main className="h-full min-h-[120vh] w-full px-2 mt-8 pb-24">
 					<SidebarTrigger />
 					{children}
 				</main>

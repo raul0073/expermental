@@ -72,9 +72,9 @@ export function ZoneModel({
 
 			<Billboard>
 				<Text
-					position={[0, 0.1, 0]}
-					fontSize={0.9}
-					color={`${theme === 'dark' ? 'lightGray' : 'lightGray'}`}
+					position={[0, 0.3, 0]}
+					fontSize={1.1}
+					color={`${theme === 'dark' ? 'lightGray' : 'black'}`}
 					anchorX="center"
 					anchorY="bottom"
 				>
