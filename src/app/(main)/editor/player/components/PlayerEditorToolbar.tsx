@@ -15,7 +15,7 @@ import { toast } from "sonner";
 function PlayerEditorToolbar({activeRole}: { activeRole: keyof ScoreConfig}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { draftConfig, dirty } = useSelector((state: RootState) => state.playerEditor);
+  const { draftConfig } = useSelector((state: RootState) => state.playerEditor);
   const initialDraft = useSelector((state: RootState) => state.playerEditor.initial_config);
   const userId = useSelector((state: RootState) => state.userConfig.userId);
   const handleSave = async () => {
@@ -58,7 +58,7 @@ function PlayerEditorToolbar({activeRole}: { activeRole: keyof ScoreConfig}) {
   return (
     <div className="flex gap-3 border rounded p-6 bg-muted/40 justify-between">
       <div className="flex items-center gap-6">
-        <Button size="lg" onClick={handleSave} disabled={loading || !dirty}>
+        <Button size="lg" onClick={handleSave} disabled={true}>
           Save player config
         </Button>
         <Button size="lg" variant="secondary" onClick={handleReset} disabled={loading}>
