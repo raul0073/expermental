@@ -18,6 +18,7 @@ export async function GET() {
     }
 
     const data: TeamModel[] = await res.json();
+    console.log(data);
     return NextResponse.json(data, {status: 200});
     //eslint-disable-next-line
   } catch (error: any) {

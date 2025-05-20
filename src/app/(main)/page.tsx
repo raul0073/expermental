@@ -10,33 +10,20 @@ import { userInitService } from "../services/user.init.service";
 import { setActive } from "@/lib/features/ZoneEditorSlice";
 import {  setActive as setActivePlayerEditor} from "@/lib/features/PlayerConfigEditorSlice";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
-(() => {
-	const bytesPerChar = 2;           // UTF-16 in most browsers
-	let total = 0;
-  
-	console.table(
-	  Object.keys(localStorage).map(key => {
-		const size = (localStorage.getItem(key) || '').length * bytesPerChar;
-		total += size;
-		return {
-		  key,
-		  bytes: size,
-		  '≈ KiB': (size / 1024).toFixed(2),
-		};
-	  })
-	);
-  
-	console.log(
-	  `%cTotal localStorage usage: ${(total / 1024).toFixed(2)} KiB`,
-	);
-  })();
 export default function Home() {
 	const dispatch = useAppDispatch();
 	const {setOpen} = useSidebar()
+	const teams = useSelector((s: RootState) => s.team)
 	useEffect(() => {
+		
+		if(Object.keys(teams).length === 0){
+			dispatch(fetchAllTeams());
+		}	
 		const uid = userInitService();
-		dispatch(fetchAllTeams());
+		
 		dispatch(setUserId(uid));
 		dispatch(setActive(false))
 		setOpen(false)
@@ -45,6 +32,7 @@ export default function Home() {
 
 	return (
 		<section className="home p-1 py-8">
+			
 			<TeamSelect />
 			<PitchCanvas />
 			<Separator />

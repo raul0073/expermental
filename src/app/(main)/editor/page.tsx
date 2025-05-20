@@ -22,7 +22,7 @@ function Page() {
 		dispatch(playerEditorActive(false))
 	}, []);
 	return (
-		<section className="editor-home pt-12">
+		<section className="editor-home pt-12 pl-12">
 			<div className="w-full flex justify-center gap-12">
 				<Link href={"/editor/player"} className="flex items-center ">
 					<Button variant={"outline"} className="py-8 px-12">

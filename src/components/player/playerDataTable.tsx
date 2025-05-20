@@ -1,11 +1,11 @@
 // components/player/PlayerStatsTable.tsx
 "use client";
 
-import { StatItem } from "@/lib/Types/PlayerStats.Type";
+import { PlayerStat } from "@/lib/Types/Team.Type";
 import { formatStatKey, toOrdinal } from "@/lib/utils";
 
 interface PlayerStatsTableProps {
-	stats: StatItem[];
+	stats: PlayerStat[];
 	loading: boolean;
 }
 
@@ -23,9 +23,9 @@ export function PlayerStatsTable({ stats, loading }: PlayerStatsTableProps) {
 	);
 
 	return (
-		<table className="w-full text-sm border-t border-muted">
+		<table className="w-full text-sm border-muted">
 			<thead>
-				<tr className="text-muted-foreground">
+				<tr className="text-muted-foreground border-b-2">
 					<th className="text-left py-1 pr-2 w-1/2 font-semibold">Stat</th>
 					<th className="text-right py-1 px-1 font-semibold">Value</th>
 					<th className="text-right py-1 pl-1 font-semibold">Team Rank</th>

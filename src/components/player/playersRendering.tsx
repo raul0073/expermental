@@ -9,6 +9,7 @@ import { FORMATION_MAP, POSITION_FALLBACK, ROLE_POSITIONS } from '@/lib/Types/Fo
 import { PlayerModel } from './playerModel';
 import { Billboard, Text } from '@react-three/drei';
 import { useSidebar } from '../ui/sidebar';
+import { setCameraTarget } from '@/lib/features/CameraFocusSlice';
 
 export function Team({ teamName }: { teamName: string }) {
   const dispatch = useDispatch();
@@ -21,18 +22,19 @@ export function Team({ teamName }: { teamName: string }) {
   }, [teamName, tracker]);
   if (!team) {
     return (
-      <Billboard>
-        <Text
-          position={[0, 1.1, 0]}
-          fontSize={4}
-          color="white"
-          fontWeight="bold"
-          anchorX="center"
-          anchorY="bottom"
-        >
-          loading team stats
-        </Text>
-      </Billboard>
+      <Billboard follow={true} lockX={false} lockY={false} lockZ={false}>
+      <Text
+        position={[0, 1.5, 0]}
+        fontSize={3.5}
+        color="white" 
+        anchorX="center"
+        anchorY="middle"
+        outlineWidth={0.2}
+        outlineColor="black"
+      >
+        Loading Team Stats...
+      </Text>
+    </Billboard>
     );
   }
 
@@ -75,12 +77,26 @@ export function Team({ teamName }: { teamName: string }) {
             onClick={() => {
               dispatch(clearSelectedZone());
               dispatch(setSelectedPlayer(player));
-              if(open){
-          
-              }else {
-        
+              const playerXZ = position; // [x, z]
+              const eyeHeight = 10;
+              
+              // place camera in front of player, looking toward them
+              const cameraPos: [number, number, number] = [
+                playerXZ[0],
+                eyeHeight,
+                playerXZ[1] + 12 // ⬅️ move in front instead of behind
+              ];
+              
+              const lookAt: [number, number, number] = [
+                playerXZ[0],
+                eyeHeight / 1.5, // lower to look at chest/center
+                playerXZ[1]
+              ];
+              
+              dispatch(setCameraTarget({ position: cameraPos, lookAt }));
+              if(!open){
                 toggleSidebar();
-              } 
+              }
             }
           }
           />
@@ -101,12 +117,26 @@ export function Team({ teamName }: { teamName: string }) {
             onClick={() => {
               dispatch(clearSelectedZone());
               dispatch(setSelectedPlayer(sub));
-              if(open){
-          
-              }else {
-        
+              const playerXZ = [x,z]; // [x, z]
+              const eyeHeight = 10;
+              
+              // place camera in front of player, looking toward them
+              const cameraPos: [number, number, number] = [
+                playerXZ[0],
+                eyeHeight,
+                playerXZ[1] + 12 // ⬅️ move in front instead of behind
+              ];
+              
+              const lookAt: [number, number, number] = [
+                playerXZ[0],
+                eyeHeight / 1.5, // lower to look at chest/center
+                playerXZ[1]
+              ];
+              
+              dispatch(setCameraTarget({ position: cameraPos, lookAt }));
+              if(!open){
                 toggleSidebar();
-              } 
+              }
             }
             }
           />

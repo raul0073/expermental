@@ -28,46 +28,38 @@ export function parseKeyTuple(keyStr: string): [string, string] {
   if (!match) return [keyStr, ""]; 
   return [match[1], match[2]];
 }
-
-export function formatStatKey(rawKey: string): string {
+const excludedKeys = [
+  "league", "season", "url", "born", "nation", "pos", "age", "player", "team", "90s"
+]
+const forbiddenPrefixes = ["time", "shot creation", "types"];
+export function formatStatKey(rawKey: string): string | null {
   const spaced = rawKey.replace(/_/g, " ");
+  const lower = spaced.toLowerCase().trim();
 
-  const forbiddenPrefixes = ["time", "shot creation", "types"];
-
-  const lower = spaced.toLowerCase();
-  const hit = forbiddenPrefixes.find((p) => lower.startsWith(p));
-
-  return hit ? spaced.slice(hit.length).trimStart() : spaced;
-}
-export function serializeServerStats(data: RawStat[]): SerializedStats {
-  const excludedKeys = ["nation", "pos", "age", "born", "90s"];
-
-  const stats: SerializedStats = {};
-
-  for (const item of data) {
-    const rawKey = item.key
-      .replace(/[()']/g, "")
-      .replace(/,\s*/, "_")
-      .toLowerCase()
-      .trim();
-
-    // Skip any key that starts with an excluded word
-    if (excludedKeys.some(prefix => rawKey.startsWith(prefix))) continue;
-
-    // Optional: only include keys with underscore (multi-part stat names)
-    if (!rawKey.includes("_")) continue;
-
-    stats[rawKey] = item.val;
+  // ⛔ Skip excluded keys (exact matches)
+  if (excludedKeys.some((k) => lower === k)) {
+    return null;
   }
 
-  return stats;
+  // ✂️ Remove unwanted prefixes
+  const hit = forbiddenPrefixes.find((p) => lower.startsWith(p));
+  const cleaned = hit ? spaced.slice(hit.length).trimStart() : spaced;
+
+  return cleaned;
+}
+export function formatStatForChartKey(key: string) {
+  const formatted = formatStatKey(key)
+ if(formatted){
+  const words = formatted.split(" ");
+  if (words.length > 1) {
+    return [words[0], ...words.slice(1).map(w => w.slice(0, 2))].join(" ");
+  } else {
+    return formatted
+  }
+ }
+
 }
 
-
-
-const SKIP_LABELS = new Set([
-  "league", "season", "url", "born", "nation", "pos", "age", "player", "team"
-]);
 
 /**
  * Given the full stats object (e.g. { standard: Stat[], keeper: Stat[], … })
@@ -78,24 +70,26 @@ const SKIP_LABELS = new Set([
  *    starts with `${statsType}_`, stripping that prefix.
  */
 export function getStatsByType(
-  //eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   allStats: Record<string, any[]>,
   statsType: string
 ): StatItem[] {
-  // 1) direct hit
   if (allStats[statsType]) {
     return allStats[statsType];
   }
 
-  // 2) fallback by prefix
   const prefix = `${statsType}_`;
   const out: StatItem[] = [];
   for (const arr of Object.values(allStats)) {
     for (const s of arr) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (s.label.startsWith(prefix)) {
         out.push({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           label: s.label.slice(prefix.length),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           val: s.val,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           rank: s.rank,
         });
       }
@@ -105,12 +99,15 @@ export function getStatsByType(
 }
 
 
-export function filterStatsForDisplay(stats: StatItem[]): StatItem[] {
+
+export function filterStatsForDisplay(stats: PlayerStat[]): PlayerStat[] {
+  const excludedKeys = new Set([
+    "league", "season", "url", "born", "nation", "pos", "age", "player", "team", "90s"
+  ]);
   return stats.filter((s) => {
-    // drop anything with a null rank (often the meta‐rows)
     if (s.rank == null || s.val === 0) return false;
-    // drop by label
-    return !SKIP_LABELS.has(s.label.toLowerCase());
+    const label = s.label.toLowerCase().trim();
+    return !excludedKeys.has(label);
   });
 }
 
@@ -134,4 +131,94 @@ export function getAssignedPosition(
 
   // no match found
   return undefined;
+}
+
+import { Player } from "@/components/player/player.types";
+import {  getChartLabel, STAT_KEYS_CONFIG } from "./Types/Plots.Type";
+import { PlayerStat, PlayerStatsGroup } from "./Types/Team.Type";
+
+// eslint-disable-next-line
+function hasCategories(obj: any): obj is { categories: Record<string, string[]> } {
+  return obj && typeof obj === "object" && "categories" in obj;
+}
+export function getChartStatKeys(
+  chartType: "pizza" | "radar",
+  role: "GK" | "DF" | "MF" | "FW",
+  // eslint-disable-next-line
+  statType?: string
+): string[] {
+  const roleConfig = STAT_KEYS_CONFIG[chartType]?.[role];
+  if (!roleConfig) return [];
+
+  if (chartType === "radar") {
+    return Object.values(roleConfig.categories).flat();
+  }
+
+  if (chartType === "pizza" && hasCategories(roleConfig)) {
+    return Object.values(roleConfig.categories).flat();
+  }
+
+  return [];
+}
+// Pull and flatten a PlayerStat[] from the selected statType
+export function getPlotStatsByType(
+  statsGroup: PlayerStatsGroup,
+  statType: string
+): PlayerStat[] {
+  return statsGroup?.[statType] ?? [];
+}
+export function getChartPayload(
+  player: Player,
+  chartType: "pizza" | "radar",
+  statType: string
+) {
+  const role = player.position as "GK" | "DF" | "MF" | "FW";
+  const roleConfig = STAT_KEYS_CONFIG[chartType]?.[role];
+
+  if (!roleConfig) {
+    console.warn(`No chart config for chartType: ${chartType}, role: ${role}`);
+    return null;
+  }
+
+  // Flatten stat keys and map to categories (only for pizza)
+  let allKeys: string[] = [];
+  const categoryMap: Record<string, string> = {};
+
+  if (chartType === "pizza" && hasCategories(roleConfig)) {
+    Object.entries(roleConfig.categories).forEach(([category, keys]) => {
+      keys.forEach((key) => {
+        allKeys.push(key);
+        categoryMap[key] = category;
+      });
+    });
+  } else if (statType && statType in roleConfig) {
+    if (hasCategories(roleConfig)) {
+      allKeys = roleConfig.categories[statType] ?? [];
+    }
+  }
+
+  // Flatten all stats into a lookup map
+  const flatStats: Record<string, number> = {};
+  Object.values(player.stats).forEach((group) => {
+    group.forEach((item) => {
+      if (item.label && item.val !== undefined) {
+        flatStats[item.label] = parseFloat(item.val as string) || 0;
+      }
+    });
+  });
+
+  // Build metric list (with category)
+  const metrics = allKeys.map((label) => ({
+    key: getChartLabel(label),       // readable display label
+    rawKey: label,                   // original stat key
+    value: flatStats[label] ?? 0,
+    category: categoryMap[label] ?? null, // category for pizza only
+  }));
+
+  return {
+    player_name: player.name,
+    stat_type: statType,
+    chart_type: chartType,
+    metrics,
+  };
 }

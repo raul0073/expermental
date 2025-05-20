@@ -1,7 +1,7 @@
 "use client";
 import { setUserTeam } from "@/lib/features/UserConfigSliceSlice";
 import { RootState } from "@/lib/store";
-import { TeamTypeInit } from "@/lib/Types/Team.Type";
+import { TeamModel, TeamTypeInit } from "@/lib/Types/Team.Type";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -10,6 +10,9 @@ import { Button } from "../../ui/button"; // Assuming you're using shadcn/ui
 import { Card, CardContent } from "../../ui/card";
 import { EPL_TEAMS } from "./teams-data";
 import { LoadingSpinner } from "../loading/Loading";
+import { setUserTeamService } from "@/app/services/config.service";
+import { initializeTeamData } from "@/app/services/team.init.service";
+import { setTeam } from "@/lib/features/TeamSlice";
 
 function TeamSelect() {
 	const dispatch = useDispatch();
@@ -19,14 +22,13 @@ function TeamSelect() {
 	useEffect(()=>{
 		setOpen(true)
 	},[])
-	// const teams = useSelector((state: RootState) => state.team)
 	const handleSelect = async (team: TeamTypeInit) => {
 		setLoading(true)
 		try {
 			dispatch(setUserTeam(team));
-			// await setUserTeamService(team.slug)
-			// const res: TeamModel = await initializeTeamData(team);
-			// dispatch(setTeam(res));
+			await setUserTeamService(team.slug)
+			const res: TeamModel = await initializeTeamData(team);
+			dispatch(setTeam(res));
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -34,7 +36,7 @@ function TeamSelect() {
 		}
 	};
 
-	if (loading) return <LoadingSpinner />
+	if (Object.keys(teams).length === 0 || loading) return <LoadingSpinner message="loading teams data..." />;
 	return (
 		<section className="w-full bg-transparent rounded-lg py-1">
 			<div className="flex justify-center items-center px-4 py-1">

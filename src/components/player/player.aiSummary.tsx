@@ -7,7 +7,7 @@ import { Player } from "./player.types";
 import { PlayerStat } from "@/lib/Types/Team.Type";
 
 interface PlayerAISummaryProps {
-  stats: StatItem[];
+  stats: PlayerStat[];
   statsType: StatsOption;
   player: Player;
 }

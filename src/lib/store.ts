@@ -8,6 +8,8 @@ import userConfigReducer from '@/lib/features/UserConfigSliceSlice';
 import teamReducer from '@/lib/features/TeamSlice';
 import zoneReducer from '@/lib/features/ZoneEditorSlice';
 import playerConfigReducer from '@/lib/features/PlayerConfigEditorSlice';
+import chartsReducer from '@/lib/features/ChartsSlice';
+import cameraReducer from '@/lib/features/CameraFocusSlice';
 
 // Combine reducers
 const rootReducer = combineReducers({
@@ -16,14 +18,16 @@ const rootReducer = combineReducers({
 	userConfig: userConfigReducer,
 	team: teamReducer,
 	zoneEditor: zoneReducer,
-	playerEditor: playerConfigReducer
+	playerEditor: playerConfigReducer,
+	charts: chartsReducer,
+	camera: cameraReducer
 });
 
 // Persist config
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['userConfig', 'selectedPlayer', 'selectedZone', 'zoneEditor'],
+	whitelist: ['userConfig', 'selectedPlayer', 'selectedZone', 'zoneEditor', 'charts'],
 };
 
 // Persisted reducer

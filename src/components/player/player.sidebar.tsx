@@ -7,9 +7,12 @@ import { useSelector } from "react-redux";
 import { LoadingSpinner } from "../root/loading/Loading";
 import { StatTypeSelector } from "../root/stats-type-select/StatsTypeBtns";
 import { ScrollArea } from "../ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { PlayerAISummary } from "./player.aiSummary";
 import { Player } from "./player.types";
 import { PlayerStatsTable } from "./playerDataTable";
+import { PlayerStatsChart } from "./playerChart";
+import { PlayerStat } from "@/lib/Types/Team.Type";
 
 export function PlayerSidebarSheet({
 	playerSelected,
@@ -36,7 +39,10 @@ export function PlayerSidebarSheet({
 		() => getStatsByType(statsGroup, statsType),
 		[statsGroup, statsType]
 	);
-	const cleanStats = useMemo(() => filterStatsForDisplay(rawStats), [rawStats]);
+	const cleanStats = useMemo(
+		() => filterStatsForDisplay(rawStats as PlayerStat[]),
+		[rawStats]
+	  );
 
 	if (!playerModel) {
 		return <LoadingSpinner />;
@@ -73,17 +79,34 @@ export function PlayerSidebarSheet({
 					playerSelected={playerModel}
 				/>
 			</div>
-			<ScrollArea className="h-[60vh] p-3">
-				{/* Stats Table */}
-				<PlayerStatsTable stats={cleanStats} loading={false} />
-
-				{/* AI Analysis */}
-				<PlayerAISummary
-					stats={cleanStats}
-					statsType={statsType}
-					player={playerModel}
-				/>
-			</ScrollArea>
+			<Tabs defaultValue="table">
+				<TabsList className="overflow-x-auto w-full flex-nowrap whitespace-nowrap">
+					<TabsTrigger key="table" value="table" className="capitalize w-full">
+						Table
+					</TabsTrigger>
+					<TabsTrigger key="plot" value="plot" className="capitalize w-full">
+						Visual
+					</TabsTrigger>
+					<TabsTrigger key="ai" value="ai" className="capitalize w-full">
+						AI
+					</TabsTrigger>
+				</TabsList>
+				<ScrollArea className="h-[50vh] p-3">
+					<TabsContent value="table" asChild>
+						<PlayerStatsTable stats={cleanStats} loading={false} />
+					</TabsContent>
+					<TabsContent value="plot" asChild>
+						<PlayerStatsChart player={playerModel} statType={'mixed'} chartType="pizza"/>
+					</TabsContent>
+					<TabsContent value="ai" asChild>
+						<PlayerAISummary
+							stats={cleanStats}
+							statsType={statsType}
+							player={playerModel}
+						/>
+					</TabsContent>
+				</ScrollArea>
+			</Tabs>
 		</div>
 	);
 }
