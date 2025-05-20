@@ -30,10 +30,10 @@ export const STAT_KEYS_CONFIG: Record<
     DF: {
       categories: {
         defending: [
-          "Challenge Tackle Success %", "Aerial Duels Win %", "Shots/Passes Blocked"
+          "Challenge Tackle Success %", "Aerial Duels Win %", "Shots/Passes Blocked", "Tackles in Defensive Third", "Ball Recoveries"
         ],
         build_up: [
-          "Progressive Passes", "Long Passes Completed", "Total Pass Completion %", "Carries into Final Third",
+          "Progressive Passes", "Long Passes Completed", "Total Pass Completion %", "Carries into Final Third", "types_Switches"
         ],
         attacking: [
           "Key Passes", "shot_creation_Shot-Creating Actions", "Passes into Penalty Area"
@@ -43,26 +43,26 @@ export const STAT_KEYS_CONFIG: Record<
     MF: {
       categories: {
         possession: [
-          "Carries", "Progressive Carries", "Take-Ons Successful"
+         "Progressive Carries", "Take-Ons Successful", "shot_creation_Shot-Creating Actions"
         ],
         playmaking: [
-          "Key Passes", "xA", "Pass Completion %"
+          "Key Passes", "Total Pass Completion %", "Carries into Final Third", "Passes into Penalty Area"
         ],
         defending: [
-          "Tackles", "Interceptions"
+          "Tackles", "Interceptions", "Aerial Duels Win %", "Ball Recoveries"
         ]
       }
     },
     FW: {
       categories: {
         finishing: [
-          "Goals", "xG", "Shots"
+          "Goals", "Shots", "shot_creation_Goal-Creating Actions"
         ],
-        creativity: [
-          "Assists", "xA", "Key Passes", "Passes into Penalty Area", "Crosses into Penalty Area"
+        passing: [
+          "Assists", "Key Passes", "Passes into Penalty Area", "Crosses into Penalty Area"
         ],
-        ball_progression: [
-          "Progressive Carries", "Dribbles Completed"
+        dribbling: [
+          "Progressive Carries", "Dribbles Completed", "Take-Ons Successful"
         ]
       }
     }
@@ -105,7 +105,7 @@ export const STAT_KEYS_CONFIG: Record<
         possession: [
           "Carries", "Progressive Carries", "Take-Ons Successful"
         ],
-        playmaking: [
+        attacking: [
           "Key Passes", "xA", "Pass Completion %"
         ],
         defending: [
@@ -131,21 +131,22 @@ export const STAT_KEYS_CONFIG: Record<
 
 export const CHART_LABELS_ALIAS: Record<string, string> = {
   // General GK stats
-  "Clean Sheet Percentage": "Clean Sheet %",
+  "Clean Sheet Percentage": "Cls %",
   "Wins": "Wins",
+  "Shots/Passes Blocked": "Blocks",
   "adv_Post-Shot Expected Goals (PSxG)": "Post-Shot xG (PSxG)",
   "adv_Crosses Stopped": "Crosses Stopped",
   "adv_Keeper Defensive Actions Outside Box": "DefActions Outside Box",
-  "adv_Average Distance of Defensive Actions": "Avg Distance (DefActions)",
+  "adv_Average Distance of Defensive Actions": "Avg Action Distance",
   "adv_Passes Launched %": "Launch Pass %",
   "adv_Average Pass Length": "Avg Pass Length",
   "Ball Recoveries": "Recoveries",
-  "Challenge Tackle Success %" : "Tackle Success %", 
+  "Challenge Tackle Success %" : "Tackle Win %", 
   "Aerial Duels Win %": "Aerial Win %",
   "Long Passes Completed": "Long Pas Comp" ,
   "Total Pass Completion %" : "Passing %", 
   "Carries into Final Third" : "Progressive Carries",
-  // keeper_adv
+  "types_Switches" : "Switches",
   "Passes Attempted (GK)": "Passes Attempted",
   "Launch Passes %": "Launch %",
   "Average Pass Length": "Avg Length",

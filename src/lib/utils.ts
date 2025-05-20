@@ -172,13 +172,17 @@ export function getChartPayload(
   chartType: "pizza" | "radar",
   statType: string
 ) {
-  const role = player.position as "GK" | "DF" | "MF" | "FW";
-  const roleConfig = STAT_KEYS_CONFIG[chartType]?.[role];
+  const position = (player.position || "").split(",")[0].trim() as
+    | "GK"
+    | "DF"
+    | "MF"
+    | "FW";
+    const roleConfig = STAT_KEYS_CONFIG[chartType]?.[position];
 
-  if (!roleConfig) {
-    console.warn(`No chart config for chartType: ${chartType}, role: ${role}`);
-    return null;
-  }
+    if (!roleConfig) {
+      console.warn(`No chart config for chartType: ${chartType}, role: ${position}`);
+      return null;
+    }
 
   // Flatten stat keys and map to categories (only for pizza)
   let allKeys: string[] = [];
