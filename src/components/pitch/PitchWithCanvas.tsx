@@ -1,17 +1,17 @@
 "use client";
 
 import { TeamTypeInit } from "@/lib/Types/Team.Type";
+import { RootState } from "@/lib/store";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useTheme } from "next-themes";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Team } from "../player/playersRendering";
 import { TeamZonesView } from "../zones/zonesRendering";
 import FootballPitch from "./Pitch";
 import { CameraZoom } from "./camera/CameraZoom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 
 export default function PitchWithCanvas({
 	activeTeam,
@@ -20,7 +20,9 @@ export default function PitchWithCanvas({
 }) {
 	const { theme } = useTheme();
 	const controlsRef = useRef<OrbitControlsImpl>(null);
-	const selectedPlayer = useSelector((state: RootState) => state.selectedPlayer.selected);
+	const selectedPlayer = useSelector(
+		(state: RootState) => state.selectedPlayer.selected
+	);
 
 	return (
 		<Canvas
@@ -40,16 +42,18 @@ export default function PitchWithCanvas({
 			/>
 			{/* player lights */}
 			<directionalLight
-	position={[100, 100, 100]}
-	intensity={selectedPlayer ? 0.1 : 1.2}
-/>
-<	ambientLight intensity={selectedPlayer ? 0.05 : 0.4} />
+				position={[100, 100, 100]}
+				intensity={selectedPlayer ? 0.5 : 1.2}
+			/>
+			<directionalLight
+				position={[-100, 30, 20]}
+				intensity={selectedPlayer ? 0.1 : 0.5}
+			/>
+			<ambientLight intensity={selectedPlayer ? 0.05 : 0.4} />
 			{/* STADIUM FLOODLIGHT SETUP */}
-			<ambientLight intensity={selectedPlayer ? 0.6 : 1} />
+			<ambientLight intensity={1} />
 
 			{/* Four corner lights simulating floodlights */}
-	
-
 
 			<OrbitControls
 				ref={controlsRef}
@@ -77,5 +81,3 @@ export default function PitchWithCanvas({
 		</Canvas>
 	);
 }
-
-

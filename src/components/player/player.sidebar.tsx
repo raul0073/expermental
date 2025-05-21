@@ -91,12 +91,12 @@ export function PlayerSidebarSheet({
 						AI
 					</TabsTrigger>
 				</TabsList>
-				<ScrollArea className="h-[50vh] p-3">
+				<ScrollArea className="h-[50vh] py-2">
 					<TabsContent value="table" asChild>
 						<PlayerStatsTable stats={cleanStats} loading={false} />
 					</TabsContent>
 					<TabsContent value="plot" asChild>
-						<PlayerStatsChart player={playerModel} statType={'mixed'} chartType="pizza"/>
+						<PlayerStatsChart player={playerModel} />
 					</TabsContent>
 					<TabsContent value="ai" asChild>
 						<PlayerAISummary

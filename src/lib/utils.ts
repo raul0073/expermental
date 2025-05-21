@@ -134,7 +134,7 @@ export function getAssignedPosition(
 }
 
 import { Player } from "@/components/player/player.types";
-import {  getChartLabel, STAT_KEYS_CONFIG } from "./Types/Plots.Type";
+import {  ChartPayload, getChartLabel, STAT_KEYS_CONFIG } from "./Types/Plots.Type";
 import { PlayerStat, PlayerStatsGroup } from "./Types/Team.Type";
 
 // eslint-disable-next-line
@@ -169,39 +169,22 @@ export function getPlotStatsByType(
 }
 export function getChartPayload(
   player: Player,
-  chartType: "pizza" | "radar",
-  statType: string
-) {
+): ChartPayload | null {
   const position = (player.position || "").split(",")[0].trim() as
     | "GK"
     | "DF"
     | "MF"
     | "FW";
-    const roleConfig = STAT_KEYS_CONFIG[chartType]?.[position];
 
-    if (!roleConfig) {
-      console.warn(`No chart config for chartType: ${chartType}, role: ${position}`);
-      return null;
-    }
+  const pizzaConfig = STAT_KEYS_CONFIG.pizza?.[position];
+  const radarConfig = STAT_KEYS_CONFIG.radar?.[position];
 
-  // Flatten stat keys and map to categories (only for pizza)
-  let allKeys: string[] = [];
-  const categoryMap: Record<string, string> = {};
-
-  if (chartType === "pizza" && hasCategories(roleConfig)) {
-    Object.entries(roleConfig.categories).forEach(([category, keys]) => {
-      keys.forEach((key) => {
-        allKeys.push(key);
-        categoryMap[key] = category;
-      });
-    });
-  } else if (statType && statType in roleConfig) {
-    if (hasCategories(roleConfig)) {
-      allKeys = roleConfig.categories[statType] ?? [];
-    }
+  if (!pizzaConfig && !radarConfig) {
+    console.warn(`No chart config for position: ${position}`);
+    return null;
   }
 
-  // Flatten all stats into a lookup map
+  // Flatten stats into lookup table
   const flatStats: Record<string, number> = {};
   Object.values(player.stats).forEach((group) => {
     group.forEach((item) => {
@@ -211,19 +194,29 @@ export function getChartPayload(
     });
   });
 
-  // Build metric list (with category)
-  const metrics = allKeys.map((label) => ({
-    key: getChartLabel(label),       // readable display label
-    raw_key: label,                   // original stat key
-    value: flatStats[label] ?? 0,
-    category: categoryMap[label] ?? null, // category for pizza only
-  }));
+  const buildMetrics = (categories: Record<string, string[]>) => {
+    const allKeys: string[] = [];
+    const categoryMap: Record<string, string> = {};
+
+    Object.entries(categories).forEach(([category, keys]) => {
+      keys.forEach((key) => {
+        allKeys.push(key);
+        categoryMap[key] = category;
+      });
+    });
+
+    return allKeys.map((label) => ({
+      key: getChartLabel(label),
+      raw_key: label,
+      value: flatStats[label] ?? 0,
+      category: categoryMap[label] ?? null,
+    }));
+  };
 
   return {
     player_name: player.name,
     player_position: player.position,
-    stat_type: statType,
-    chart_type: chartType,
-    metrics,
+    pizza_metrics: pizzaConfig ? buildMetrics(pizzaConfig.categories) : [],
+    radar_metrics: radarConfig ? buildMetrics(radarConfig.categories) : [],
   };
 }

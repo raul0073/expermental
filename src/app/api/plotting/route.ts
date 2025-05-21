@@ -5,9 +5,8 @@ const API_URL = process.env.API_URL
 export async function POST(req: NextRequest) {
 	try {
 		const payload: ChartPayload = await req.json();
-		console.log(payload);
-		console.log(payload);
-		const response = await fetch(`${API_URL}/test/test-pizza`, {
+		console.log(`ROUTE PAYLOAD: ${payload}`);
+		const response = await fetch(`${API_URL}/plot/charts`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

@@ -29,7 +29,7 @@ export default function GrassSurface() {
 
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-      <planeGeometry args={[105, 68, 512, 512]} />
+      <planeGeometry args={[125, 68, 512, 512]} />
       <primitive attach="material" object={material} />
     </mesh>
   );

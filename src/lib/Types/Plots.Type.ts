@@ -164,17 +164,15 @@ export type ChartMetric = { key: string; value: number, raw_key: string, categor
 export type ChartPayload = {
   player_name: string;
   player_position: string;
-  stat_type: string;
-  chart_type: "radar" | "pizza" ;
-  metrics: ChartMetric[];
+  pizza_metrics: ChartMetric[];
+  radar_metrics: ChartMetric[];
 };
-export type ChartResponse = { image_base64: string };
-  
+export type ChartResponse = { pizza_chart: string, radar_chart: string };
+
 export function topPizzaMetrics(
   stats: PlayerStat[],
   limit: number = 12
 ): string[] {
-  // 1. Filter out useless keys (like "nation", "born", etc.)
     const displayStats = filterStatsForDisplay(stats);
     return displayStats
     .filter((item) => item.label && item.val !== undefined)

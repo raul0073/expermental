@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 			user_id: user_id,
 			zones_config: zonesConfig
 		}
-		console.log(DTO);
+
 		const res = await fetch(`${API_URL}/user/zones-config`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },

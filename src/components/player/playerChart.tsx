@@ -11,75 +11,81 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPlayerChart } from "@/lib/features/ChartsSlice";
 import { RootState } from "@/lib/store";
 
-export function PlayerStatsChart({
-	player,
-	chartType,
-	statType,
-}: {
-	player: Player;
-	chartType: "radar" | "pizza";
-	statType: string;
-}) {
+export function PlayerStatsChart({ player }: { player: Player }) {
 	const dispatch = useDispatch();
 
-	const chartImage = useSelector((state: RootState) =>
-		state.charts?.[player.name]?.[chartType] ?? null
-	);
+	const charts = useSelector((state: RootState) => state.charts?.[player.name] ?? {});
+	const [radarChart, setRadarChart] = useState<string | null>(charts.radar ?? null);
+	const [pizzaChart, setPizzaChart] = useState<string | null>(charts.pizza ?? null);
 
-	const [imageBase64, setImageBase64] = useState<string | null>(chartImage);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		// If chart is already in Redux, skip fetching
-		if (chartImage) {
-			setImageBase64(chartImage);
-			return;
-		}
+		const hasBothCharts = radarChart && pizzaChart;
+		if (hasBothCharts) return;
 
-		async function getChart() {
+		async function fetchCharts() {
 			setLoading(true);
-			setImageBase64(null);
 			setError(null);
 
 			try {
-				const payload: ChartPayload | null = getChartPayload(player, chartType, statType);
-				console.log(payload);
-				if (payload) {
-					const res: ChartResponse = await fetchPlayerChart(payload);
-					setImageBase64(res.image_base64);
+				const payload: ChartPayload | null = getChartPayload(player);
+				console.log(`COMPONENT PAYLOAD: ${payload}`);
+				if (!payload) return;
 
-					dispatch(setPlayerChart({
-						player_name: player.name,
-						chart_type: chartType,
-						image: res.image_base64,
-					}));
-				}
+				const res: ChartResponse = await fetchPlayerChart(payload);
+
+				dispatch(setPlayerChart({
+					player_name: player.name,
+					chart_type: "radar",
+					image: res.radar_chart,
+				}));
+				dispatch(setPlayerChart({
+					player_name: player.name,
+					chart_type: "pizza",
+					image: res.pizza_chart,
+				}));
+
+				setRadarChart(res.radar_chart);
+				setPizzaChart(res.pizza_chart);
 
 			} catch (err) {
 				console.error("Chart fetch failed:", err);
+				setError("Failed to load charts.");
 			} finally {
 				setLoading(false);
 			}
 		}
 
-		getChart();
-	}, [player.name, chartType, statType, chartImage]);
+		fetchCharts();
+	}, [player.name, radarChart, pizzaChart, dispatch]);
 
-
-	if (loading) return <LoadingSpinner message="loading chart..." />;
+	if (loading) return <LoadingSpinner message="loading charts..." />;
 	if (error) return <p className="text-red-500 text-sm">{error}</p>;
-	if (!imageBase64) return <p className="text-muted-foreground text-sm">No chart available.</p>;
+	if (!radarChart && !pizzaChart)
+		return <p className="text-muted-foreground text-sm">No charts available.</p>;
 
 	return (
-		<div className="w-full flex justify-center items-center">
-			<Image
-				src={`data:image/png;base64,${imageBase64}`}
-				alt={`${chartType} chart`}
-				width={800}
-				height={800}
-				className="w-[500px] h-[500px] object-contain mx-auto"
-			/>
+		<div className="flex flex-col justify-center items-center gap-8">
+			{pizzaChart && (
+				<Image
+					src={`data:image/png;base64,${pizzaChart}`}
+					alt={`${player.name} Pizza Chart`}
+					width={400}
+					height={400}
+					className="w-fit h-fit object-contain"
+				/>
+			)}
+			{radarChart && (
+				<Image
+					src={`data:image/png;base64,${radarChart}`}
+					alt={`${player.name} Radar Chart`}
+					width={400}
+					height={400}
+					className="w-fit h-fit object-contain"
+				/>
+			)}
 		</div>
 	);
 }
