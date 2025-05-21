@@ -1,18 +1,16 @@
 "use client";
+import { setUserTeamService } from "@/app/services/config.service";
 import { setUserTeam } from "@/lib/features/UserConfigSliceSlice";
 import { RootState } from "@/lib/store";
-import { TeamModel, TeamTypeInit } from "@/lib/Types/Team.Type";
+import { TeamTypeInit } from "@/lib/Types/Team.Type";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button"; // Assuming you're using shadcn/ui
 import { Card, CardContent } from "../../ui/card";
-import { EPL_TEAMS } from "./teams-data";
 import { LoadingSpinner } from "../loading/Loading";
-import { setUserTeamService } from "@/app/services/config.service";
-import { initializeTeamData } from "@/app/services/team.init.service";
-import { setTeam } from "@/lib/features/TeamSlice";
+import { EPL_TEAMS } from "./teams-data";
 
 function TeamSelect() {
 	const dispatch = useDispatch();
