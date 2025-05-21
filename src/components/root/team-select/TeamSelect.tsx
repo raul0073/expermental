@@ -1,5 +1,4 @@
 "use client";
-import { setUserTeamService } from "@/app/services/config.service";
 import { setUserTeam } from "@/lib/features/UserConfigSliceSlice";
 import { RootState } from "@/lib/store";
 import { TeamTypeInit } from "@/lib/Types/Team.Type";
@@ -24,7 +23,6 @@ function TeamSelect() {
 		setLoading(true)
 		try {
 			dispatch(setUserTeam(team));
-			await setUserTeamService(team.slug)
 			// const res: TeamModel = await initializeTeamData(team);
 			// dispatch(setTeam(res));
 		} catch (error) {

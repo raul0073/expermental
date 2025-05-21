@@ -1,15 +1,6 @@
 import {  PlayersConfig, UserConfigModel } from "@/lib/Types/PlayerConfig.Type";
 import { ZonesConfig } from "@/lib/Types/Zones.Types";
 
-export const setUserTeamService = async (slug: string) => {
-    await fetch("/api/config", {
-        method: "POST",
-        body: JSON.stringify({ slug }),
-        headers: { "Content-Type": "application/json" },
-    });
-};
-
-
 
 
 export async function loadZoneEditorConfig(user_id: string): Promise<ZonesConfig | null> {

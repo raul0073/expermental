@@ -56,7 +56,7 @@ const headerClass =
 function About() {
 	return (
 		<section className="about min-h-screen w-full bg-background text-foreground">
-			<div className="container py-8 px-12 space-y-20" id="editor-intro">
+			<div className="container py-8 px-6 sm:px-12 space-y-20" id="editor-intro">
 				<article className="space-y-10">
 					<section className="space-y-4">
 						<h3 className={headerClass} id="players-explain">

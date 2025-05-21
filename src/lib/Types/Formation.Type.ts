@@ -56,6 +56,13 @@ export const FORMATION_MAP: Record<string, string[]> = {
 		"LCM", "RCM",
 		"LW", "ST", "RW",
 	],
+	"1-4-2-4": [
+		"GK",
+		"LB", "LCB", "RCB", "RB",
+		"LCM", "RCM",
+		"LW", "CAM", "ST", "RW",
+
+	]
 };
 export const ROLE_POSITIONS: Record<PlayerRole, [number, number]> = {
     // Goalkeeper
@@ -108,7 +115,7 @@ export const ROLE_POSITIONS: Record<PlayerRole, [number, number]> = {
 	CM:     ["LCM", "RCM", "CDM"],
 	LCM:    ["CM", "RCM"],
 	RCM:    ["CM", "LCM"],
-
+	
 	RM:     ["RW", "RCM"],
 	LM:     ["LW", "LCM"],
 	CAM:    ["LCM", "RCM", "CM"],

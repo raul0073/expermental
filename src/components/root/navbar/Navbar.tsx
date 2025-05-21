@@ -11,7 +11,7 @@ function Navbar() {
 			<div className="px-6 py-2  mx-auto flex justify-between items-center">
 				<Logo size="small" />
 				<div className="flex gap-4 items-center">
-					<h2 className="font-default text-muted-foreground text-xs sm:text-sm">
+					<h2 className="hidden sm:flex font-default text-muted-foreground text-xs sm:text-sm">
 						{userTeam?.name} Season Visualization
 					</h2>
 					<ModeToggle />

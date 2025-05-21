@@ -29,18 +29,20 @@ export default function PitchWithCanvas({
 			key={activeTeam.name}
 			shadows
 			dpr={[1, 1.5]}
-			camera={{ position: [30, 75, 130], fov: 30 }}
+			camera={{ position: [30, 55, 130], fov: 30 }}
 			onCreated={({ gl }) => {
 				gl.getContext().canvas.addEventListener("webglcontextlost", (e) => {
 					e.preventDefault();
 					console.warn("WebGL context lost. Try reloading the page.");
 				});
 			}}>
+			{/* Scene background */}
 			<color
 				attach="background"
-				args={[theme === "dark" ? "#1c1917" : "#6d8c76"]}
+				args={[theme === "dark" ? "#1c1917" : "lightgray"]}
 			/>
-			{/* player lights */}
+
+			{/* Stadium lighting */}
 			<directionalLight
 				position={[100, 100, 100]}
 				intensity={selectedPlayer ? 0.5 : 1.2}
@@ -50,28 +52,30 @@ export default function PitchWithCanvas({
 				intensity={selectedPlayer ? 0.1 : 0.5}
 			/>
 			<ambientLight intensity={selectedPlayer ? 0.05 : 0.4} />
-			{/* STADIUM FLOODLIGHT SETUP */}
 			<ambientLight intensity={1} />
 
-			{/* Four corner lights simulating floodlights */}
-
+			{/* Orbit controls */}
 			<OrbitControls
 				ref={controlsRef}
 				enableRotate
 				enablePan
 				enableZoom
 				enableDamping
-				mouseButtons={{ LEFT: 2, MIDDLE: 0, RIGHT: 1 }}
 				panSpeed={1.5}
 				zoomSpeed={0.5}
 				rotateSpeed={0.6}
+				mouseButtons={{ LEFT: 2, MIDDLE: 0, RIGHT: 1 }}
 				maxPolarAngle={Math.PI / 2.2}
 				minPolarAngle={0.2}
+				minDistance={80}
+				maxDistance={250}
 			/>
+
+			{/* Optional camera animation */}
 			{controlsRef && <CameraZoom controlsRef={controlsRef} />}
+
+			{/* Render pitch + players */}
 			<FootballPitch>
-				{/* injected children */}
-				{/* <TeamLogo url={activeTeam.logo}	/> */}
 				<Team key={`${activeTeam.name}-players`} teamName={activeTeam.name} />
 				<TeamZonesView
 					key={`${activeTeam.name}-zones`}

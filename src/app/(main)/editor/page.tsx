@@ -22,15 +22,15 @@ function Page() {
 		dispatch(playerEditorActive(false))
 	}, []);
 	return (
-		<section className="editor-home pt-12 pl-12">
-			<div className="w-full flex justify-center gap-12">
-				<Link href={"/editor/player"} className="flex items-center ">
+		<section className="editor-home pt-12 sm:pl-12">
+			<div className="w-full flex flex-col justify-center items-center sm:flex-row gap-6">
+				<Link href={"/editor/player"} className="w-fit flex items-center ">
 					<Button variant={"outline"} className="py-8 px-12">
 						Player Config Editor
 						<ArrowRight />
 					</Button>
 				</Link>
-				<Link href={"/editor/zone"} className="flex items-center ">
+				<Link href={"/editor/zone"} className="w-fit flex items-center ">
 					<Button variant={"outline"} className="py-8 px-12">
 						Zones Config Editor
 						<ArrowRight />

@@ -24,8 +24,8 @@ export function Team({ teamName }: { teamName: string }) {
     return (
       <Billboard follow={true} lockX={false} lockY={false} lockZ={false}>
       <Text
-        position={[0, 2.5, 0]}
-        fontSize={4}
+        position={[0, 3, 0]}
+        fontSize={5}
         color="white" 
         anchorX="center"
         anchorY="middle"
