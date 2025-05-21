@@ -44,7 +44,7 @@ export function PlayerStatsChart({
 
 			try {
 				const payload: ChartPayload | null = getChartPayload(player, chartType, statType);
-
+				console.log(payload);
 				if (payload) {
 					const res: ChartResponse = await fetchPlayerChart(payload);
 					setImageBase64(res.image_base64);

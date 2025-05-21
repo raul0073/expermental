@@ -27,8 +27,8 @@ function TeamSelect() {
 		try {
 			dispatch(setUserTeam(team));
 			await setUserTeamService(team.slug)
-			const res: TeamModel = await initializeTeamData(team);
-			dispatch(setTeam(res));
+			// const res: TeamModel = await initializeTeamData(team);
+			// dispatch(setTeam(res));
 		} catch (error) {
 			console.log(error);
 		} finally {

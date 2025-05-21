@@ -214,13 +214,14 @@ export function getChartPayload(
   // Build metric list (with category)
   const metrics = allKeys.map((label) => ({
     key: getChartLabel(label),       // readable display label
-    rawKey: label,                   // original stat key
+    raw_key: label,                   // original stat key
     value: flatStats[label] ?? 0,
     category: categoryMap[label] ?? null, // category for pizza only
   }));
 
   return {
     player_name: player.name,
+    player_position: player.position,
     stat_type: statType,
     chart_type: chartType,
     metrics,

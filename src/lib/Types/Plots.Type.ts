@@ -160,9 +160,10 @@ export const CHART_LABELS_ALIAS: Record<string, string> = {
   "Touches": "Touches",
 };
 
-export type ChartMetric = { key: string; value: number, rawKey: string, category: string };
+export type ChartMetric = { key: string; value: number, raw_key: string, category: string };
 export type ChartPayload = {
   player_name: string;
+  player_position: string;
   stat_type: string;
   chart_type: "radar" | "pizza" ;
   metrics: ChartMetric[];
