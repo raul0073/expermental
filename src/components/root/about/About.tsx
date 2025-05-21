@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-
+import Image from "next/image";
+import pitch_divided from '@/../public/pitch_divided.png'
 interface ConfigExplanation {
 	title: string;
 	description: string;
@@ -51,7 +52,7 @@ const zoneConfigExplanation = {
 	tip: "Good configs reflect your team's identity: a high press? Weight attacking zones and player touches. Compact defense? Invest in defensive zones and against-stats suppression. There are 15 zones across the pitch — spread across defensive, midfield, and attacking thirds, and across left/central/right channels. Think of each zone as a lens into your tactical shape.",
 };
 const headerClass =
-	"relative text-5xl font-extrabold my-12 flex gap-4 items-end tracking-tight after:absolute after:-left-5 after:bg-primary after:w-2 after:h-full after:top-1/2 after:-translate-y-1/2";
+	"relative text-5xl font-extrabold my-12 flex gap-4 items-end tracking-tight after:absolute after:-left-5 after:bg-primary after:w-2 after:h-full after:top-1/2 after:-translate-y-1/2 text-foreground/80";
 function About() {
 	return (
 		<section className="about min-h-screen w-full bg-background text-foreground">
@@ -131,10 +132,17 @@ export const ZonesGuidanceComp = ({
 				{zoneConfigExplanation.tip}
 			</p>
 
-			<div className="mt-6">
-				<p className="text-center text-sm text-muted-foreground mt-3">
-					A 15-zone division of the pitch
-				</p>
+			<div className="mt-6 w-full flex justify-center">
+			<figure>
+			<Image
+				alt="pitch_zones"
+				width={500}
+				height={500}
+				className="dark:grayscale-[0.2]"
+				src={pitch_divided}
+				/>
+				<figcaption>A 15-zone division of the pitch</figcaption>
+			</figure>
 			</div>
 
 			<div className="mt-10 text-base leading-relaxed space-y-4 border border-muted bg-muted rounded-xl p-6">

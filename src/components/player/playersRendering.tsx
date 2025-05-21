@@ -24,15 +24,15 @@ export function Team({ teamName }: { teamName: string }) {
     return (
       <Billboard follow={true} lockX={false} lockY={false} lockZ={false}>
       <Text
-        position={[0, 2, 0]}
-        fontSize={3.5}
+        position={[0, 2.5, 0]}
+        fontSize={4}
         color="white" 
         anchorX="center"
         anchorY="middle"
-        outlineWidth={0.2}
+        outlineWidth={0.1}
         outlineColor="black"
       >
-        Loading Team Stats...
+        Loading Team Stats & Models...
       </Text>
     </Billboard>
     );
