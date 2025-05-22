@@ -9,7 +9,6 @@ import teamReducer from '@/lib/features/TeamSlice';
 import zoneReducer from '@/lib/features/ZoneEditorSlice';
 import playerConfigReducer from '@/lib/features/PlayerConfigEditorSlice';
 import chartsReducer from '@/lib/features/ChartsSlice';
-import cameraReducer from '@/lib/features/CameraFocusSlice';
 
 // Combine reducers
 const rootReducer = combineReducers({
@@ -19,8 +18,7 @@ const rootReducer = combineReducers({
 	team: teamReducer,
 	zoneEditor: zoneReducer,
 	playerEditor: playerConfigReducer,
-	charts: chartsReducer,
-	camera: cameraReducer
+	charts: chartsReducer
 });
 
 // Persist config

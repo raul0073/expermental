@@ -1,9 +1,11 @@
 // components/player/PlayerModel.tsx
 'use client';
 
+import { RootState } from '@/lib/store';
 import { Billboard, Text, useGLTF } from '@react-three/drei';
 import { useTheme } from 'next-themes';
 import { useLayoutEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import type { Group } from 'three';
 
 /**
@@ -12,6 +14,7 @@ import type { Group } from 'three';
  */
 export function PlayerModel({
   position: [x, z],
+  shirt_number,
   name,
   isSub = false,
   onClick,
@@ -27,7 +30,9 @@ export function PlayerModel({
   const { theme } = useTheme();
   const gltf = useGLTF('/models/modelV1.1.glb');
   const gltfSub = useGLTF('/models/modelV1.1-sub.glb');
+  const selected = useSelector((state: RootState) => state.selectedPlayer.selected);
 
+  const isSelected = selected?.name === name;
   // enable shadows on the model
   useLayoutEffect(() => {
     const scene = isSub ? gltfSub.scene : gltf.scene;
@@ -46,12 +51,31 @@ export function PlayerModel({
     <group
       ref={ref}
       position={[x, 5, z]}
+      rotation={[0, -Math.PI / -2, 0]}
       scale={targetScale}
       onClick={e => { e.stopPropagation(); onClick?.(); }
     }>
-     <Billboard>
+     {isSelected && (
+        <directionalLight
+          position={[x + 100, 100, z + 100]}
+          intensity={2}
+          target-position={[x, 5, z]}
+          castShadow
+        />
+      )}
      <primitive object={(isSub ? gltfSub.scene : gltf.scene).clone()}  />
-     </Billboard>
+
+    <Text
+          position={[0, 0.2, -0.2]}
+          fontSize={0.3}
+          color={theme === 'dark' ? 'black' : 'black'}
+          fontWeight={isSub ? 'thin' : 'bold'}
+          anchorX="center"
+          anchorY="bottom"
+        >
+          {shirt_number}
+        </Text>
+
       <Billboard>
         <Text
           position={[0, 1, 0]}

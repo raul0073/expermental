@@ -56,4 +56,34 @@ type FetchTeamStatsParams = {
       throw error;
     }
   }
+  type AnalyzeTeamParams = {
+    team_name: string;
+    user_id: string;
+  };
   
+  export async function analyzeTeam({ team_name, user_id }: AnalyzeTeamParams) {
+    try {
+      const queryParams = new URLSearchParams({
+        team_name,
+        user_id,
+      });
+  
+      const res = await fetch(`/api/team/analyze?${queryParams.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+      });
+  
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error?.detail || 'Failed to analyze team');
+      }
+  
+      return await res.json();
+    } catch (error) {
+      console.error('AnalyzeTeam error:', error);
+      throw error;
+    }
+  }

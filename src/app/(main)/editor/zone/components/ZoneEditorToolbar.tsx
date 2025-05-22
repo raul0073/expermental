@@ -52,7 +52,7 @@ export default function ZoneEditorToolbar() {
   return (
     <div className="flex gap-3 border rounded p-6 bg-muted/40 justify-between">
      <div className="flex  items-center gap-6">
-     <Button size="lg" onClick={handleSave} disabled={loading}>
+     <Button size="lg" onClick={handleSave} disabled={true}>
         Save zone settings
       </Button>
 
