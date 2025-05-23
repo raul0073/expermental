@@ -58,7 +58,7 @@ function PlayerEditorToolbar({activeRole}: { activeRole: keyof ScoreConfig}) {
   return (
     <div className="flex gap-3 border rounded p-6 bg-muted/40 justify-between">
       <div className="flex items-center gap-6">
-        <Button size="lg" onClick={handleSave} disabled={true}>
+        <Button size="lg" onClick={handleSave} disabled={loading}>
           Save player config
         </Button>
         <Button size="lg" variant="secondary" onClick={handleReset} disabled={loading}>

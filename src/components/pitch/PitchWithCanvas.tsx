@@ -5,7 +5,7 @@ import { RootState } from "@/lib/store";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useTheme } from "next-themes";
-import { RefObject, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Team } from "../player/playersRendering";
@@ -19,11 +19,14 @@ function CanvasContent({
 	activeTeam: TeamTypeInit;
 	controlsRef: RefObject<OrbitControlsImpl | null>;
   }) {
-	const { camera } = useThree();
+	const { camera, size  } = useThree();
 	const perspectiveCamera = camera as THREE.PerspectiveCamera;
 	const selectedPlayer = useSelector((state: RootState) => state.selectedPlayer.selected);
 	const { theme } = useTheme();
-  
+	useEffect(() => {
+		perspectiveCamera.aspect = size.width / size.height;
+		perspectiveCamera.updateProjectionMatrix();
+	}, [size, perspectiveCamera]);
 	return (
 	  <>
 		{/* Scene background */}
@@ -81,6 +84,7 @@ function CanvasContent({
 	  <Canvas
 		key={activeTeam.name}
 		shadows
+		className="w-full"
 		dpr={[1, 1.5]}
 		camera={{ position: [0, 55, 100], fov: 35 }}
 		onCreated={({ gl }) => {

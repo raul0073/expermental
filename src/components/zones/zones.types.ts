@@ -1,4 +1,3 @@
-import { Player } from "../player/player.types";
 
 export type ChannelZone = {
   id: string;
@@ -14,12 +13,20 @@ type ZoneBreakdown = {
 }
 type TeamZoneBreakdown = {
   score: number;
-  keys: string[]
+  raw: number;
+  pros: string[]
+  cons: string[]
+  weight: number;
 }
 type PlayersZoneBreakdown = {
   score: number;
-  players: Player[]
+  contributions: PlayersContribution[]
+  raw: number;
+  weight: number;
   
+}
+type PlayersContribution = {
+  name: string, rating:number, minutes:number, position_weight: number
 }
 export type FullSelectableZone = ChannelZone & {
   rating: number;

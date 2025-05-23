@@ -34,9 +34,10 @@ export default function Home() {
 		<section className="home p-1 py-8">
 			
 			<TeamSelect />
+			{ Object.keys(teams).length > 0 &&
 			<PitchCanvas />
+			}
 			<Separator />
-			{/* <About /> */}
 		</section>
 	);
 }

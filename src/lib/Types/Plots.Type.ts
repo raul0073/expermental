@@ -70,63 +70,83 @@ export const STAT_KEYS_CONFIG: Record<
   radar: {
     GK: {
       categories: {
-        general: [
+        mentality: [
+          "Penalty Save Percentage",
           "Clean Sheet Percentage",
-          "Wins",
-          "Ball Recoveries"
+          "Saves",
+          "Goals Against / 90",
         ],
-        shot_stopping: [
-          "adv_Post-Shot Expected Goals (PSxG)",
-          "adv_Crosses Stopped",
-          "adv_Keeper Defensive Actions Outside Box"
+        decisions: [
+          "Keeper Defensive Actions per 90",
+          "Average Distance of Defensive Actions",
+          "Cross Stop Percentage",
+          "Launch Pass Completion %",
         ],
-        distribution: [
-          "adv_Average Distance of Defensive Actions",
-          "adv_Passes Launched %",
-          "adv_Average Pass Length"
-        ]
-      }
+        pressure: [
+          "Penalties Faced",
+          "Own Goals Conceded",
+          "Errors Leading to Shot"
+        ],
+      },
     },
     DF: {
       categories: {
-        defending: [
-          "Challenge Tackle Success %", "Aerial Duels Win %", "Shots/Passes Blocked"
+        mentality: [
+          "Yellow Cards",
+          "Red Cards",
+          "Fouls Committed",
+          "Aerial Duels Win %",
         ],
-        build_up: [
-          "Progressive Passes", "Long Passes Completed", "Total Pass Completion %", "Carries into Final Third",
+        decisions: [
+          "Interceptions",
+          "Errors Leading to Shot",
+          "Passes Offside"
         ],
-        attacking: [
-          "Key Passes", "shot_creation_Shot-Creating Actions", "Passes into Penalty Area"
-        ]
-      }
+        pressure: [
+          "Own Goals Conceded",
+          "Dispossessed",
+          "Miscontrols",
+        ],
+      },
     },
     MF: {
       categories: {
-        possession: [
-          "Carries", "Progressive Carries", "Take-Ons Successful"
+        mentality: [
+          "Fouls Committed",
+          "Yellow Cards",
+          "Red Cards",
         ],
-        attacking: [
-          "Key Passes", "xA", "Pass Completion %"
+        decisions: [
+          "Miscontrols",
+          "Dispossessed",
+          "Passes Offside",
+          "Interceptions"
         ],
-        defending: [
-          "Tackles", "Interceptions"
-        ]
-      }
+        pressure: [
+          "Tackled on Take-On %",
+          "Tackles in Middle Third"
+        ],
+      },
     },
     FW: {
       categories: {
-        finishing: [
-          "Goals", "xG", "Shots"
+        mentality: [
+          "Offside Calls",
+          "Fouls Committed",
+          "Yellow Cards"
         ],
-        creativity: [
-          "Assists", "xA", "Key Passes", "Passes into Penalty Area", "Crosses into Penalty Area"
+        decisions: [
+          "Miscontrols",
+          "Dispossessed",
+          "Passes Offside"
         ],
-        ball_progression: [
-          "Progressive Carries", "Dribbles Completed"
-        ]
-      }
-    }
-  }
+        pressure: [
+          "Tackled on Take-On %",
+          "Challenges Lost"
+        ],
+      },
+    },
+  },
 };
 
 export const CHART_LABELS_ALIAS: Record<string, string> = {

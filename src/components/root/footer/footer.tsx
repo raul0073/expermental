@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import AnalyzeTeamDialogComp from '../dialog/DialogComp'
 
 function Footer() {
   const path = usePathname()
@@ -20,7 +21,7 @@ function Footer() {
              </Button>
              </Link>
          )}
-        {/* { isAnalysisBtnShow && <AnalyzeTeamDialogComp />} */}
+        { isAnalysisBtnShow && <AnalyzeTeamDialogComp />}
         </div>
         </div>
 				</footer>

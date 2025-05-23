@@ -29,7 +29,7 @@ const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "26rem";
 const SIDEBAR_EDITOR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_MOBILE = "18rem";
+const SIDEBAR_WIDTH_MOBILE = "w-full";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
@@ -165,6 +165,7 @@ SidebarProvider.displayName = "SidebarProvider";
 const Sidebar = React.forwardRef<
 	HTMLDivElement,
 	React.ComponentProps<"div"> & {
+		mobileSide?: "bottom",
 		side?: "left" | "right";
 		variant?: "sidebar" | "floating" | "inset";
 		collapsible?: "offcanvas" | "icon" | "none";
@@ -172,6 +173,7 @@ const Sidebar = React.forwardRef<
 >(
 	(
 		{
+			mobileSide = "bottom",
 			side = "left",
 			variant = "floating",
 			collapsible = "offcanvas",
@@ -209,7 +211,7 @@ const Sidebar = React.forwardRef<
 								"--sidebar-width": SIDEBAR_WIDTH_MOBILE,
 							} as React.CSSProperties
 						}
-						side={side}>
+						side={mobileSide}>
 						<SheetHeader className="sr-only">
 							<SheetTitle>Sidebar</SheetTitle>
 							<SheetDescription>Displays the mobile sidebar.</SheetDescription>

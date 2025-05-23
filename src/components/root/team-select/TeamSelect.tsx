@@ -66,7 +66,7 @@ function TeamSelect() {
 								<Image
 									src={team.logo}
 									alt={team.name}
-									className="xl:h-16 object-contain mb-3"
+									className="object-contain"
 									width={80}
 									height={80}
 								/>

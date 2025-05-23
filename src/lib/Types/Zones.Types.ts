@@ -12,6 +12,8 @@ export interface ZoneConfig {
   cons: ZoneMetricBranches;
 }
 
+
+// zones config
 export interface ZonesConfig {
   zone_config: Record<string, ZoneConfig>;
   zone_scalers: Record<string, Record<string, number>>;

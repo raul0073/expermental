@@ -18,7 +18,7 @@ export const LABELS_CONFIG: Record<string, Record<string, string>> = {
         "Expected_npxG+xAG": "Non-Penalty xG + xAG",
         "Progression_PrgC": "Progressive Carries",
         "Progression_PrgP": "Progressive Passes",
-        "Progression_PrgR": "Progressive Passes Receivied",
+        "Progression_PrgR": "Progressive Passes Received",
         "Per 90 Minutes_Gls": "Goals / 90",
         "Per 90 Minutes_Ast": "Assists / 90",
         "Per 90 Minutes_G+A": "Goals + Assists / 90",

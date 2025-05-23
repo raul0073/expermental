@@ -39,8 +39,8 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar>
-			<SidebarHeader>
-				<div className="flex items-center justify-end px-1 mt-14">
+			<SidebarHeader className="mt-8">
+				<div className="absolute right-4 top-14">
 					<button
 						aria-label="Toggle sidebar"
 						onClick={toggleSidebar}

@@ -39,7 +39,7 @@ export function ZoneModel({
 		// normalizedRating 1 → hue 0   (red)
 		const hue = (1 - normalizedRating) * 120;
 		// 80% saturation, 50% lightness gives vivid colors
-		return `hsl(${hue}, 80%, 40%)`;
+		return `hsl(${hue}, 90%, 50%)`;
 	  }, [normalizedRating, hovered]);
 
 	return (

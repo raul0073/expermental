@@ -45,49 +45,57 @@ export function PlayerModel({
   // apply a clear, static scale
   const targetScale: [number, number, number] = isSub
     ? [3, 4, 3]
-    : [4, 5, 3.5];
+    : [3, 4, 3];
 
   return (
     <group
-      ref={ref}
-      position={[x, 5, z]}
-      rotation={[0, -Math.PI / -2, 0]}
-      scale={targetScale}
-      onClick={e => { e.stopPropagation(); onClick?.(); }
-    }>
-     {isSelected && (
-        <directionalLight
-          position={[x + 100, 100, z + 100]}
-          intensity={2}
-          target-position={[x, 5, z]}
-          castShadow
-        />
-      )}
-     <primitive object={(isSub ? gltfSub.scene : gltf.scene).clone()}  />
+  ref={ref}
+  position={[x, 5, z]}
+  rotation={[0, -Math.PI / -2, 0]}
+  scale={targetScale}
+  onClick={e => { e.stopPropagation(); onClick?.(); }}
+>
+  {isSelected && (
+    <directionalLight
+      position={[x + 100, 100, z + 100]}
+      intensity={2}
+      target-position={[x, 5, z]}
+      castShadow
+    />
+  )}
+  
+  <primitive object={(isSub ? gltfSub.scene : gltf.scene).clone()} />
 
+  {!isSelected && (
     <Text
-          position={[0, 0.2, -0.2]}
-          fontSize={0.3}
-          color={theme === 'dark' ? 'black' : 'black'}
-          fontWeight={isSub ? 'thin' : 'bold'}
-          anchorX="center"
-          anchorY="bottom"
-        >
-          {shirt_number}
-        </Text>
+      position={[0, 0.2, -0.2]}
+      fontSize={0.3}
+      color={theme === 'dark' ? 'black' : 'black'}
+      fontWeight={isSub ? 'thin' : 'bold'}
+      anchorX="center"
+      anchorY="bottom"
+    >
+      {shirt_number}
+    </Text>
+  )}
 
-      <Billboard>
-        <Text
-          position={[0, 1, 0]}
-          fontSize={0.2}
-          color={theme === 'dark' ? 'yellow' : 'black'}
-          fontWeight={isSub ? 'thin' : 'bold'}
-          anchorX="center"
-          anchorY="bottom"
-        >
-          {name}
-        </Text>
-      </Billboard>
-    </group>
+ 
+{(!selected || isSelected) && (
+  <Billboard>
+    <Text
+      position={[0, 1, 0]}
+      fontSize={0.2}
+      color={theme === 'dark' ? 'yellow' : 'black'}
+      fontWeight={isSub ? 'thin' : 'bold'}
+      anchorX="center"
+      anchorY="bottom"
+    >
+      {name}
+    </Text>
+  </Billboard>
+)}
+
+</group>
+
   );
 }

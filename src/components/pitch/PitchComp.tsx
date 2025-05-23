@@ -19,7 +19,7 @@ export default function PitchComp() {
 	if(!activeTeam) return null
 
 	return (
-		<div className="w-full max-w-8xl h-[80vh]">
+		<div className="w-full h-[80vh]">
 			<PitchWithCanvas activeTeam={activeTeam}/>
 		</div>
 	);
