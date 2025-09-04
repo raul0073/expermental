@@ -1,4 +1,3 @@
-import { PlayerRole } from "@/components/player/player.types";
 
 export const FORMATION_MAP: Record<string, string[]> = {
 	"1-4-3-3": [
@@ -64,64 +63,3 @@ export const FORMATION_MAP: Record<string, string[]> = {
 
 	]
 };
-export const ROLE_POSITIONS: Record<PlayerRole, [number, number]> = {
-    // Goalkeeper
-    GK: [-50, 0],
-  
-    // Defense
-    LB: [-28, -25],
-    LCB: [-30, -10],
-    CB: [-30, 0],
-    RCB: [-30, 10],
-    RB: [-28, 25],
-  
-    LWB: [-20, -25],
-    RWB: [-20, 25],
-  
-    // Midfield
-    CDM: [-15, 0],
-    LDM: [-15, -12],
-    RDM: [-15, 12],
-    CM: [-5, 0],
-    LCM: [-1, -12],
-    RCM: [-1, 12],
-    LM: [-10, -25],
-    RM: [-10, 25],
-    CAM: [12, 0], 
-  
-    // Attack
-    LW: [18, -25],
-    RW: [18, 25],
-    SS: [15, -5],
-    CF: [22, 0],
-    ST: [30, 0],
-    STR: [25, 5],
-    STL: [25, -5],
-    FW: [18, 0],
-  };
-
-
-  export const POSITION_FALLBACK: Record<string, string[]> = {
-	GK:     ["GK", "SK"],
-	LB:     ["LWB"],
-	RB:     ["RWB"],
-	CB:     ["LCB", "RCB"],
-	LCB:    ["CB", "RCB"],
-	RCB:    ["CB", "LCB"],
-	LWB:    ["LB", "LM"],
-	RWB:    ["RB", "RM"],
-
-	CDM:    ["CM", "LCM", "RCM"],
-	CM:     ["LCM", "RCM", "CDM"],
-	LCM:    ["CM", "RCM"],
-	RCM:    ["CM", "LCM"],
-	
-	RM:     ["RW", "RCM"],
-	LM:     ["LW", "LCM"],
-	CAM:    ["LCM", "RCM", "CM"],
-	LW:     ["LM", "STL"],
-	RW:     ["RM", "STR"],
-	CF:     ["ST", "CAM"],
-	ST:     ["CF"]
-
-  };

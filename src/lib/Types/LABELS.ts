@@ -1,3 +1,10 @@
+import { StaticImageData } from "next/image";
+import bundesliga from "./../../../public/images/leagues/bun.png";
+import epl from "./../../../public/images/leagues/epl.png";
+import la from "./../../../public/images/leagues/la.png";
+import lig from "./../../../public/images/leagues/lig.png";
+import ser from "./../../../public/images/leagues/ser.png";
+
 export const LABELS_CONFIG: Record<string, Record<string, string>> = {
     "standard": {
         "Playing Time_MP": "Matches Played",
@@ -248,3 +255,28 @@ export const LABELS_CONFIG: Record<string, Record<string, string>> = {
 export const DND_ITEM_TYPES = {
 	STAT_KEY: "statKey",
 };
+
+export const LEAGUES_NAME: Record<string, string> = {
+    "GER-Bundesliga" : "Bundesliga",
+    "ENG-Premier League": "Premier League",
+    "ESP-La Liga": "La Liga",
+    "ITA-Serie A": "Serie A",
+    "FRA-Ligue 1": "Ligue 1",
+}
+export const LeagueNameMType = [
+    "GER-Bundesliga",
+    "ENG-Premier League",
+    "ESP-La Liga",
+    "ITA-Serie A",
+    "FRA-Ligue 1",
+] as const;
+export type LeagueNameMap = (typeof LeagueNameMType)[number];
+
+
+export const LEAGUE_ICONS: Record<string, StaticImageData> = {
+    "GER-Bundesliga": bundesliga,
+    "ENG-Premier League": epl,
+    "ESP-La Liga": la,
+    "ITA-Serie A": ser,
+    "FRA-Ligue 1": lig,
+}
