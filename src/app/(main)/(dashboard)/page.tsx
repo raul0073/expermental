@@ -1,42 +1,58 @@
-
-import { BestElevenFormation } from "./components/BestElevenList";
+import BestElevenPlot from "./components/best_eleven/BestElevenPlot";
 import TeamsScatterDashboard from "./components/charts/dashboard/TeamsScatterDashboard";
 import TeamsDashboardHeader from "./components/header/DashboardHeader";
 import PlayerMentalTable from "./components/tables/PlayerMentalTable";
 import TeamMentalTable from "./components/tables/TeamMentalTable";
 import { fetchAllMentalData } from "./utils/fetcher";
+import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
 
 export default async function Page() {
-  const { players, teams, best_eleven } = await fetchAllMentalData();
+  let data;
+  try {
+    data = await fetchAllMentalData();
+  } catch (err) {
+    console.error(err);
+    return <DashboardSkeleton />;
+  }
+
+  const { players, teams, best_eleven } = data;
+
+  if (!players || !teams || !best_eleven) return <DashboardSkeleton />;
+
   return (
-    <section className="w-full h-full px-1 md:px-4 pb-24 space-y-3 md:space-y-8">
-      <TeamsDashboardHeader
+    <section className="w-full px-4 pb-24">
+      {/* Header */}
+      <TeamsDashboardHeader />
 
-      />
+      {/* Top section: equal-height cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+        {/* Team table */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col h-full">
+          <TeamMentalTable teams={teams.mental} className="flex-1" />
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2 md:gap-8">
-  {/* Team table takes full width on small, 2/2 cols on md, 3/5 on lg */}
-  <div className="col-span-1 md:col-span-2 lg:col-span-3">
-    <TeamMentalTable teams={teams} />
-  </div>
+        {/* Best Eleven */}
+        <div className="col-span-1 md:col-span-1 flex flex-col h-full">
+          <BestElevenPlot
+            plotImg={best_eleven.best_eleven_visual}
+            className="flex-1"
+            subs={best_eleven.subs}
+          />
+        </div>
 
-  {/* Player table: full width on small, 2/2 on md, 2/5 on lg */}
-  <div className="col-span-1 md:col-span-2 lg:col-span-2">
-     <BestElevenFormation eleven={best_eleven} /> 
-  </div>
+        {/* Player table */}
+        <div className="col-span-1 md:col-span-2 flex flex-col h-full">
+          <PlayerMentalTable players={players} className="flex-1" />
+        </div>
+      </div>
 
-  {/* Best Eleven Formation: full width on small, half width on md, 2/5 on lg */}
-  <div className="col-span-1 md:col-span-2 lg:col-span-2">
-  <PlayerMentalTable players={players} />
-  </div>
-
-  {/* Teams Scatter: full width on small, 2/2 on md, 3/5 on lg */}
-  <div className="col-span-1 md:col-span-2 lg:col-span-3">
-    <TeamsScatterDashboard teams={teams} />
-  </div>
-</div>
-
+      {/* Remaining section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mt-6">
+        {/* Teams Scatter Dashboard */}
+        <div className="col-span-12 md:col-span-6 lg:col-span-7">
+          <TeamsScatterDashboard teams={teams.mental} className="flex-1" />
+        </div>
+      </div>
     </section>
-
   );
 }

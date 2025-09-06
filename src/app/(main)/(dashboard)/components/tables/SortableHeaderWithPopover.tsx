@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { TableHead } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 
@@ -16,6 +17,8 @@ type Props = {
   onSort: (key: string) => void;
   description: string;
   numeric?: boolean;
+  centered?: boolean;
+  end?: boolean
 };
 
 export default function SortableHeaderWithPopover({
@@ -25,6 +28,8 @@ export default function SortableHeaderWithPopover({
   sortDir,
   onSort,
   description,
+  centered,
+  end,
   numeric = false,
 }: Props) {
   const isActive = statKey === sortKey;
@@ -32,19 +37,19 @@ export default function SortableHeaderWithPopover({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <th
+      <PopoverTrigger asChild className="w-fit">
+        <TableHead
           onClick={() => onSort(statKey)}
           className={cn(
             "cursor-pointer select-none whitespace-nowrap",
-            numeric && "text-right"
+            numeric && "text-left", centered && "text-center", end && "text-right"
           )}
         >
-          <div className="flex items-center gap-2">
+          <div className={cn("flex items-center gap-2", centered && "justify-center", end && "justify-end")}>
             <span>{label} {icon}</span>
-            <Info className="w-4 h-4 text-muted-foreground" />
+            <Info className="w-3 h-3 text-muted-foreground" />
           </div>
-        </th>
+        </TableHead>
       </PopoverTrigger>
       <PopoverContent className="max-w-xs text-sm">
         {description}

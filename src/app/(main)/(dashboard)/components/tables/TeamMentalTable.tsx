@@ -1,52 +1,40 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import {
-  Table,
-  TableHeader,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import LeagueLogo from "@/components/root/league/LeagueLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SortKey, TeamMentalSummary } from "../../utils/types";
-import SortableHeaderWithPopover from "./SortableHeaderWithPopover";
-import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { LEAGUES_NAME } from "@/lib/Types/LABELS";
 import { getLeagueFlag } from "@/lib/flags";
-import LeagueLogo from "@/components/root/league/LeagueLogo";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { SortKey, TeamMentalSummary } from "../../utils/types";
+import SortableHeaderWithPopover from "./SortableHeaderWithPopover";
+import { TEAM_TABLE_HEADERS } from "./constants/headers";
+import { cn } from "@/lib/utils";
 
 type Props = {
   teams: TeamMentalSummary[];
+  leaguePage?:boolean
+  className?:string
 };
 
-const HEADERS = [
-  {
-    key: "avg_m",
-    label: "Avg M",
-    desc: "Represents the team's overall mental strength — average M-Score across all players.",
-  },
-  {
-    key: "spread_m",
-    label: "Spread",
-    desc: "Gap between top and bottom M-Score in the team.",
-  },
-  {
-    key: "leader",
-    label: "Leader",
-    desc: "The player with the highest M-Score in the team.",
-  },
-];
 
-export default function TeamMentalTable({ teams }: Props) {
+
+export default function TeamMentalTable({ teams, leaguePage, className }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("avg_m");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [activeLeague, setActiveLeague] = useState<"ALL" | string>("ALL");
@@ -79,11 +67,11 @@ export default function TeamMentalTable({ teams }: Props) {
     }
   };
 
-  const visibleTeams = showAll ? sortedTeams : sortedTeams.slice(0, 10);
+  const visibleTeams = showAll ? sortedTeams : sortedTeams.slice(0, 15);
 
   return (
-    <Card className="h-fit border-none">
-      <CardHeader>
+    <Card className={cn("h-fit", className)}>
+      <CardHeader className="p-1 md:p-6 h-[100px]">
         <CardTitle>Top Mental Teams</CardTitle>
         {/* Tabs */}
         <div className="flex gap-2 mt-2 flex-wrap">
@@ -107,13 +95,13 @@ export default function TeamMentalTable({ teams }: Props) {
         </div>
       </CardHeader>
       <CardContent className="overflow-auto space-y-4">
-        <Table className="rounded">
+        <Table className="rounded text-xs md:text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
               <TableHead>Team</TableHead>
-              <TableHead>League</TableHead>
-              {HEADERS.map((h) => (
+              <TableHead className={cn("hidden md:flex md:items-center", leaguePage && "hidden md:hidden")}>League</TableHead> 
+              {TEAM_TABLE_HEADERS.map((h) => (
                 <SortableHeaderWithPopover
                   key={h.key}
                   label={h.label}
@@ -134,7 +122,7 @@ export default function TeamMentalTable({ teams }: Props) {
                 className="hover:bg-muted/30"
               >
                 <TableCell>{i + 1}</TableCell>
-                <TableCell className="font-medium text-nowrap">
+                <TableCell  className={cn("font-medium text-nowrap")}>
                   <Link
                     href={`/${encodeURIComponent(t.league)}/${encodeURIComponent(
                       t.team
@@ -143,7 +131,7 @@ export default function TeamMentalTable({ teams }: Props) {
                     {t.team}
                   </Link>
                 </TableCell>
-                <TableCell>
+                <TableCell className={cn("hidden md:flex md:items-center", leaguePage && "hidden md:hidden")}>
                   <Link
                     href={`/${encodeURIComponent(t.league)}`}
                     className="flex items-center gap-2"
@@ -151,6 +139,7 @@ export default function TeamMentalTable({ teams }: Props) {
                    {<LeagueLogo league={t.league} size="sm"/>}
                    
                     <Badge
+                    className="text-xs text-nowrap"
                       variant={t.league.slice(0, 3) as
                         | "GER"
                         | "ENG"
@@ -166,7 +155,7 @@ export default function TeamMentalTable({ teams }: Props) {
                 <TableCell className="text-muted-foreground">
                   {Math.round(t.spread_m)}
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-muted-foreground ">
                   {t.leader?.player} ({t.leader?.m})
                 </TableCell>
               </TableRow>

@@ -39,9 +39,9 @@ export type TeamMentalSummary = {
 };
 export type Player = {
   name: string;
-  team: string;
+  team?: string;
   league: string;
-  league_name: string;
+  league_name?: string;
   role: string;
   position: string;
   age: number | string;
@@ -56,3 +56,11 @@ export type Player = {
   };// eslint-disable-next-line
   stats?: Record<string, any>;
 };
+
+export type TeamStat = {
+  league: string;
+  season: string;
+  team: string;
+  metrics: Record<string, number>;
+};
+export type StatsPayload = Record<string, TeamStat[]>;

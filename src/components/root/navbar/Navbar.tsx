@@ -9,7 +9,7 @@ function Navbar() {
 				<Logo size="small" />
 				<div className="flex gap-4 items-center">
 					<h2 className="hidden sm:flex font-default text-muted-foreground text-xs sm:text-sm">
-					 Season Visualization
+					 24-25 Season Visualization
 					</h2>
 					<ModeToggle />
 				</div>

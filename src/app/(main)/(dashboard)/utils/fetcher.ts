@@ -1,19 +1,27 @@
 import { SETTINGS } from "@/lib/Types/settings";
-import { TeamMentalSummary } from "./types";
-import { Player } from "./types/player";
+import { StatsPayload, TeamMentalSummary } from "./types";
 import { LeagueMetaData } from "./types/league";
+import { Player } from "./types/player";
 
 // -------- MAIN PAGE --------
-// Load top 5 leagues best players, teams, best XI, plots
-export async function fetchAllMentalData(): Promise<{
+export interface DashboardPaylod {
   players: Player[];
-  // eslint-disable-next-line
-  teams: any[];
-  // eslint-disable-next-line
-  best_eleven: any[];
+  teams: {
+    mental: TeamMentalSummary[];
+    //eslint-disable-next-line
+    stats: any[]
+  }
+   best_eleven: {
+    best_eleven: Player[];
+    best_eleven_visual: string 
+    subs: Player[]
+
+  }
   // eslint-disable-next-line
   plots?: any[]; // placeholder for your 2 charts
-}> {
+}
+// Load top 5 leagues best players, teams, best XI, plots
+export async function fetchAllMentalData(): Promise<DashboardPaylod> {
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/all`, {
     next: { revalidate: SETTINGS.REVALIDATE_SECONDS }
   });
@@ -26,20 +34,28 @@ export async function fetchAllMentalData(): Promise<{
   return data;
 }
 
+
+
+type LeaguePagePayload = {
+  league_meta: LeagueMetaData
+  players: Player[];
+  teams: {
+    mental: TeamMentalSummary[];
+    stats: StatsPayload
+  }
+   best_eleven: {
+    best_eleven: Player[];
+    best_eleven_visual: string 
+    subs: Player[]
+
+  }
+}
 // -------- LEAGUE PAGE --------
 // Load all league stats: teams, players, best XI, plots
 export async function fetchLeagueMentalData(
   league: string,
   season: number = 2425
-): Promise<{
-  teams: TeamMentalSummary[];
-  league_meta: LeagueMetaData
-  players: Player[];
-  // eslint-disable-next-line
-  best_eleven: any[];
-  // eslint-disable-next-line
-  plots: any[];
-}> {
+): Promise<LeaguePagePayload> {
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/all`, {
     next: { revalidate: SETTINGS.REVALIDATE_SECONDS },
   });
@@ -49,7 +65,6 @@ export async function fetchLeagueMentalData(
   }
 
 const data =  await res.json();
-console.log(data)
 return data
 }
 
@@ -97,3 +112,7 @@ export async function fetchPlayerMentalData(
 
   return res.json();
 }
+
+
+
+

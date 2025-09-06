@@ -1,43 +1,41 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Link from "next/link";
-import { Player } from "../../utils/types/player";
-import { LEAGUES_NAME } from "@/lib/Types/LABELS";
-import { getLeagueFlag } from "@/lib/flags";
-import { Badge } from "@/components/ui/badge";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { LEAGUES_NAME } from "@/lib/Types/LABELS";
+import { getLeagueFlag } from "@/lib/flags";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Player } from "../../utils/types/player";
+import MentalCircle from "../mental/MentalRankCircle";
+import SortableHeaderWithPopover from "./SortableHeaderWithPopover";
 
 type Props = {
   players: Player[];
+    leaguePage?:boolean
+    className?:string
 };
 
 type SortKey = "name" | "team" | "league" | "mental" | "preformance";
 type SortDirection = "asc" | "desc";
 
-// 🔑 Add your descriptions here
-const TRAIT_DESCRIPTIONS: Record<string, string> = {
-  Resilience: "Ability to bounce back from setbacks, keep performance high under pressure.",
-  Composure: "How calm and effective a player is when under stress or facing adversity.",
-  Creativity: "Vision, decision-making, and ability to create opportunities in tough situations.",
-  Discipline: "Avoiding mistakes, fouls, and cards while staying focused.",
-  Leadership: "Influencing and organizing teammates, maintaining focus and morale.",
-};
 
-export default function PlayerMentalTable({ players }: Props) {
+
+export default function PlayerMentalTable({ players, leaguePage, className }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [activeLeague, setActiveLeague] = useState<"ALL" | string>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("mental");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
 
- 
+
 
   const leagues = useMemo(() => {
     const set = new Set(players.map((p) => p.league ?? p.__meta__?.league));
@@ -85,7 +83,7 @@ export default function PlayerMentalTable({ players }: Props) {
   }, [players, activeLeague, sortKey, sortDir]);
 
   const visiblePlayers = showAll ? filteredPlayers : filteredPlayers.slice(0, 10);
- if (!players?.length) return null;
+  if (!players?.length) return null;
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
       setSortDir((prev) => (prev === "asc" ? "desc" : "asc"));
@@ -96,8 +94,8 @@ export default function PlayerMentalTable({ players }: Props) {
   };
 
   return (
-    <Card className="h-fit border-none">
-      <CardHeader>
+   <Card className={cn("h-fit", className)}>
+      <CardHeader className="p-1 md:p-6 h-[100px]">
         <CardTitle>Top Mental Players</CardTitle>
         <div className="flex gap-2 mt-2 flex-wrap">
           <Button
@@ -119,30 +117,60 @@ export default function PlayerMentalTable({ players }: Props) {
           ))}
         </div>
       </CardHeader>
-
       <CardContent className="overflow-auto space-y-4">
-        <Table>
+        <Table className="rounded text-xs md:text-sm">
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-12 cursor-pointer" onClick={() => handleSort("name")}>
-                #
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
-                Player
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
-                Team
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("league")}>
-                League
-              </TableHead>
-              <TableHead className="text-right cursor-pointer" onClick={() => handleSort("mental")}>
-                Mental / raw
-              </TableHead>
-              <TableHead className="text-right cursor-pointer" onClick={() => handleSort("preformance")}>
-                Preformance
-              </TableHead>
-            </TableRow>
+             <TableRow>
+    <TableHead
+      className="w-12 cursor-pointer"
+      onClick={() => handleSort("name")}
+    >
+      #
+    </TableHead>
+    <TableHead
+      className="cursor-pointer"
+      onClick={() => handleSort("name")}
+    >
+      Player
+    </TableHead>
+    <TableHead
+      className="cursor-pointer"
+      onClick={() => handleSort("team")}
+    >
+      Team
+    </TableHead>
+    <TableHead
+      className={cn("cursor-pointer", leaguePage && "hidden")}
+      onClick={() => handleSort("league")}
+    >
+      League
+    </TableHead>
+
+
+    {/* Mental column */}
+    <SortableHeaderWithPopover
+    key={sortKey}
+      label="Mental"
+      statKey="mental"
+      sortKey={sortKey}
+      sortDir={sortDir}//eslint-disable-next-line
+      onSort={(key) => handleSort(key as any)}
+      description="Overall mental score (M-score 0–100)"
+      centered
+    />
+
+    {/* Performance column */}
+    <SortableHeaderWithPopover
+     key={sortKey}
+      label="Performance"
+      statKey="ranking.performance"
+      sortKey={sortKey}
+      sortDir={sortDir}//eslint-disable-next-line
+      onSort={(key) => handleSort(key as any)}
+      description="Overall performance rating (0–100 composite)"
+      end
+    />
+  </TableRow>
           </TableHeader>
 
           <TableBody>
@@ -159,9 +187,9 @@ export default function PlayerMentalTable({ players }: Props) {
               }
 
               return (
-                <TableRow key={`${player.fbref_id ?? idx}-${idx}`}>
+                <TableRow key={`${player.fbref_id ?? idx}-${idx}`} className="">
                   <TableCell>{idx + 1}</TableCell>
-                  <TableCell className="flex flex-col">
+                  <TableCell className="flex flex-col items-start justify-center h-full p-0 py-0.5">
                     <Link
                       href={`/${encodeURIComponent(leagueKey)}/${encodeURIComponent(team)}/${encodeURIComponent(player.name)}`}
                       className="hover:underline"
@@ -171,34 +199,36 @@ export default function PlayerMentalTable({ players }: Props) {
                     {bestTrait && (
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant="link"
+                          <button
                             className="text-xs text-gray-500 p-0 h-auto font-normal"
                           >
                             Best Trait: {bestTrait} ({breakdown[bestTrait].toFixed(1)})
-                          </Button>
+                          </button>
                         </PopoverTrigger>
-                        <PopoverContent className="max-w-sm text-sm">
-                          <p className="font-semibold">{bestTrait}</p>
-                          <p>{TRAIT_DESCRIPTIONS[bestTrait] ?? "No description available."}</p>
+                                <PopoverContent className="max-w-sm text-sm flex flex-col items-start w-fit">
+                          {Object.entries(player.mental.breakdown).map(([key, val]) => {
+                            return (
+                              <span key={key}>{key}: {val.toFixed(1)}</span>
+                            )
+                          })}
                         </PopoverContent>
                       </Popover>
                     )}
                   </TableCell>
                   <TableCell>{team}</TableCell>
-                  <TableCell>
+                  <TableCell  className={cn(leaguePage && "hidden")}>
                     <Link
                       href={`/${encodeURIComponent(leagueKey)}`}
                       className="flex items-center gap-2"
                     >
                       <span>{getLeagueFlag(leagueKey)?.emoji}</span>
-                      <Badge variant={leagueKey.slice(0, 3) as "GER" | "ENG" | "ESP" | "ITA" | "FRA"}>
+                      <Badge  className="text-xs text-nowrap" variant={leagueKey.slice(0, 3) as "GER" | "ENG" | "ESP" | "ITA" | "FRA"}>
                         {leagueName}
                       </Badge>
                     </Link>
                   </TableCell>
-                  <TableCell className="text-right font-bold">
-                    {player.mental?.m ?? 0} / {player.mental?.m_raw ?? 0}
+                  <TableCell className="">
+                    <MentalCircle value={player.mental?.m ?? 0} />
                   </TableCell>
                   <TableCell className="text-right font-bold">
                     {player.ranking?.performance ?? 0}

@@ -13,12 +13,12 @@ function LeagueLogo({ league, size }: LeagueLogoProps) {
     <div
       className={`inline-block rounded-full ${
         size === "sm"
-          ? "w-5 h-5"
+          ? "w-5 h-auto"
           : size === "md"
-          ? "w-8 h-8"
+          ? "w-8 h-auto"
           : size === "lg"
-          ? "w-10 h-10"
-          : "w-8 h-8"
+          ? "w-10 h-auto"
+          : "w-8 h-auto"
       }`}
     >
       <Image
