@@ -18,7 +18,7 @@ export interface DashboardPaylod {
 // Load top 5 leagues best players, teams, best XI, plots
 export async function fetchAllMentalData(): Promise<DashboardPaylod> {
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/all`, {
-    next: { revalidate: SETTINGS.REVALIDATE_SECONDS }
+     cache: "no-store",
   });
 
   if (!res.ok) {
@@ -46,7 +46,7 @@ export async function fetchLeagueMentalData(
   season: number = 2425
 ): Promise<LeaguePagePayload> {
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/all`, {
-    next: { revalidate: SETTINGS.REVALIDATE_SECONDS },
+     cache: "no-store",
   });
 
   if (!res.ok) {
@@ -76,8 +76,7 @@ export async function fetchTeamMentalData(
 }> {
 
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/${team}`, {
-    next: { revalidate: SETTINGS.REVALIDATE_SECONDS },
-  });
+ cache: "no-store",  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch mental data for team ${team}: ${res.status}`);
