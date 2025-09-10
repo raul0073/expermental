@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { seoMeta } from "@/lib/seo/seo";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+					<NextTopLoader  />
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="dark"

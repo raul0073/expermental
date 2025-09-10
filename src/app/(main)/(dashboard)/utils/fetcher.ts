@@ -16,8 +16,11 @@ export interface DashboardPaylod {
   plots?: any[]; // placeholder for your 2 charts
 }
 // Load top 5 leagues best players, teams, best XI, plots
-export async function fetchAllMentalData(): Promise<DashboardPaylod> {
-  const res = await fetch(`${SETTINGS.NEXT_API}/mental/all`, {
+export async function fetchAllMentalData(server:boolean = true): Promise<DashboardPaylod> {
+ const url = server
+    ? `${SETTINGS.NEXT_API}/mental/all` // full API call for server-side
+    : `/api/mental/all`;                // relative path for client-side
+  const res = await fetch(url, {
      cache: "no-store",
   });
 
