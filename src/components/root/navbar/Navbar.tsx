@@ -1,6 +1,8 @@
 "use client";
+import { SiGoogledocs } from "react-icons/si";
 import { ModeToggle } from "../../ui/theme-switcher";
 import Logo from "../logo/Logo";
+import Link from "next/link";
 
 function Navbar() {
 	return (
@@ -11,6 +13,8 @@ function Navbar() {
 					<h2 className="hidden sm:flex font-default text-muted-foreground text-xs sm:text-sm">
 					 24-25 Season Visualization
 					</h2>
+					<Link href="/docs">
+					<SiGoogledocs /></Link>
 					<ModeToggle />
 				</div>
 			</div>

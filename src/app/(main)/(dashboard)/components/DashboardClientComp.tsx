@@ -2,7 +2,7 @@
 import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
 import { useTopLoader } from "nextjs-toploader";
 import { useEffect, useState } from "react";
-import { fetchAllMentalData } from "../utils/fetcher";
+import { DashboardPaylod, fetchAllMentalData } from "../utils/fetcher";
 import { BestXIFormation } from "./best_eleven/BestElevenComp";
 import TeamsScatterDashboard from "./charts/dashboard/TeamsScatterDashboard";
 import PageErrorComp from "./error/PageErrorComp";
@@ -12,11 +12,7 @@ import PlayerMentalTable from "./tables/players/PlayerTable";
 
 
 export default function DashboardPage() {
-  const [data, setData] = useState<null | {
-    players: any[];
-    teams: any;
-    best_eleven: any;
-  }>(null);
+  const [data, setData] = useState<DashboardPaylod | null>(null);
   const [error, setError] = useState(false);
   const loader = useTopLoader()
   useEffect(() => {

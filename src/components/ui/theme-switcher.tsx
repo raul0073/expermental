@@ -12,9 +12,10 @@ export function ModeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      className=""
+      className="bg-transparent hover:bg-transparent"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       aria-label="Toggle theme"
+      aria-describedby="Toggle Theme"
     >
       {theme === "dark" ? (
         <Sun className="h-[1.2rem] w-[1.2rem] text-yellow-400" />
