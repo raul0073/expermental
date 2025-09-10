@@ -1,24 +1,60 @@
-import React from 'react'
+import { LeaguePageSkeleton } from "@/components/root/skeletons/LeagueSkeleton";
+import { Suspense } from "react";
+import { BestXIFormation } from "../../components/best_eleven/BestElevenComp";
+import PageErrorComp from "../../components/error/PageErrorComp";
+import PlayerMentalTable from "../../components/tables/players/PlayerTable";
+import { fetchTeamMentalData } from "../../utils/fetcher";
+import { TeamDefaultRadarVsLeagueBest } from "./components/charts/TeamRadar";
+import TeamHeader from "./components/header/TeamHeader";
+import { ChartRadarTeamGrid } from "./components/team/TeamPerformanceRadar";
 
-function page() {
+type PageProps = {
+  params: Promise<{
+    league: string;
+    team: string
+  }>;
+};
+
+async function Page({ params }: PageProps) {
+  const {league, team} = await params
+  const decodedLeague = decodeURIComponent(league);
+  const decodedTeam = decodeURIComponent(team);
+      let data;
+    try {
+      data = await fetchTeamMentalData(decodedLeague, decodedTeam);
+    } catch (err) {
+      console.error(err);
+      return <PageErrorComp page="team" />
+    }
+  
+    const { players,stats, best_eleven, plot } = data;
+  
+    if (!players || !stats || !best_eleven) return <PageErrorComp page="team" />
+  
+
   return (
-    <div>
-      <header>LEAGUE NAME / PLAYER NAME / TEAM NAME</header>
-    now grid of 2:
-      table of top 20 players. 
-      table has: 
-      name, team, mental score, preformance score, age, role
-      all are sortable on click.
-    best 11 for the page / team? / league? if player no need.
+     <Suspense fallback={<LeaguePageSkeleton />}>
+       <section className={`team-page-${team} w-full px-4 pb-24`}>
+     <TeamHeader teamName={decodedTeam} leagueName={decodedLeague} />
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="col-span-1 sm:col-span-2 lg:col-span-2 flex flex-col">
+          <PlayerMentalTable players={players} teamName={decodedTeam} leagueName={decodedLeague} leaguePage className="flex-1" />
+        </div>
+               <div className="col-span-2 lg:col-span-1 flex flex-col h-full">
+                 <BestXIFormation data={best_eleven} className="w-full sm:flex-1" />
+              </div>
+        <div className="flex-col sm:flex-row flex w-full gap-3 justify-center col-span-2 h-full">
+ 
+           <ChartRadarTeamGrid teamStats={stats.stats} className="h-full" teamName={decodedTeam} />
+          <TeamDefaultRadarVsLeagueBest data={plot.default} className="h-full" teamName={decodedTeam} />
 
-    under this main section:
-    plotting section, here we will have chart visualizing the data.
-    player? pizza plot.
-    team? scatter 
-    league? TBD
-
-    </div>
+        </div>
+       
+      </div>
+    </section>
+     </Suspense>
   )
 }
 
-export default page
+export default Page

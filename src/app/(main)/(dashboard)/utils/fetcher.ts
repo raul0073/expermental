@@ -1,5 +1,5 @@
 import { SETTINGS } from "@/lib/Types/settings";
-import { StatsPayload, TeamMentalSummary } from "./types";
+import { BestElevenResponse, PlayerResponse, StatsPayload, TeamDefaultChartData, TeamMentalSummary } from "./types";
 import { LeagueMetaData } from "./types/league";
 import { Player } from "./types/player";
 
@@ -9,14 +9,9 @@ export interface DashboardPaylod {
   teams: {
     mental: TeamMentalSummary[];
     //eslint-disable-next-line
-    stats: any[]
+    stats: StatsPayload
   }
-   best_eleven: {
-    best_eleven: Player[];
-    best_eleven_visual: string 
-    subs: Player[]
-
-  }
+  best_eleven: BestElevenResponse,
   // eslint-disable-next-line
   plots?: any[]; // placeholder for your 2 charts
 }
@@ -30,7 +25,6 @@ export async function fetchAllMentalData(): Promise<DashboardPaylod> {
     throw new Error(`Failed to fetch global mental data: ${res.status}`);
   }
   const data = await res.json();
-  console.log(data)
   return data;
 }
 
@@ -43,12 +37,7 @@ type LeaguePagePayload = {
     mental: TeamMentalSummary[];
     stats: StatsPayload
   }
-   best_eleven: {
-    best_eleven: Player[];
-    best_eleven_visual: string 
-    subs: Player[]
-
-  }
+   best_eleven: BestElevenResponse
 }
 // -------- LEAGUE PAGE --------
 // Load all league stats: teams, players, best XI, plots
@@ -72,16 +61,20 @@ return data
 // Load team stats + players + best XI + plots
 export async function fetchTeamMentalData(
   league: string,
-  season: number,
-  team: string
+  team: string,
+   season: number = 2425
 ): Promise<{
-  team: TeamMentalSummary;
   players: Player[];
-  // eslint-disable-next-line
-  best_eleven: any[];
-  // eslint-disable-next-line
-  plots: any[];
+  stats: {
+    mental: TeamMentalSummary[];
+    stats: StatsPayload
+  }
+   best_eleven: BestElevenResponse,
+  plot: {
+    default: TeamDefaultChartData
+  }
 }> {
+
   const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/${team}`, {
     next: { revalidate: SETTINGS.REVALIDATE_SECONDS },
   });
@@ -90,24 +83,38 @@ export async function fetchTeamMentalData(
     throw new Error(`Failed to fetch mental data for team ${team}: ${res.status}`);
   }
 
-  return res.json();
+const data =  await res.json();
+return data
 }
 
 // -------- PLAYER PAGE --------
-// Load single player data + pizza chart
 export async function fetchPlayerMentalData(
-  playerId: string
-): Promise<{
-  player: Player;
-  // eslint-disable-next-line
-  plots: any[]; // pizza chart (later structured type)
-}> {
-  const res = await fetch(`${SETTINGS.NEXT_API}/mental/player/${playerId}`, {
+  league: string,
+  season: number = 2425,
+  options?: {
+    name?: string;
+    role?: string;
+    top_k?: number;
+  }
+): Promise<PlayerResponse> {
+  const query = new URLSearchParams();
+  console.log(league, season, options)
+  if (options?.name) query.set("name", options.name);
+  if (options?.role) query.set("role", options.role);
+  if (options?.top_k) query.set("top_k", String(options.top_k));
+
+  const url = `${SETTINGS.NEXT_API}/mental/${league}/${season}/players?${query.toString()}`;
+  console.log("FETCH FROM:", url)
+  const res = await fetch(url, {
     next: { revalidate: SETTINGS.REVALIDATE_SECONDS },
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch mental data for player ${playerId}: ${res.status}`);
+    throw new Error(
+      `Failed to fetch mental data (league=${league}, season=${season}, opts=${JSON.stringify(
+        options
+      )}): ${res.status}`
+    );
   }
 
   return res.json();

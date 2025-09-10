@@ -21,19 +21,23 @@ export type StatsOption =
 | "goal"
 | "defense"
 | "possession"
-| "playing"
-| "misc";
+| "misc"
+|"goal_shot_creation"
+|"passing_types"
+|"playing_time"
 
 // Label mapping to show in UI
 export const STAT_OPTION_LABELS: Record<StatsOption, string> = {
 	standard: "Overall",
 	keeper: "Goalkeeping",
 	shooting: "Shooting & Finishing",
+  goal_shot_creation: "Creating",
+  passing_types: "Types of Passing",
 	passing: "Passing",
 	goal: "Creative Playmaking",
 	defense: "Defensive Actions",
 	possession: "Possession",
-	playing: "Playing Time",
+	playing_time: "Playing Time",
 	misc: "Other Stats",
 };
 
@@ -46,6 +50,6 @@ export const STAT_OPTIONS: StatsOption[] = [
 "defense",
 "possession",
 "keeper",
-"playing",
+"playing_time",
 "misc",
 ];

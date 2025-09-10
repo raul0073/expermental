@@ -25,6 +25,7 @@ import { SortKey, TeamMentalSummary } from "../../utils/types";
 import SortableHeaderWithPopover from "./SortableHeaderWithPopover";
 import { TEAM_TABLE_HEADERS } from "./constants/headers";
 import { cn } from "@/lib/utils";
+import TeamLogo from "../../[league]/[team]/components/header/TeamLogo";
 
 type Props = {
   teams: TeamMentalSummary[];
@@ -71,7 +72,7 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
 
   return (
     <Card className={cn("h-fit", className)}>
-      <CardHeader className="p-1 md:p-6 h-[100px]">
+      <CardHeader className="p-2 md:p-6 min-h-[100px]">
         <CardTitle>Top Mental Teams</CardTitle>
         {/* Tabs */}
         <div className="flex gap-2 mt-2 flex-wrap">
@@ -127,8 +128,9 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
                     href={`/${encodeURIComponent(t.league)}/${encodeURIComponent(
                       t.team
                     )}`}
+                    className="flex items-center gap-1"
                   >
-                    {t.team}
+                   <TeamLogo teamName={t.team} size="xs" league={t.league} /> {t.team}
                   </Link>
                 </TableCell>
                 <TableCell className={cn("hidden md:flex md:items-center", leaguePage && "hidden md:hidden")}>

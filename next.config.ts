@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'loodibee.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'fbref.com',
+      },
     ],
   },
 };

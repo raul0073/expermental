@@ -280,3 +280,8 @@ export const LEAGUE_ICONS: Record<string, StaticImageData> = {
     "ITA-Serie A": ser,
     "FRA-Ligue 1": lig,
 }
+export const BEST_XI_HEADERS = {
+  "team" : "Team",
+  "league": "League",
+  "overall": "Top 5 Leagues"
+}

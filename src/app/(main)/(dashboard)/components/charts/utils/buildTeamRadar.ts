@@ -71,7 +71,7 @@ export type MentalRadarMetric = {
 
 export type MentalRadarMapping = Record<string, MentalRadarMetric[]>;
 
-// Example mapping
+// team radar mapping
 export const MENTAL_RADAR_MAPPING: MentalRadarMapping = {
   passing_quality: [
     { statGroup: "passing", key: "Total_Cmp%" },
@@ -82,7 +82,6 @@ export const MENTAL_RADAR_MAPPING: MentalRadarMapping = {
   chance_creation: [
     { statGroup: "goal_shot_creation", key: "SCA_SCA90" },
     { statGroup: "goal_shot_creation", key: "GCA_GCA90" },
-    { statGroup: "shooting", key: "Standard_Gls" },
     { statGroup: "shooting", key: "Standard_Ast" },
   ],
   ball_recovery: [
@@ -90,23 +89,24 @@ export const MENTAL_RADAR_MAPPING: MentalRadarMapping = {
     { statGroup: "defense", key: "Int" },
     { statGroup: "misc", key: "Performance_Recov" },
     { statGroup: "defense", key: "Challenges_Tkl%" },
+        { statGroup: "defense", key: "Challenges_Lost", lowerBetter: true },
   ],
   chance_conversion: [
     { statGroup: "shooting", key: "Standard_G/Sh" },
     { statGroup: "shooting", key: "Standard_G/SoT" },
     { statGroup: "shooting", key: "Expected_npxG/Sh" },
+    { statGroup: "standard", key: "Per 90 Minutes_G+A-PK" },
   ],
   pressure: [
     { statGroup: "defense", key: "Tackles_Att 3rd" },
     { statGroup: "defense", key: "Tackles_Mid 3rd" },
-    { statGroup: "defense", key: "Tackles_Def 3rd" },
     { statGroup: "defense", key: "Challenges_Att" },
   ],
   discipline: [
     { statGroup: "defense", key: "Err", lowerBetter: true },
-    { statGroup: "defense", key: "Challenges_Lost", lowerBetter: true },
-    { statGroup: "misc", key: "Performance_CrdY", lowerBetter: true },
     { statGroup: "misc", key: "Performance_CrdR", lowerBetter: true },
+    { statGroup: "misc", key: "Performance_2CrdY", lowerBetter: true },
+    { statGroup: "misc", key: "Performance_Off", lowerBetter: true },
   ],
   aerial: [
     { statGroup: "misc", key: "Aerial Duels_Won%" },
@@ -114,17 +114,15 @@ export const MENTAL_RADAR_MAPPING: MentalRadarMapping = {
     { statGroup: "misc", key: "Aerial Duels_Lost", lowerBetter: true },
   ],
 };
-
-export function getMentalRadarDataForTeams(
-  //eslint-disable-next-line
+export function getMentalRadarDataForTeams(//eslint-disable-next-line
   teams: Record<string, any>[]
-): Record<string, Record<string, number>> {
-  const rawResult: Record<string, Record<string, number>> = {};
+): Record<string, Record<string, number> & { league?: string }> {
+  const rawResult: Record<string, Record<string, number> & { league?: string }> = {};
 
-  // First, calculate raw sums per team
   teams.forEach((team) => {
     if (!team.team) return;
-    const mapped: Record<string, number> = {};
+
+    const mapped: Record<string, number> & { league?: string } = { league: team.league };
 
     Object.entries(MENTAL_RADAR_MAPPING).forEach(([category, metrics]) => {
       let sum = 0;
@@ -143,15 +141,14 @@ export function getMentalRadarDataForTeams(
     rawResult[team.team] = mapped;
   });
 
-  // Then, normalize per category across all teams
+  // normalize per category
   const categories = Object.keys(MENTAL_RADAR_MAPPING);
-  const normalizedResult: Record<string, Record<string, number>> = {};
+  const normalizedResult: Record<string, Record<string, number> & { league?: string }> = {};
 
   categories.forEach((cat) => {
     let min = Infinity;
     let max = -Infinity;
 
-    // find min/max for this category
     Object.values(rawResult).forEach((stats) => {
       const val = stats[cat];
       if (val !== undefined) {
@@ -160,17 +157,18 @@ export function getMentalRadarDataForTeams(
       }
     });
 
-    // normalize each team's value for this category
     Object.entries(rawResult).forEach(([team, stats]) => {
       if (!normalizedResult[team]) normalizedResult[team] = {};
       const val = stats[cat];
-      // avoid division by zero
       normalizedResult[team][cat] = min === max ? 50 : ((val - min) / (max - min)) * 100;
+      // keep league for scatterData
+      normalizedResult[team].league = stats.league;
     });
   });
 
   return normalizedResult;
 }
+
 
 export const DEFENSE_MAPPING_QUALITY: Record<string, string[]> = {
   Resilience: ["Tackles_Tkl%", "Tackles_TklW", "Tkl+Int"], // success & clean interventions
@@ -207,6 +205,80 @@ export function getDefenseDataForRadar(teams: Record<string, any>) {
 
     result[team.team] = mapped;
   });
+
+  return result;
+}
+
+export type RadarCategoryScores = Record<string, number>;
+
+/**
+ * Convert snake_case to Capitalized Words for radar labels
+ */
+function prettifyCategory(name: string) {
+  return name
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+const normalizeDiscipline = (val: number): number => {
+  if (val == null || isNaN(val)) return 50;
+
+  // 0 cards = 100, 5+ cards = 0
+  return Math.max(0, Math.min(100, (1 - val / 5) * 100));
+};
+/**
+ * Compute radar-friendly normalized scores (0-100) per mental category
+ * @param teamStats StatsPayload for a single team
+ * @param radarMapping MENTAL_RADAR_MAPPING
+ * @returns RadarCategoryScores
+ */
+export function getTeamRadarStats(
+  teamStats: StatsPayload,
+  radarMapping = MENTAL_RADAR_MAPPING
+): RadarCategoryScores {
+  const result: RadarCategoryScores = {};
+
+  for (const [category, keys] of Object.entries(radarMapping)) {
+    const values: number[] = [];
+
+    for (const k of keys) {//eslint-disable-next-line
+      const group = teamStats[k.statGroup] as Record<string, any> | undefined;
+      if (!group) continue;
+
+      let val = group[k.key as string];
+      if (val && typeof val === "object" && "value" in val) val = val.value;
+      if (val == null || isNaN(val)) continue;
+
+      // If discipline, apply manual punishment
+      if (category === "discipline") {
+        val = normalizeDiscipline(Number(val));
+      } else if (k.lowerBetter) {
+        // invert lowerBetter stats normally
+        val = -Number(val);
+      }
+
+      values.push(Number(val));
+    }
+
+    if (values.length === 0) {
+      result[prettifyCategory(category)] = 99;
+      continue;
+    }
+
+    // Min-max normalization for the category
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const normValues = values.map((v) =>
+      max === min ? 99 : ((v - min) / (max - min)) * 100
+    );
+
+    const avgScore =
+      normValues.reduce((sum, v) => sum + v, 0) / normValues.length;
+
+    result[prettifyCategory(category)] = Math.round(
+      Math.min(Math.max(avgScore, 0), 100)
+    );
+  }
 
   return result;
 }

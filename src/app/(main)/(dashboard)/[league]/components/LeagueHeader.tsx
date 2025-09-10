@@ -23,10 +23,9 @@ const LeagueHeader: React.FC<Props> = ({
         const seasonString = season.toString().slice(0,2).concat(" / ").concat(season.toString().slice(2))
     return (
        
-        <header className="flex flex-col">
+        <header className="flex flex-col md:flex-row md:items-start md:justify-between p-1">
             {/* Title + Subtitle */}
-            <div className="p-1  gap-6 md:flex-row md:items-center md:justify-between mb-6">
-                <div className="flex justify-between gap-3 items-center leading-tight tracking-tighter">
+             <div className="flex justify-between gap-3 items-center leading-tight tracking-tighter">
                      <div className="header flex items-center gap-2">
                          <span> {<LeagueLogo league={league} size="lg" />}</span>
                        <h1 className="text-xl md:text-4xl font-bold tracking-tight
@@ -35,17 +34,21 @@ const LeagueHeader: React.FC<Props> = ({
                        ">
                     {LEAGUES_NAME[league]} Mental Ranking
                 </h1>
-                     </div>
-                <div className="flex gap-4 items-center">
-                    <StatCard label="League Avg Mental" value={avg_m.toFixed(1)} />
+                </div>
+
+                </div>
+            <div className="p-1  gap-6 md:flex-row md:items-center md:justify-between mb-6">
+               
+              <div className="flex flex-col items-start  md:flex-row gap-4 md:items-center">
+                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-3 md:grid-cols-6">
+                        <StatCard label="League Avg Mental" value={avg_m.toFixed(1)} />
                     <StatCard label="Spread (variance)" value={spread_m.toFixed(1)} />
                     <StatCard label="Teams" value={teams_count} />
                     <StatCard label="Players Ranked" value={players_count} />
                     <StatCard label="Top Performer" value={top_player} highlight />
                     <StatCard label="Season" value={seasonString} />
+                    </div>
                 </div>
-                </div>
-              
                 
             </div>
         </header>
@@ -69,7 +72,7 @@ function StatCard({
             <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                 {label}
             </span>
-            <span className="text-lg font-bold">{value}</span>
+            <span className="text-medium md:text-lg font-bold">{value}</span>
         </div>
     );
 }
