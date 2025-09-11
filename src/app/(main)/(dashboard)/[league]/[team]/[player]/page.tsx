@@ -12,6 +12,7 @@ import PageErrorComp from "../../../components/error/PageErrorComp";
 import PlayerHeader from "./components/PlayerHeader";
 import PlayerPizzaChart from "./components/PlayerPizzaPlot";
 import PlayerStatsTable from "./components/PlayerStatsTable";
+import { generateMetadata } from "../../../utils/metadata";
 
 type PageProps = {
   params: Promise<{
@@ -24,6 +25,7 @@ async function Page({ params }: PageProps) {
   const { league, player } = await params;
   const decodedLeague = decodeURIComponent(league);
   const decodedPlayer = decodeURIComponent(player);
+  generateMetadata({ type: "player", league: league, player: player });
   let data;
   try {
     data = await fetchPlayerMentalData(decodedLeague, 2425, {

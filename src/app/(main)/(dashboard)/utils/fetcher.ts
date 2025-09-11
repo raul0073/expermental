@@ -33,7 +33,7 @@ export async function fetchAllMentalData(
   }
 }
 
-type LeaguePagePayload = {
+export type LeaguePagePayload = {
   league_meta: LeagueMetaData;
   players: Player[];
   teams: {
@@ -46,10 +46,14 @@ type LeaguePagePayload = {
 // -------- LEAGUE PAGE --------
 export async function fetchLeagueMentalData(
   league: string,
-  season: number = 2425
+  season: number = 2425,
+  client: boolean = true
 ): Promise<LeaguePagePayload | null> {
   try {
-    const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/all`);
+          const url = client
+    ? `/api/mental/${league}/${season}/all`
+    : `${SETTINGS.NEXT_API}/mental/${league}/${season}/all`
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Status ${res.status}`);
     return await res.json();
   } catch (err) {
@@ -62,7 +66,8 @@ export async function fetchLeagueMentalData(
 export async function fetchTeamMentalData(
   league: string,
   team: string,
-  season: number = 2425
+  season: number = 2425,
+  client: boolean = false
 ): Promise<{
   players: Player[];
   stats: { mental: TeamMentalSummary[]; stats: StatsPayload };
@@ -70,7 +75,10 @@ export async function fetchTeamMentalData(
   plot: { default: TeamDefaultChartData };
 } | null> {
   try {
-    const res = await fetch(`${SETTINGS.NEXT_API}/mental/${league}/${season}/${team}`);
+      const url = client
+    ? `/api/mental/${league}/${season}/${team}`
+    : `${SETTINGS.NEXT_API}/mental/${league}/${season}/${team}`;
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Status ${res.status}`);
     return await res.json();
   } catch (err) {

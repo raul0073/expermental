@@ -1,14 +1,16 @@
+"use client";
+
 import { Player } from "@/app/(main)/(dashboard)/utils/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  CardContent,
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import React from "react";
-import { Player365Radar } from "./Player365StatsChart";
-import { PlayerHeaderAreaChart } from "./PlayerHeaderAreaChart";
+import { ROLES_FULL_TEXT } from "@/lib/labels/labels";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import TeamLogo from "../../components/header/TeamLogo";
 import PlayerInfoAndStats from "./PlayerInfoAndStats";
 import PlayerLinkToFbref from "./PlayerLinkToFbref";
 
@@ -18,47 +20,83 @@ type PlayerHeaderProps = {
 };
 
 const PlayerHeader: React.FC<PlayerHeaderProps> = ({ player }) => {
+  const { ref, inView } = useInView({
+    threshold: 0.3, // triggers when 30% of info section visible
+    triggerOnce: false,
+  });
+
   return (
     <>
-      {/* Sticky header with avatar + name */}
-      <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-sm border-b">
-        <CardHeader className="relative w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 py-4 text-center sm:text-left">
+      {/* Sticky Header */}
+      <motion.div
+        initial={false}
+        animate={{
+          paddingTop: inView ? "1rem" : "0.5rem",
+          paddingBottom: inView ? "1rem" : "0.5rem",
+          backgroundColor: "hsl(var(--background) / 0.9)",
+          backdropFilter: "blur(12px)",
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="sticky top-0 z-20 border-b"
+      >
+        <CardHeader className="relative w-full flex flex-row items-center justify-between gap-4 sm:gap-6">
           <div className="flex items-center gap-4 sm:gap-6">
-            <Avatar className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 shadow-lg ring-2 ring-primary dark:ring-primary/50">
-              <AvatarImage src={player.profile_img as string} alt={player.name} />
-              <AvatarFallback className="text-xl sm:text-2xl font-bold">
-                {player.name[0]}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col items-start">
-              <CardDescription className="text-xl sm:text-2xl lg:text-3xl font-extrabold">
-                {player.name}
+            <motion.div
+              animate={{
+                width: inView ? "6rem" : "3rem",
+                height: inView ? "6rem" : "3rem",
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <Avatar className="h-full w-full shadow-lg ring-2 ring-primary dark:ring-primary/50">
+                <AvatarImage src={player.profile_img as string} alt={player.name} />
+                <AvatarFallback className="text-xl sm:text-2xl font-bold">
+                  {player.name[0]}
+                </AvatarFallback>
+              </Avatar>
+            </motion.div>
+
+            <motion.div
+              animate={{
+                fontSize: inView ? "1.5rem" : ".7rem",
+                lineHeight: inView ? "2rem" : "1rem",
+              }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col items-start "
+            >
+              <CardDescription className={cn("font-extrabold", inView && "text-xl")}>
+                {player.name} {!inView && (
+                  <span className="text-muted-foreground font-thin text-xs">({player.foot})</span>
+                )}
               </CardDescription>
-              <PlayerLinkToFbref player={player} />
-            </div>
+              <div>
+                {!inView && (
+                  <div className=" w-full flex justify-between items-center">
+                    <div className="info text-muted-foreground">
+                      {player.role && <p className="text-foreground/80">{ROLES_FULL_TEXT[player.role] || player.role}, {player.age} years old.</p>}
+                    </div>
+                    {player.__meta__?.team && (
+                      <div className="opacity-45 absolute right-3 top-1/2 -translate-y-1/2">
+                        <TeamLogo
+                          teamName={player.__meta__?.team}
+                          league={player.__meta__?.league}
+                          size="sm"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {!inView && <PlayerLinkToFbref player={player} />}
+            </motion.div>
           </div>
         </CardHeader>
-      </div>
+      </motion.div>
 
       {/* Player info and stats */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 mt-4">
+      <div ref={ref} className="w-full px-4 sm:px-6 lg:px-8 my-4">
         <PlayerInfoAndStats player={player} />
       </div>
-
-      {/* Area chart */}
-      <div className="w-full mt-6 px-2 sm:px-4">
-        <PlayerHeaderAreaChart player={player} className="flex-1" />
-      </div>
-
-      <Separator className="my-6 sm:my-8" />
-
-      {/* Radar chart */}
-      <CardContent className="p-0">
-          <Player365Radar
-            player={player}
-            className="flex-1"
-          />
-      </CardContent>
     </>
   );
 };

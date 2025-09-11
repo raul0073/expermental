@@ -107,3 +107,42 @@ export function statTypeInfo(raw: string): StatTypeInfo {
     description: "Unrecognized stat file; using generic label.",
   };
 }
+
+export const ROLES_FULL_TEXT: Record<string, string> = {
+  // Goalkeeper
+  "GK": "Goalkeeper",
+
+  // Defenders
+  "RB": "Right Back",
+  "LB": "Left Back",
+  "CB": "Centre Back",
+  "RWB": "Right Wing Back",
+  "LWB": "Left Wing Back",
+
+  // Midfielders
+  "DM": "Defensive Midfielder",
+  "CDM": "Central Defensive Midfielder",
+  "CM": "Central Midfielder",
+  "RCM": "Right Central Midfielder",
+  "LCM": "Left Central Midfielder",
+  "AM": "Attacking Midfielder",
+  "CAM": "Central Attacking Midfielder",
+
+  // Wide players
+  "RM": "Right Midfielder",
+  "LM": "Left Midfielder",
+  "RW": "Attacking Right Winger",
+  "LW": "Attacking Left Winger",
+  "W": "Attacking",
+
+  // Forwards
+  "CF": "Centre Forward",
+  "ST": "Striker",
+  "SS": "Second Striker",
+
+  // Hybrids / less common
+  "WB": "Wing Back",
+  "MF": "Midfielder",
+  "DF": "Defender",
+  "FW": "Forward",
+};

@@ -1,6 +1,6 @@
 'use client'
 
-import pizzaMaking from '@/../public/images/loaders/pizzaMaking.gif';
+import pizzaMaking from '@/../public/images/loaders/slices.gif';
 import { fetchPlayerPlot } from "@/app/(main)/(dashboard)/utils/fetcher";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,18 +63,16 @@ const PlayerPizzaChart: React.FC<PlayerPizzaChartProps> = ({
         </Card>
       )}
       {loading && (
-
         <Skeleton className="w-full rounded h-[500px] flex justify-center flex-col items-center" >
           <Image
             src={pizzaMaking}
-            width={250}
-            height={250}
+            width={150}
+            height={150}
             alt="pizza_chart_making"
             className=""
           />
           <span>Making Pizza Chart...</span>
         </Skeleton>
-
       )}
     </Suspense>
   );

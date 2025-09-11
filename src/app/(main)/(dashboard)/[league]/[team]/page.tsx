@@ -6,6 +6,7 @@ import PlayerMentalTable from "../../components/tables/players/PlayerTable";
 import { fetchTeamMentalData } from "../../utils/fetcher";
 import TeamRadarDashboard from "./components/charts/TeamPageChartsComp";
 import TeamHeader from "./components/header/TeamHeader";
+import { generateMetadata } from "../../utils/metadata";
 
 type PageProps = {
   params: Promise<{
@@ -18,6 +19,7 @@ async function Page({ params }: PageProps) {
   const { league, team } = await params
   const decodedLeague = decodeURIComponent(league);
   const decodedTeam = decodeURIComponent(team);
+  generateMetadata({ type: "team", league: league, team: team });
   let data;
   try {
     data = await fetchTeamMentalData(decodedLeague, decodedTeam);
