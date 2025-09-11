@@ -3,12 +3,13 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { LEAGUES_NAME } from "@/lib/Types/LABELS";
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 import {
   CartesianGrid,
   ResponsiveContainer,
@@ -22,7 +23,6 @@ import {
 import { StatsPayload } from "../../../utils/types";
 import { buildRadarData, getMentalRadarDataForTeams } from "../utils/buildTeamRadar";
 import { getTeamLogoUrl } from "../utils/getTeamLogo";
-import { useMemo } from "react";
 
 type Props = {
   teams: StatsPayload;
@@ -63,7 +63,7 @@ function TeamsRadarScatter({ teams, className }: Props) {
     { text: "Strong & balanced", x: xMax, y: yMax, anchor: "end top" },
     { text: "Clinical but limited", x: xMin, y: yMax, anchor: "start top" },
     { text: "Creative but wasteful", x: xMax, y: yMin, anchor: "end bottom" },
-    { text: "Wasteful & inconsistent", x: xMin, y: yMin, anchor: "start bottom" },
+    { text: "Wasteful & limited", x: xMin, y: yMin, anchor: "start bottom" },
   ];
 
   const getColor = (value: number) => {
@@ -76,15 +76,16 @@ function TeamsRadarScatter({ teams, className }: Props) {
       <CardHeader className="p-4 md:p-6">
         <CardTitle>Team Chances Quality</CardTitle>
         <CardDescription>
-          Chances quality: creation vs. conversion, sized by pressure and colored by aerial ability
+          Creation vs. conversion, sized by pressure and colored by aerial ability
         </CardDescription>
       </CardHeader>
-      <CardContent className="w-full h-[80vh] md:h-[700px] relative">
+      <CardContent className="w-full h-[80vh] md:h-[700px] relative p-0">
+         <div className="absolute z-0 bg-gradient-to-tr from-red-300 via-amber-200 to-green-500 opacity-30 h-[80vh] md:h-[700px] w-full"/>
         {/* Quadrant labels dynamically positioned */}
         {quadrantLabels.map((ql, idx) => (
           <div
             key={idx}
-            className="absolute font-bold text-gray-600 text-xs bg-white/30 px-1 rounded z-10"
+            className="absolute font-bold text-muted-foreground text-xs px-1 rounded z-10"
             style={{
               left: ql.anchor.includes("start") ? 5 : undefined,
               right: ql.anchor.includes("end") ? 5 : undefined,
@@ -95,10 +96,11 @@ function TeamsRadarScatter({ teams, className }: Props) {
             {ql.text}
           </div>
         ))}
-
-        <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 40, right: 10, bottom: 40, left: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
+       
+        <ResponsiveContainer width="100%" height="100%"  >
+          
+          <ScatterChart margin={{ top: 50, right: 10, bottom: 40, left: 1 }} >
+            <CartesianGrid strokeDasharray="3 3"  />
             <XAxis
               type="number"
               dataKey="x"
@@ -139,6 +141,7 @@ function TeamsRadarScatter({ teams, className }: Props) {
             />
 
             <Scatter
+           
               name="Teams"
               data={scatterData}//eslint-disable-next-line
               shape={(props: any) => {

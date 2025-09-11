@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useMemo, useState } from "react";
-import { PlayersTable, PlayerTableProps, PlayerTableSortKey, SortDirection } from "./PlayersTableComp";
 import { LeagueTabs, RoleTabs } from "../tableTabs/RoleAndLeagueTabs";
+import { PlayersTable, PlayerTableProps, PlayerTableSortKey, SortDirection } from "./PlayersTableComp";
 export default function PlayerMentalTable({ players, leaguePage, className, teamName, leagueName }: PlayerTableProps) {
   const [showAll, setShowAll] = useState(false);
   const [activeLeague, setActiveLeague] = useState<"ALL" | string>("ALL");
@@ -28,7 +28,7 @@ export default function PlayerMentalTable({ players, leaguePage, className, team
         case "name": aVal = a.name.toLowerCase(); bVal = b.name.toLowerCase(); break;
         case "team": aVal = a.team ?? a.__meta__?.team ?? ""; bVal = b.team ?? b.__meta__?.team ?? ""; break;
         case "league": aVal = a.league ?? a.__meta__?.league ?? ""; bVal = b.league ?? b.__meta__?.league ?? ""; break;
-        case "performance":  aVal = a.ranking?.performance ?? 0;bVal = b.ranking?.performance ?? 0; break;
+        case "performance":  aVal = parseFloat(String(a.ranking?.performance ?? "-Infinity")); bVal = parseFloat(String(b.ranking?.performance ?? "-Infinity")); break;
         case "mental":
         default: aVal = a.mental?.m ?? 0; bVal = b.mental?.m ?? 0; break;
       }
@@ -55,11 +55,11 @@ export default function PlayerMentalTable({ players, leaguePage, className, team
   return (
     <Card className={cn("h-fit", className)}>
       <CardHeader className="p-1 md:p-6 min-h-[120px] flex flex-col">
-       <div className="flex md:justify-between md:flex-row flex-col items-start gap-3">
+       <div className="flex flex-col items-start gap-3">
          <CardTitle>Top Mental Players</CardTitle>
-         <RoleTabs players={players} activeRole={activeRole} setActiveRole={setActiveRole} />
        </div>
         {!leaguePage && <LeagueTabs players={players} activeLeague={activeLeague} setActiveLeague={setActiveLeague} />}
+         <RoleTabs players={players} activeRole={activeRole} setActiveRole={setActiveRole} />
        
       </CardHeader>
       <CardContent className="overflow-auto space-y-4">

@@ -6,11 +6,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
+import { Suspense } from "react";
 import PageErrorComp from "../../../components/error/PageErrorComp";
 import PlayerHeader from "./components/PlayerHeader";
 import PlayerPizzaChart from "./components/PlayerPizzaPlot";
-import { Suspense } from "react";
-import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
 import PlayerStatsTable from "./components/PlayerStatsTable";
 
 type PageProps = {
@@ -33,10 +33,7 @@ async function Page({ params }: PageProps) {
     console.error(err);
     return <PageErrorComp page="player" />;
   }
-
-  const { players } = data;
-
-  if (!players) return <PageErrorComp page="player" />;
+  if (!data) return <PageErrorComp page="player" />;
   const playerData = data.players[0];
 
   return (
@@ -54,11 +51,12 @@ async function Page({ params }: PageProps) {
           <CardContent className="p-0">
             <div className="flex flex-col lg:flex-row items-center lg:items-center gap-6 lg:gap-10">
               <PlayerPizzaChart
-                plotBase64={data.plot}
+                league={decodedLeague}
+                season={2425}
+                playerName={decodedPlayer}
                 className="flex-1"
-                playerImg={playerData.profile_img}
-                playerName={playerData.name}
               />
+
             </div>
           </CardContent>
 

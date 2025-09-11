@@ -39,7 +39,7 @@ export const TEAM_RADAR_CATEGORY_LABELS: Record<string, string> = {
   "Initiative / Proactivity": "Initiative",
   "Penetration / Creativity": "Creativity",
   "Composure / Efficiency": "Composure",
-  "Discipline / Risk Management": "Risk Mgmt",
+  "Discipline / Risk Management": "Risk",
   "Team Influence / Control": "Control",
 }
 

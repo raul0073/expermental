@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import Image, { StaticImageData } from "next/image";
 import pitchBG from "@/../public/images/pitch.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image, { StaticImageData } from "next/image";
+import React from "react";
 import { FormationType } from "../../utils/types";
 
 export interface FormationPlayer {
@@ -76,7 +76,7 @@ export const Pitch: React.FC<PitchProps> = ({ formation, players }) => {
       <Image
         src={pitchBG}
         alt="Pitch Background"
-        className="absolute left-0 top-0 w-full h-full object-cover"
+        className="absolute left-0 top-0 w-full h-full object-cover md:object-fill aspect-square"
         priority
       />
 

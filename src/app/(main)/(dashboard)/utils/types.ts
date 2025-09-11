@@ -65,6 +65,7 @@ export type Player = {
   player_365_stats: Player365Stats
 };
 
+
 export type TeamStat = {
   league: string;
   season: string;
@@ -180,7 +181,12 @@ export interface BestElevenResponse {
   score: number,
   best_eleven: Player[],
   subs: Player[]
-  }[]
+  }[],
 
-  best_preforming_eleven: Player[]
+  best_performing_eleven: {
+    formation: FormationType
+  score: number,
+  best_eleven: Player[],
+    subs: Player[]
+  }
 }

@@ -66,7 +66,7 @@ export function PlayerHeaderAreaChart({ player, className }: Props) {
   }, {} as Record<string, { label: string; color: string }>)
 
   return (
-    <Card className={cn("h-full w-full border-none p-0", className)}>
+    <Card className={cn("h-full w-full border-none p-0 shadow-none", className)}>
       <CardHeader>
         <CardDescription>
           {player.name} {`compared to positional peers in Men's Big 5 Leagues.`} <br />

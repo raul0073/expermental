@@ -1,8 +1,8 @@
 import { fetchLeagueMentalData } from "@/app/(main)/(dashboard)/utils/fetcher";
-import { LeaguePageSkeleton } from "@/components/root/skeletons/LeagueSkeleton";
-import { BestXIFormation } from "../components/best_eleven/BestElevenComp";
+import { BestXIMentalFormation } from "../components/best_eleven/BestElevenComp";
 import TeamsRadarScatter from "../components/charts/dashboard/LeagueScatter";
 import TeamsScatterDashboard from "../components/charts/dashboard/TeamsScatterDashboard";
+import PageErrorComp from "../components/error/PageErrorComp";
 import PlayerMentalTable from "../components/tables/players/PlayerTable";
 import TeamMentalTable from "../components/tables/TeamMentalTable";
 import { generateMetadata } from "../utils/metadata";
@@ -23,37 +23,22 @@ export default async function LeaguePage({ params }: PageProps) {
     data = await fetchLeagueMentalData(league);
   } catch (err) {
     console.error(err);
-    return <LeaguePageSkeleton />;
+    return <PageErrorComp page="league" />;
   }
-
-  const { players, teams, best_eleven, league_meta } = data;
-
-  if (!players || !teams || !best_eleven) return <LeaguePageSkeleton />
+    
+     if (!data) return <PageErrorComp page="league" />;
+    const { players, teams, best_eleven, league_meta } = data;
 
 
   return (
     <section className={`league-page-${league} w-full px-2 md:px-4 pb-24`}>
       <LeagueHeader league_meta={league_meta} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-        <div className="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col h-full">
-          <TeamMentalTable teams={teams.mental} leaguePage className="flex-1" />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-1 flex flex-col h-full">
-           <BestXIFormation data={best_eleven} className="flex-1" />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col h-full">
-          <PlayerMentalTable players={players} leaguePage className="flex-1" />
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-6">
-        <div className="col-span-1 md:col-span-2 lg:col-span-4">
-          <TeamsScatterDashboard teams={teams.mental} className="flex-1" />
-        </div>
-          <div className="col-span-1 md:col-span-4 lg:col-span-3">
-          <TeamsRadarScatter teams={teams.stats} className="flex-1" />
-        </div>
-          <div className="col-span-1 md:col-span-4 lg:col-span-3">
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-1 xxl:grid-cols-5 gap-3">
+          <TeamMentalTable teams={teams.mental} leaguePage className="col-span-1 sm:col-span-1 md:col-span-1 xl:col-span-2 h-full flex-1 " />
+           <BestXIMentalFormation data={best_eleven} className="col-span-1 h-full flex-1" />
+          <TeamsScatterDashboard teams={teams.mental} className="col-span-1 sm:col-span-1 md:col-span-1 xl:col-span-2 h-full flex-1" />
+          <PlayerMentalTable players={players} leaguePage className="col-span-1 sm:col-span-1 md:col-span-1 xl:col-span-2 h-full flex-1" />
+          <TeamsRadarScatter teams={teams.stats} className="col-span-1 sm:col-span-1 md:col-span-1 xl:col-span-3 h-full flex-1" />
 
       </div>
     </section>

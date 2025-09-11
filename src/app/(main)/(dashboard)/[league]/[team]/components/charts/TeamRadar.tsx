@@ -5,9 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardHeader
 } from "@/components/ui/card"
 import {
   ChartContainer,
@@ -15,14 +13,14 @@ import {
   ChartLegendContent,
 } from "@/components/ui/chart"
 import { cn } from "@/lib/utils"
-import { ArrowBigDown, ArrowBigUp } from "lucide-react"
+import { ArrowBigUp } from "lucide-react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip } from "recharts"
 import { extractBestAndWorstAreasFromChartData, RadarDatum, TEAM_RADAR_CATEGORY_LABELS } from "./utils"
 
 type Props = {
   data: TeamDefaultChartData
   teamName: string;
-  className?:string
+  className?: string
 }
 
 
@@ -38,8 +36,8 @@ export function TeamDefaultRadarVsLeagueBest({ data, className, teamName }: Prop
       // Find the league best value for tooltip
       const leagueBestStat = statValues.reduce((best, s) =>
         s.league_normalized! > (best.league_normalized ?? 0) ? s : best
-      //eslint-disable-next-line
-      , {} as any)
+        //eslint-disable-next-line
+        , {} as any)
 
       return {
         category,
@@ -52,10 +50,10 @@ export function TeamDefaultRadarVsLeagueBest({ data, className, teamName }: Prop
   )
 
   const colors = ["hsl(var(--chart-1)", "var(--chart-2))"]
-const chartConfig = {
-  team: { label: "Team", color: "var(--chart-1)" },
-  leagueBest: { label: "League Best", color: "var(--chart-2)" },
-} as const
+  const chartConfig = {
+    team: { label: "Team", color: "var(--chart-1)" },
+    leagueBest: { label: "League Best", color: "var(--chart-2)" },
+  } as const
   // Custom tooltip to show league leader 
   //eslint-disable-next-line
   const renderTooltip = (props: any) => {
@@ -78,17 +76,20 @@ const chartConfig = {
     return null
   }
   const worstAndBestAreas = extractBestAndWorstAreasFromChartData(radarData)
- 
+
   return (
-      <Card className={cn("h-fit gap-2", className)}>
-      <CardHeader className="gap-0">
-        <CardTitle>{teamName}  Mental Radar</CardTitle>
+    <Card className={cn("h-fit gap-4 border-none shadow-none", className)}>
+      <CardHeader className="gap-2 py-0">
         <CardDescription>
-          Team performance vs. league top per mental category
+          {teamName} vs. league leaders <br />
+          <span className="flex gap-2 text-xs"> {worstAndBestAreas.keyArea} <ArrowBigUp className="h-4 w-4 fill-lime-600 text-lime-600/90" /> </span>
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square">
+       <CardContent className="mx-auto">
+        <ChartContainer
+          config={chartConfig}
+          className="max-w-[270px] aspect-square"
+        >
           <RadarChart
             cx="50%"
             cy="50%"
@@ -98,10 +99,10 @@ const chartConfig = {
             data={radarData}
           >
             <PolarGrid />
-            <PolarAngleAxis 
-  dataKey="category"
-  tickFormatter={(value) => TEAM_RADAR_CATEGORY_LABELS[value] ?? value}
-/>
+            <PolarAngleAxis
+              dataKey="category"
+              tickFormatter={(value) => TEAM_RADAR_CATEGORY_LABELS[value] ?? value}
+            />
             <Tooltip content={renderTooltip} cursor={false} />
             <Radar
               name="Team"
@@ -121,14 +122,6 @@ const chartConfig = {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 pt-4 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-         {worstAndBestAreas.keyArea} <ArrowBigUp className="h-4 w-4 fill-lime-600 text-lime-600/90" /> 
-        </div>
-        <div className="flex items-center gap-2 leading-none font-medium">
-         {worstAndBestAreas.worstCategory} <ArrowBigDown className="h-4 w-4 fill-destructive text-destructive/90" /> 
-        </div>
-      </CardFooter>
     </Card>
   )
 }

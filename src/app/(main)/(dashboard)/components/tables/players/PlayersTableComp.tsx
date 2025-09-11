@@ -52,9 +52,9 @@ export const PlayersTable = ({
           centered
         />
         <SortableHeaderWithPopover
-          key="preformance"
+          key="performance"
           label="Performance"
-          statKey="ranking.performance"
+          statKey="performance"
           sortKey={sortKey}
           sortDir={sortDir}//eslint-disable-next-line
           onSort={(key) => handleSort(key as any)}

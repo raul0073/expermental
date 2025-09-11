@@ -1,15 +1,13 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { ArrowBigUp } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardHeader
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -18,14 +16,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import { cn } from "@/lib/utils";
-import { StatsPayload } from "@/app/(main)/(dashboard)/utils/types";
 import { getTeamRadarStats } from "@/app/(main)/(dashboard)/components/charts/utils/buildTeamRadar";
+import { StatsPayload } from "@/app/(main)/(dashboard)/utils/types";
+import { cn } from "@/lib/utils";
 
 type Props = {
   teamStats: StatsPayload;
   teamName: string;
-  className?:string
+  className?: string
 };
 
 // optional: categories order
@@ -61,22 +59,22 @@ export function ChartRadarTeamGrid({ teamStats, teamName, className }: Props) {
       ? chartData.reduce((max, curr) => (curr.value > max.value ? curr : max)).category
       : "-";
   return (
-    <Card className={cn("h-fit gap-2", className)}>
-      <CardHeader className="gap-0">
-        <CardTitle>{teamName} Performance Radar</CardTitle>
+    <Card className={cn("h-fit gap-4 border-none shadow-none", className)}>
+      <CardHeader className="gap-2 py-0">
         <CardDescription>
-          Team mental-performance overview
+          {teamName} Performance Radar <br />
+          <span className="flex gap-2 text-xs"> Key performance areas <ArrowBigUp className="h-4 w-4 fill-lime-600 text-lime-600/90" /> {keyArea}</span>
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="pb-0">
+        <CardContent className="mx-auto">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square"
+          className="max-w-[270px] aspect-square"
         >
           <RadarChart data={chartData}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-             <PolarGrid
+            <PolarGrid
               className="fill-muted-foreground opacity-20"
               gridType="circle"
             />
@@ -91,12 +89,6 @@ export function ChartRadarTeamGrid({ teamStats, teamName, className }: Props) {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Key performance areas <TrendingUp className="h-4 w-4" /> {keyArea}
-        </div>
-      </CardFooter>
     </Card>
   );
 }

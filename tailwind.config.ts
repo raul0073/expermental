@@ -69,7 +69,11 @@ export default {
   		fontFamily: {
   			default: 'var(--font-geist-mono)',
   			body: 'var(--font-geist-sans)'
-  		}
+  		},
+		screens : {
+			xl: '1440px',
+			xxl: '1640px'
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

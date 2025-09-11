@@ -26,7 +26,7 @@ export const RoleTabs = ({
       <Button
         size="sm"
         variant={activeRole === "ALL" ? "secondary" : "outline"}
-        className="rounded-full"
+        className="rounded-full text-xs"
         onClick={() => setActiveRole("ALL")}
       >
         All
@@ -36,7 +36,7 @@ export const RoleTabs = ({
           key={role}
           size="sm"
 
-          className="rounded-full"
+          className="rounded-full text-xs"
           variant={activeRole === role ? "secondary" : "outline"}
           onClick={() => setActiveRole(role)}
         >

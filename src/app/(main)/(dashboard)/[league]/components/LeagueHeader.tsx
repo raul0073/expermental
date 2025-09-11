@@ -23,7 +23,7 @@ const LeagueHeader: React.FC<Props> = ({
         const seasonString = season.toString().slice(0,2).concat(" / ").concat(season.toString().slice(2))
     return (
        
-        <header className="flex flex-col md:flex-row md:items-start md:justify-between p-1">
+        <header className="flex flex-col lg:flex-row lg:items-start lg:justify-between p-1">
             {/* Title + Subtitle */}
              <div className="flex justify-between gap-3 items-center leading-tight tracking-tighter">
                      <div className="header flex items-center gap-2">
