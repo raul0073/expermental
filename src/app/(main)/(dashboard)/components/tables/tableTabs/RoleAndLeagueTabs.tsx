@@ -3,9 +3,9 @@
 
 import { Button } from "@/components/ui/button";
 import { getLeagueFlag } from "@/lib/flags";
+import { LEAGUES_NAME } from "@/lib/Types/LABELS";
 import { useMemo } from "react";
 import { Player } from "../../../utils/types/player";
-import { LEAGUES_NAME } from "@/lib/Types/LABELS";
 
 export const RoleTabs = ({
   players,
@@ -26,7 +26,7 @@ export const RoleTabs = ({
       <Button
         size="sm"
         variant={activeRole === "ALL" ? "secondary" : "outline"}
-        className="rounded-full text-xs"
+        className="rounded-full text-xs px-1 py-1"
         onClick={() => setActiveRole("ALL")}
       >
         All

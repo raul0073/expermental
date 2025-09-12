@@ -69,22 +69,21 @@ export const PlayersTable = ({
         const team = teamName ?? player.team ?? player.__meta__?.team;
         console.log("REAM NAME: ", leagueName, teamName)
         const breakdown = player.mental?.breakdown ?? {};
-        const firstEntry = Object.entries(breakdown)[0]; 
-        let playerBestTrait = "";
-        if (firstEntry) {
-        const [key, val] = firstEntry;
-        playerBestTrait = `${key}: ${val.toFixed(1)}`;
-        }
+        const bestTrait = Object.entries(player.mental.breakdown).reduce<string | null>((best, [trait, data]) => {
+          if (!best) return trait;
+          return data.avg > breakdown[best].avg ? trait : best;
+        }, null); 
+
         return (
           <TableRow key={`${player.fbref_id ?? idx}-${idx}`}>
             <TableCell>{idx + 1}</TableCell>
             <TableCell className="">
               <Link
-                href={`/${encodeURIComponent(leagueKey)}/${encodeURIComponent(team)}/${encodeURIComponent(player.name)}`}
+                href={`/${encodeURIComponent(leagueKey)}/${encodeURIComponent(team!)}/${encodeURIComponent(player.name)}`}
                 className="hover:underline flex-col flex items-start"
               >
                 <div>{player.name} </div>
-                <span className="hidden md:block text-[.6rem] text-muted-foreground">{playerBestTrait}</span>
+                <span className="hidden md:block text-[.6rem] text-muted-foreground">{bestTrait}</span>
               </Link>
             </TableCell>
             {leaguePage && <TableCell>{player.role}</TableCell>}

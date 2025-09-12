@@ -1,7 +1,6 @@
 "use client";
 import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
 import { useLocalStorage } from "@/hooks/use-localStorage";
-import { useTopLoader } from "nextjs-toploader";
 import { useEffect, useState } from "react";
 import { DashboardPayload, fetchAllMentalData } from "../utils/fetcher";
 import { BestXIMentalFormation } from "./best_eleven/BestElevenComp";
@@ -18,41 +17,32 @@ export default function DashboardPage() {
     null
   );
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const loader = useTopLoader();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
-    loader.start();
-
-    const loadData = async () => {
-      try {
-        const result = await fetchAllMentalData(false);
-        if (isMounted) setData(result); 
-      } catch (err) {
-        console.error(err);
-        if (isMounted) setError(true);
-      } finally {
-        if (isMounted) setLoading(false);
-        loader.done();
-      }
-    };
-
-    // cached data, show it instantly
-    if (!data) {
-      loadData();
-    } else {
-      setLoading(false); 
-      loadData();
+  async function getDashboardData(){
+    const isMounted = true;
+    setLoading(true)
+    try {
+       if (data) {
+        return
+       } else {
+         const result = await fetchAllMentalData(false);
+         if (isMounted) setData(result); 
+       }
+    } catch (error) {
+      setError(true)
+      console.error(error)
+    }finally {
+      setLoading(false)
     }
+  }
+  useEffect(() => {
+    getDashboardData()
+   
 
-    return () => {
-      isMounted = false;
-      loader.done();
-    };
   }, []);
 
-  if (loading && !data) {
+  if (loading) {
     return <DashboardSkeleton />;
   }
 

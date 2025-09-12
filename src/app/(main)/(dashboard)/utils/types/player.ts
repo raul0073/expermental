@@ -1,4 +1,5 @@
-import { LeagueNameMap } from "@/lib/Types/LABELS";
+import { StaticImageData } from "next/image";
+import { Player365Stats } from "../types";
 
 export type PlayerStatsGroup = {
   [key: string]: number | null;
@@ -27,25 +28,40 @@ export type PlayerMeta = {
   season: string;
 };
 
+export type MentalBreakdownCategory = {
+  avg: number;                       // average score for this category
+  stats: Record<string, number>;     // individual stat values for this category
+};
+
 export type PlayerMental = {
-  m_raw: number;
-  m: number;
-  breakdown: Record<string, number>;
+  m_raw: number;                                      // raw mental score before normalization
+  m: number;                                          // normalized mental score (0-100)
+  breakdown: Record<string, MentalBreakdownCategory>; // category name → breakdown
 };
 
 export type Player = {
   name: string;
-  age: number;
+  team?: string;
+  league: string;
+  league_name?: string;
+  role: string;
   position: string;
-  position_text: string;
-  role: "GK" | "CB" | "FB" | "DM" | "CM" | "AM" | "W" | "CF";
-  foot: string;
-  stats: PlayerStats;
-  ranking: PlayerRanking;
-  fbref_id: string;
-  fbref_url: string;
-  __meta__: PlayerMeta;
+  age: number | string;
   mental: PlayerMental;
-  league?: LeagueNameMap; // denormalized for easier access
-  team?: string; // denormalized for easier access
+  ranking?: {
+    performance: number;
+    breakdown?: Record<string, number>;
+  }; // eslint-disable-next-line
+  stats?: Record<string, any>;
+  __meta__?: {
+    league: string;
+    season: string;
+    team: string;
+  };
+  fbref_id?: string;
+  fbref_url?: string;
+  position_text?: string;
+  foot?: string;
+  profile_img?: StaticImageData | string;
+  player_365_stats: Player365Stats
 };

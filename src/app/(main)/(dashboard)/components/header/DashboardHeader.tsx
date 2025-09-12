@@ -9,7 +9,7 @@ type Props = {
 };
 
 const TeamsDashboardHeader: React.FC<Props> = ({
-    title = "Top 5 Leagues Metnal Ranking",
+    title = "Top 5 Leagues Mental Ranking",
     subtitle = "Visualize a team mental strength, balance and key performers across leagues.",
 }) => {
     return (

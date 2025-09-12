@@ -54,7 +54,7 @@ export default function PlayerMentalTable({ players, leaguePage, className, team
 
   return (
     <Card className={cn("h-fit", className)}>
-      <CardHeader className="p-1 md:p-6 min-h-[120px] flex flex-col">
+      <CardHeader className="min-h-[120px] flex flex-col">
        <div className="flex flex-col items-start gap-3">
          <CardTitle>Top Mental Players</CardTitle>
        </div>

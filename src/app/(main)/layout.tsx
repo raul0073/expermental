@@ -8,7 +8,7 @@ function Layout({ children }: { children: ReactNode }) {
 		<Fragment>
 			<Navbar />
 			<Toaster />
-			<main className="h-full w-full mt-16">
+			<main className="h-full w-full mt-24">
 				<ScrollArea className="h-[calc(100dvh-3rem)] w-full">
 
 					{children}

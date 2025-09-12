@@ -23,7 +23,7 @@ const TeamRadarDashboard: React.FC<Props> = ({ stats, plot, teamName, className 
           Team performance & comparison vs league best
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-0 flex flex-col md:flex-row">
+      <CardContent className="p-0 flex flex-col md:flex-row gap-1">
         <ChartRadarTeamGrid
           teamStats={stats}
           className="w-full h-1/2"
@@ -34,6 +34,7 @@ const TeamRadarDashboard: React.FC<Props> = ({ stats, plot, teamName, className 
           className="w-full h-1/2 pt-1"
           teamName={teamName}
         />
+        
       </CardContent>
     </Card>
   );

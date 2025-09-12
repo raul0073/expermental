@@ -4,9 +4,10 @@ import { BestXIMentalFormation } from "../../components/best_eleven/BestElevenCo
 import PageErrorComp from "../../components/error/PageErrorComp";
 import PlayerMentalTable from "../../components/tables/players/PlayerTable";
 import { fetchTeamMentalData } from "../../utils/fetcher";
+import { generateMetadata } from "../../utils/metadata";
+import TeamHeatmap from "./components/charts/TeamContributionByRole";
 import TeamRadarDashboard from "./components/charts/TeamPageChartsComp";
 import TeamHeader from "./components/header/TeamHeader";
-import { generateMetadata } from "../../utils/metadata";
 
 type PageProps = {
   params: Promise<{
@@ -43,6 +44,7 @@ async function Page({ params }: PageProps) {
 
           <BestXIMentalFormation data={best_eleven} className="md:col-span-1 xxl:col-span-1 flex-1 h-full" />
           <TeamRadarDashboard stats={stats.stats} plot={plot.default} className="cols-span-1 md:col-span-3 xxl:col-span-2" teamName={decodedTeam} />
+          <TeamHeatmap players={players} className="cols-span-1 md:col-span-3 xxl:col-span-5" teamName={decodedTeam} />
 
 
 
