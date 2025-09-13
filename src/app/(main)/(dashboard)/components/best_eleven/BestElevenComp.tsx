@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -38,11 +38,18 @@ export const BestXIMentalFormation: React.FC<BestXIProps> = ({ data, className }
             Best Mentality XI
         </CardTitle>
         <CardDescription>
-            {`Top players ranked by Mental Score.`} <br /> <span>Selected top 3 combinations</span>
+            {`Top players ranked by Mental Score.`}
         </CardDescription>
+    
+       
+      </CardHeader>
 
-        <Select value={selectedIndex.toString()} onValueChange={(val) => setSelectedIndex(Number(val))}>
-          <SelectTrigger className="w-72">
+      <CardContent className="w-full h-fit p-0 relative">
+        <Pitch formation={selectedFormation} players={bestEleven} />
+      </CardContent>
+      <CardFooter className="w-full mt-2 p-1">
+         <Select value={selectedIndex.toString()} onValueChange={(val) => setSelectedIndex(Number(val))}>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select Formation" />
           </SelectTrigger>
           <SelectContent>
@@ -53,11 +60,7 @@ export const BestXIMentalFormation: React.FC<BestXIProps> = ({ data, className }
             ))}
           </SelectContent>
         </Select>
-      </CardHeader>
-
-      <CardContent className="w-full h-fit p-0 relative">
-        <Pitch formation={selectedFormation} players={bestEleven} />
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

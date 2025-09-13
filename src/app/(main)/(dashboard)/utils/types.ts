@@ -101,11 +101,6 @@ export type TeamDefaultChartData = {
   metrics: TeamMetricsMapping;
 };
 
-export type PlotResponse = {
-  plot: {
-    default: TeamDefaultChartData;
-  };
-};
 
 
 export type Player365Stats = {

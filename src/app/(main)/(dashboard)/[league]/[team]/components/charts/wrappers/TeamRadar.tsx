@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils"
 import { ArrowBigUp } from "lucide-react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip } from "recharts"
-import { extractBestAndWorstAreasFromChartData, RadarDatum, TEAM_RADAR_CATEGORY_LABELS } from "./utils"
+import { extractBestAndWorstAreasFromChartData, RadarDatum, TEAM_RADAR_CATEGORY_LABELS } from "../utils"
 
 type Props = {
   data: TeamDefaultChartData
@@ -41,7 +41,7 @@ export function TeamDefaultRadarVsLeagueBest({ data, className, teamName }: Prop
 
       return {
         category,
-        team: Math.round(teamAvg),
+        team: Math.round(teamAvg).toFixed(1),
         leagueBest: leagueBestStat?.league_normalized ?? 100,
         leagueBestTeam: leagueBestStat?.league_best_team,
         leagueBestValue: leagueBestStat?.league_best_value,
@@ -85,7 +85,7 @@ export function TeamDefaultRadarVsLeagueBest({ data, className, teamName }: Prop
           <span className="flex gap-2 text-xs"> {worstAndBestAreas.keyArea} <ArrowBigUp className="h-4 w-4 fill-lime-600 text-lime-600/90" /> </span>
         </CardDescription>
       </CardHeader>
-       <CardContent className="mx-auto">
+      <CardContent className="mx-auto">
         <ChartContainer
           config={chartConfig}
           className="max-w-[270px] aspect-square"

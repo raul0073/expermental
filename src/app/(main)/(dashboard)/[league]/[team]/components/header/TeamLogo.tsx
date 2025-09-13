@@ -30,7 +30,7 @@ const TeamLogo: React.FC<TeamLogoProps> = ({ teamName, league, size = "md" }) =>
 
   return (
     <div
-      className="relative inline-flex items-center justify-center rounded-full overflow-hidden"
+      className="relative inline-flex items-center justify-center  overflow-hidden p-0.5"
       style={{ width: dimension, height: dimension }}
     >
       {logoPath ? (

@@ -3,11 +3,11 @@ import {
   BestElevenResponse,
   PlayerResponse,
   StatsPayload,
-  TeamDefaultChartData,
-  TeamMentalSummary,
+  TeamMentalSummary
 } from "./types";
 import { LeagueMetaData } from "./types/league";
 import { Player } from "./types/player";
+import { TeamPlottingResponse } from "./types/team";
 
 // -------- MAIN PAGE --------
 export interface DashboardPayload {
@@ -72,7 +72,7 @@ export async function fetchTeamMentalData(
   players: Player[];
   stats: { mental: TeamMentalSummary[]; stats: StatsPayload };
   best_eleven: BestElevenResponse;
-  plot: { default: TeamDefaultChartData };
+  plot: TeamPlottingResponse
 } | null> {
   try {
       const url = client

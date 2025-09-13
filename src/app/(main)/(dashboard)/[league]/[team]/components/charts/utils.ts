@@ -1,12 +1,10 @@
 
-// Radar chart data type
 export type RadarDatum = {
-  category: string
-  team: number
-  leagueBest: number
-  rawTeam?: number
-  leagueBestTeam?: string
-  leagueBestValue?: number
+  category: string;
+  team: string; // instead of number
+  leagueBest: number;
+  leagueBestTeam: string;
+  leagueBestValue: number;
 }
 export function extractBestAndWorstAreasFromChartData(data: RadarDatum[]) {
   if (data.length === 0) return { keyArea: "-", worstCategory: "-" };
