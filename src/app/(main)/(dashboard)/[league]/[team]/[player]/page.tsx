@@ -9,10 +9,11 @@ import { Separator } from "@/components/ui/separator";
 import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
 import { Suspense } from "react";
 import PageErrorComp from "../../../components/error/PageErrorComp";
+import { generateMetadata } from "../../../utils/metadata";
 import PlayerHeader from "./components/PlayerHeader";
+import { PlayerHeaderAreaChart } from "./components/PlayerHeaderAreaChart";
 import PlayerPizzaChart from "./components/PlayerPizzaPlot";
 import PlayerStatsTable from "./components/PlayerStatsTable";
-import { generateMetadata } from "../../../utils/metadata";
 
 type PageProps = {
   params: Promise<{
@@ -43,15 +44,14 @@ async function Page({ params }: PageProps) {
       <section
         className={`player-page-${decodedPlayer} w-full px-2 sm:px-4 lg:px-6 pb-16 sm:pb-20 lg:pb-24`}
       >
-        <Card className="w-full max-w-5xl mx-auto">
+        <Card className="w-full max-w-5xl mx-auto space-y-6">
           {/* Header */}
           <PlayerHeader player={playerData} league={decodedLeague} />
-
           <Separator />
+          <PlayerHeaderAreaChart player={playerData} className="max-w-[100vw] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg" />
 
           {/* Chart Section */}
           <CardContent className="p-0">
-            <div className="flex flex-col lg:flex-row items-center lg:items-center gap-6 lg:gap-10">
               <PlayerPizzaChart
                 league={decodedLeague}
                 season={2425}
@@ -59,7 +59,6 @@ async function Page({ params }: PageProps) {
                 className="flex-1"
               />
 
-            </div>
           </CardContent>
 
           {/* Stats Section */}

@@ -30,15 +30,15 @@ export type StatsOption =
 export const STAT_OPTION_LABELS: Record<StatsOption, string> = {
 	standard: "Overall",
 	keeper: "Goalkeeping",
-	shooting: "Shooting & Finishing",
+	shooting: "Shooting",
   goal_shot_creation: "Creating",
-  passing_types: "Types of Passing",
+  passing_types: "Ad. Passing",
 	passing: "Passing",
-	goal: "Creative Playmaking",
+	goal: "Playmaking",
 	defense: "Defensive Actions",
 	possession: "Possession",
-	playing_time: "Playing Time",
-	misc: "Other Stats",
+	playing_time: "Time",
+	misc: "Other",
 };
 
 // Optional: ordered list for rendering buttons/dropdowns

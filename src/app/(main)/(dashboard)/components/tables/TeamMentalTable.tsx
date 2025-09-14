@@ -19,13 +19,13 @@ import {
 } from "@/components/ui/table";
 import { LEAGUES_NAME } from "@/lib/Types/LABELS";
 import { getLeagueFlag } from "@/lib/flags";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import TeamLogo from "../../[league]/[team]/components/header/TeamLogo";
 import { SortKey, TeamMentalSummary } from "../../utils/types";
 import SortableHeaderWithPopover from "./SortableHeaderWithPopover";
 import { TEAM_TABLE_HEADERS } from "./constants/headers";
-import { cn } from "@/lib/utils";
-import TeamLogo from "../../[league]/[team]/components/header/TeamLogo";
 
 type Props = {
   teams: TeamMentalSummary[];
@@ -36,6 +36,7 @@ type Props = {
 
 
 export default function TeamMentalTable({ teams, leaguePage, className }: Props) {
+
   const [sortKey, setSortKey] = useState<SortKey>("avg_m");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [activeLeague, setActiveLeague] = useState<"ALL" | string>("ALL");
@@ -72,7 +73,7 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
 
   return (
     <Card className={cn("h-fit", className)}>
-      <CardHeader className="p-2 md:p-6 min-h-[100px]">
+      <CardHeader className="p-2 md:p-6">
         <CardTitle>Top Mental Teams</CardTitle>
         {/* Tabs */}
         <div className="flex gap-2 mt-2 flex-wrap">
@@ -95,10 +96,10 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
           ))}
         </div>
       </CardHeader>
-      <CardContent className="overflow-auto space-y-4">
-        <Table className="rounded text-xs md:text-sm">
+      <CardContent className="overflow-auto space-y-4 p-0">
+        <Table className="p-0">
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-xs">
               <TableHead>#</TableHead>
               <TableHead>Team</TableHead>
               <TableHead className={cn("hidden md:flex md:items-center", leaguePage && "hidden md:hidden")}>League</TableHead> 
@@ -116,7 +117,7 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="text-xs">
             {visibleTeams.map((t, i) => (
               <TableRow
                 key={`${t.league}-${t.team}`}
@@ -158,7 +159,8 @@ export default function TeamMentalTable({ teams, leaguePage, className }: Props)
                   {Math.round(t.spread_m)}
                 </TableCell>
                 <TableCell className="text-muted-foreground ">
-                  {t.leader?.player} ({t.leader?.m})
+                 <span className="hidden md:inline-block"> {t.leader?.player} ({t.leader?.m})</span>
+                 <span className="md:hidden"> {`${t.leader?.player.split(" ")[1]}`} ({t.leader?.m})</span>
                 </TableCell>
               </TableRow>
             ))}

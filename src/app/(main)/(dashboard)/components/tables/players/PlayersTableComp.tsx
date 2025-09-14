@@ -112,7 +112,7 @@ export const PlayersTable = ({
                 </TableCell>
               </>
             )}
-            <TableCell><MentalCircle value={player.mental?.m ?? 0} /></TableCell>
+            <TableCell><MentalCircle value={player.mental?.m !== undefined ? Number(player.mental.m.toFixed(0)) : 0} /></TableCell>
             <TableCell className="text-right font-bold">{player.ranking?.performance ?? 0}</TableCell>
           </TableRow>
         );

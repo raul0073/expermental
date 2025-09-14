@@ -91,7 +91,10 @@ export type TeamMetricsMappingItem = {
 };
 
 export type TeamMetricsMapping = Record<string, TeamMetricsMappingItem[]>;
-
+export type DashboardTeamsResponse = {
+    mental: TeamMentalSummary[];
+    stats: StatsPayload;
+  };
 export type TeamDefaultChartData = {
   league: string;
   season: number;

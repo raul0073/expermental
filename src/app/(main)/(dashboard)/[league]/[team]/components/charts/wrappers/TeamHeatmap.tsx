@@ -2,6 +2,7 @@
 import { HeatmapPlottingResponse } from "@/app/(main)/(dashboard)/utils/types/team";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type TeamHeatmapProps = {
   data: HeatmapPlottingResponse
@@ -17,7 +18,8 @@ export function HeatmapComp({ data, teamName, className }: TeamHeatmapProps) {
       {teamName} <span className="text-primary">Chances</span> by Zone
     </CardDescription>
     <CardContent className="heatmaps w-full p-1">
-       <img
+       <Image
+       unoptimized
           src={`data:image/png;base64,${data.attacking}`}
           alt={`${teamName}_heatmap`}
           width={350}
@@ -31,7 +33,8 @@ export function HeatmapComp({ data, teamName, className }: TeamHeatmapProps) {
       {teamName} <span className="text-primary">Recoveries</span> by Zone
     </CardDescription>
     <CardContent className="heatmaps  w-full p-1">
-     <img
+     <Image
+     unoptimized
           src={`data:image/png;base64,${data.defending}`}
           alt={`${teamName}_heatmap`}
           width={350}

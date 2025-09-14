@@ -75,8 +75,8 @@ export function PlayerHeaderAreaChart({ player, className }: Props) {
         </CardDescription>
 
       </CardHeader>
-      <CardContent className="full p-0 h-fit">
-        <ChartContainer config={chartConfig} className="aspect-video">
+      <CardContent className="full p-0.5 h-fit">
+        <ChartContainer config={chartConfig} className="">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={chartData}
@@ -93,6 +93,7 @@ export function PlayerHeaderAreaChart({ player, className }: Props) {
                 fontSize={10}
               />
               <YAxis
+              width={50}
                 domain={[0, 100]}
                 tickFormatter={(value) => `${value}%`}
                 tickLine={false}

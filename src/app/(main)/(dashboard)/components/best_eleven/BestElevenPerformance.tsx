@@ -1,17 +1,18 @@
 "use client";
 
+import ScatterSkeleton from "@/components/root/skeletons/ScatterSkeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { BestElevenResponse } from "../../utils/types";
 import { FormationPlayer, Pitch } from "./Pitch";
 
 interface BestXIProps {
-  data: BestElevenResponse;
+  data: BestElevenResponse | undefined;
   className?: string;
 }
 
 export const BestXIPerformanceFormation: React.FC<BestXIProps> = ({ data, className }) => {
-    console.log("BestXIPerformanceFormation", data.best_performing_eleven)
+   if(!data) return <ScatterSkeleton />
   if (!data?.best_performing_eleven?.best_eleven) return <div>No formations available</div>;
 
   const selectedFormation = data.best_performing_eleven.formation;

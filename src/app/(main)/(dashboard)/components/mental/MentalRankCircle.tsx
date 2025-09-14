@@ -1,7 +1,6 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 

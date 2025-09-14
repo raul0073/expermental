@@ -32,17 +32,22 @@ function PlayerStatsTable({playerData, className}: {playerData: Player, classNam
             <div className="px-2">
             <h3 className="font-semibold mb-2">Stats</h3>
             <Tabs defaultValue={statCategories[0]} className="w-full">
-              <TabsList className="flex flex-col md:flex-row items-start gap-2 mb-2 h-fit">
-                {statCategories.map((cat) => (
-                  <TabsTrigger
-                    key={cat}
-                    value={cat}
-                    className="text-left w-fit"
-                  >
-                    {STAT_OPTION_LABELS[cat.toLowerCase() as keyof typeof STAT_OPTION_LABELS]}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+        <TabsList
+  className={cn(
+    "w-full grid grid-cols-3 md:grid-cols-4 h-fit gap-1 bg-transparent",
+
+  )}
+>
+  {statCategories.map((cat) => (
+    <TabsTrigger
+      key={cat}
+      value={cat}
+      className="rounded-full border text-muted-foreground text-xs data-[state=active]:bg-primary"
+    >
+      {STAT_OPTION_LABELS[cat.toLowerCase() as keyof typeof STAT_OPTION_LABELS]}
+    </TabsTrigger>
+  ))}
+</TabsList>
 
               {statCategories.map((cat) => (
                 <TabsContent key={cat} value={cat}>

@@ -21,15 +21,17 @@ import {
 } from "recharts";
 import { TeamMentalSummary } from "../../../utils/types";
 import { getTeamLogoUrl } from "../utils/getTeamLogo";
+import ScatterSkeleton from "@/components/root/skeletons/ScatterSkeleton";
 
 type Props = {
-  teams: TeamMentalSummary[];
+  teams: TeamMentalSummary[] | undefined;
   className?: string;
 };
 
 
 
 function TeamsScatterDashboard({ teams, className }: Props) {
+  if(!teams) return <ScatterSkeleton />
   const scatterData = teams.map((team) => ({
     x: team.avg_m,
     y: team.spread_m,

@@ -1,5 +1,6 @@
 "use client";
 
+import ScatterSkeleton from "@/components/root/skeletons/ScatterSkeleton";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -14,12 +15,13 @@ import { BestElevenResponse } from "../../utils/types";
 import { FormationPlayer, Pitch } from "./Pitch";
 
 interface BestXIProps {
-  data: BestElevenResponse;
+  data: BestElevenResponse | undefined;
   className?: string;
 }
 
 export const BestXIMentalFormation: React.FC<BestXIProps> = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+   if(!data) return <ScatterSkeleton />
 
   if (!data?.top_formations?.length) return <div>No formations available</div>;
 
