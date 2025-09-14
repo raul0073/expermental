@@ -1,9 +1,8 @@
 "use client";
 import DashboardSkeleton from "@/components/root/skeletons/PageSkeleton";
+import { useTopLoader } from 'nextjs-toploader';
 import { useEffect, useState } from "react";
-import { fetchAllMentalDataStreamed } from "../utils/fetcher";
-import { BestElevenResponse, DashboardTeamsResponse } from "../utils/types";
-import { Player } from "../utils/types/player";
+import { DashboardPayload, fetchAllMentalData } from "../utils/fetcher";
 import { BestXIMentalFormation } from "./best_eleven/BestElevenComp";
 import { BestXIPerformanceFormation } from "./best_eleven/BestElevenPerformance";
 import TeamsScatterDashboard from "./charts/dashboard/TeamsScatterDashboard";
@@ -11,39 +10,46 @@ import PageErrorComp from "./error/PageErrorComp";
 import TeamsDashboardHeader from "./header/DashboardHeader";
 import TeamMentalTable from "./tables/TeamMentalTable";
 import PlayerMentalTable from "./tables/players/PlayerTable";
-
-
 export default function DashboardPage() {
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [teams, setTeams] = useState<DashboardTeamsResponse>();
-  const [bestXI, setBestXI] = useState<BestElevenResponse>();
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<DashboardPayload | null>();
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const loader = useTopLoader()
+  async function getDashboardData(){
+    const isMounted = true;
+    loader.start()
+    setLoading(true)
+    try {
+       if (data) {
+        return
+       } else {
+         const result = await fetchAllMentalData();
+         if (isMounted) setData(result); 
+       }
+    } catch (error) {
+      console.error(error)
+      setError(true)
+    }finally {
+      setLoading(false)
+      loader.done()
+    }
+  }
+  useEffect(() => {
+    getDashboardData()
+   
 
+  }, []);
 
- useEffect(() => {
-  fetchAllMentalDataStreamed((player) => {
-    setPlayers((prev) => {
-      const id = player.fbref_id ?? player.name;
-      // check if already exists
-      if (prev.some((p) => (p.fbref_id ?? p.name) === id)) {
-        return prev; // skip duplicate
-      }
-      return [...prev, player];
-    });
-  }).then((data) => {
-    setTeams(data.teams);
-    setBestXI(data.best_eleven);
-    setLoading(false);
-  }).catch(err => {
-    console.error(err);
-     setError(true);
-    setLoading(false);
-  })
-}, []);
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
 
-  if (loading && players.length === 0) return <DashboardSkeleton />;
-  if (error ) return <PageErrorComp page="dashboard" />;
+  if (error || !data) {
+    return <PageErrorComp page="dashboard" />;
+  }
+
+  const { players, teams, best_eleven } = data;
+
   return (
     <section className="w-full px-4 pb-24">
       <TeamsDashboardHeader />
@@ -61,7 +67,7 @@ export default function DashboardPage() {
         />
 
         <BestXIMentalFormation
-          data={bestXI}
+          data={best_eleven}
           className="col-span-1 xl:col-span-2 h-full flex-1"
         />
         <PlayerMentalTable
@@ -69,7 +75,7 @@ export default function DashboardPage() {
           className="col-span-1 sm:col-span-1 md:col-span-1 xl:col-span-3 h-full flex-1 "
         />
         <BestXIPerformanceFormation
-          data={bestXI}
+          data={best_eleven}
           className="col-span-1 xl:col-span-2 h-full flex-1"
         />
       </div>

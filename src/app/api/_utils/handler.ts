@@ -9,8 +9,7 @@ export async function apiHandler(req: NextRequest, upstreamPath: string): Promis
   // Forward method/headers/body
   const init: RequestInit = {
     method: req.method,
-    headers: req.headers,         // pass-through
-    cache: "no-store",
+    headers: req.headers,        
   };
   if (req.method !== "GET" && req.method !== "HEAD") {// eslint-disable-next-line
     init.body = req.body as any;  // stream body through

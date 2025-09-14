@@ -21,58 +21,17 @@ export interface DashboardPayload {
  * Fetch /mental/all as a streaming response and progressively parse players.
  * Ensures players are only pushed once.
  */
-export async function fetchAllMentalDataStreamed(
-  onPlayerChunk?: (player: Player) => void
-): Promise<{ teams: DashboardTeamsResponse; best_eleven: BestElevenResponse }> {
-  const res = await fetch("/api/mental/all");
-  if (!res.ok) throw new Error(`Status ${res.status}`);
-
-  const reader = res.body!.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  // eslint-disable-next-line 
-  let teams: any = null;
-  // eslint-disable-next-line 
-  let best_eleven: any = null;
-
-  // Track players already sent to avoid duplicates
-  const seenPlayers = new Set<string>();
-
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-
-    const lines = buffer.split("\n");
-    buffer = lines.pop()!; // keep incomplete line in buffer
-
-    for (const line of lines) {
-      if (!line.trim()) continue;
-
-      try {
-        const obj = JSON.parse(line);
-
-        if (obj.players) {
-          // not used in NDJSON, skip
-        } else if (obj.teams) {
-          teams = obj.teams;
-        } else if (obj.best_eleven) {
-          best_eleven = obj.best_eleven;
-        } else {
-          // assume this is a single player object
-          const id = obj.fbref_id ?? obj.name; // use a unique key
-          if (!seenPlayers.has(id)) {
-            seenPlayers.add(id);
-            onPlayerChunk?.(obj);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to parse line:", line, err);
-      }
-    }
+export async function fetchAllMentalData(
+): Promise<DashboardPayload | null> {
+  const url = `/api/mental/all`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.error("[fetchAllMentalData] Failed:", err);
+    return null; // fail gracefully
   }
-
-  return { teams, best_eleven };
 }
 
 export type LeaguePagePayload = {
