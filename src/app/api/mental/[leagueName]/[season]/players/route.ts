@@ -7,13 +7,10 @@ export async function GET(
   req: NextRequest,
   ctx: { params: Promise<{ leagueName: string; season: string }> }
 ) {
-  console.log("[DEBUG] Incoming request:", req.url);
 
   const { leagueName, season } = await ctx.params;
-  console.log("[DEBUG] Extracted params:", { leagueName, season });
 
   const { searchParams } = new URL(req.url);
-  console.log("[DEBUG] Raw searchParams:", searchParams.toString());
 
   const query = new URLSearchParams();
 
@@ -37,7 +34,6 @@ export async function GET(
     queryString ? `?${queryString}` : ""
   }`;
 
-  console.log("[DEBUG] Proxying request to backend:", backendUrl);
 
   return apiHandler(req, backendUrl);
 }

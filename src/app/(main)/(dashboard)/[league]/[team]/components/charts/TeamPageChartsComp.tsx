@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/utils";
 import React from "react";
 import { ChartRadarTeamGrid } from "../team/TeamPerformanceRadar";
+import { HeatmapComp } from "./wrappers/TeamHeatmap";
 import { TeamDefaultRadarVsLeagueBest } from "./wrappers/TeamRadar";
-import {HeatmapComp} from "./wrappers/TeamHeatmap";
 
 type Props = {
   stats: StatsPayload; // team radar stats
@@ -17,7 +17,6 @@ type Props = {
 };
 
 const TeamRadarDashboard: React.FC<Props> = ({ stats, plot, teamName, className }) => {
-  console.log(plot)
   return (
     <Card className={cn("h-full", className)}>
       <CardHeader>

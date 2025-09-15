@@ -111,3 +111,21 @@ export function mapFormationPlayers(
     return { ...p, x: pos.x, y: pos.y };
   });
 }
+export interface PlayerPosition {
+  x: number;
+  y: number;
+}
+export const FORMATION_POSITIONS: Record<FormationType, PlayerPosition[]> = {
+  "433": [
+    { x: 50, y: 90 }, { x: 65, y: 78 }, { x: 35, y: 78 }, { x: 15, y: 70 }, { x: 85, y: 70 },
+    { x: 30, y: 41 }, { x: 70, y: 41 }, { x: 50, y: 60 }, { x: 20, y: 25 }, { x: 80, y: 25 }, { x: 50, y: 12 },
+  ],
+  "4231": [
+    { x: 50, y: 90 }, { x: 65, y: 80 }, { x: 35, y: 80 }, { x: 15, y: 70 }, { x: 85, y: 70 },
+    { x: 30, y: 50 }, { x: 70, y: 50 }, { x: 50, y: 35 }, { x: 20, y: 25 }, { x: 80, y: 25 }, { x: 50, y: 12 },
+  ],
+  "532": [
+    { x: 50, y: 90 }, { x: 25, y: 80 }, { x: 50, y: 80 }, { x: 75, y: 80 }, { x: 10, y: 60 },
+    { x: 90, y: 60 }, { x: 35, y: 43 }, { x: 65, y: 43 }, { x: 50, y: 30 }, { x: 35, y: 12 }, { x: 65, y: 17 },
+  ],
+};

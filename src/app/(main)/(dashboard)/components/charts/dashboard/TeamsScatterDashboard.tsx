@@ -1,5 +1,6 @@
 "use client";
 
+import ScatterSkeleton from "@/components/root/skeletons/ScatterSkeleton";
 import {
   Card,
   CardContent,
@@ -21,7 +22,6 @@ import {
 } from "recharts";
 import { TeamMentalSummary } from "../../../utils/types";
 import { getTeamLogoUrl } from "../utils/getTeamLogo";
-import ScatterSkeleton from "@/components/root/skeletons/ScatterSkeleton";
 
 type Props = {
   teams: TeamMentalSummary[] | undefined;
@@ -31,7 +31,7 @@ type Props = {
 
 
 function TeamsScatterDashboard({ teams, className }: Props) {
-  if(!teams) return <ScatterSkeleton />
+  if (!teams) return <ScatterSkeleton />
   const scatterData = teams.map((team) => ({
     x: team.avg_m,
     y: team.spread_m,
@@ -50,13 +50,13 @@ function TeamsScatterDashboard({ teams, className }: Props) {
     const hue = (value / 100) * 120; // red -> green
     return `hsl(${hue}, 70%, 50%)`;
   };
-const xValues = scatterData.map((d) => d.x);
-const yValues = scatterData.map((d) => d.y);
+  const xValues = scatterData.map((d) => d.x);
+  const yValues = scatterData.map((d) => d.y);
 
-const xMin = Math.floor(Math.min(...xValues) - 1);
-const xMax = Math.ceil(Math.max(...xValues) + 1);
-const yMin = Math.floor(Math.min(...yValues) - 1);
-const yMax = Math.ceil(Math.max(...yValues) + 1);
+  const xMin = Math.floor(Math.min(...xValues) - 1);
+  const xMax = Math.ceil(Math.max(...xValues) + 1);
+  const yMin = Math.floor(Math.min(...yValues) - 1);
+  const yMax = Math.ceil(Math.max(...yValues) + 1);
   return (
     <Card className={cn("h-fit gap-2", className)}>
       <CardHeader className="p-4 md:p-6">
@@ -64,7 +64,7 @@ const yMax = Math.ceil(Math.max(...yValues) + 1);
         <CardDescription>Avg vs. spread of mental scores per team</CardDescription>
       </CardHeader>
       <CardContent className="w-full h-[80vh] md:h-[700px] relative p-0">
-         <div className="absolute z-0 bg-gradient-to-tr from-red-300 via-amber-200 to-green-500 opacity-30 h-[80vh] md:h-[700px] w-full"/>
+        <div className="absolute z-0 bg-gradient-to-tr from-red-300 via-amber-200 to-green-500 opacity-30 h-[80vh] md:h-[700px] w-full" />
         {/* Quadrant labels */}
         <div className="absolute top-2 right-2 font-bold text-muted-foreground z-10 text-xs">
           Strong but inconsistent
@@ -83,22 +83,22 @@ const yMax = Math.ceil(Math.max(...yValues) + 1);
           <ScatterChart margin={{ top: 40, right: 10, bottom: 40, left: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
-  type="number"
-  dataKey="x"
-  name="Avg Mental"
-  domain={[xMin, xMax]}
-  label={{ value: "Avg Mental Score", position: "bottom", offset: 5 }}
-/>
-<YAxis
-  type="number"
-  dataKey="y"
-  name="Mental Spread"
-  domain={[yMin, yMax]}
-  label={{ value: "Mental Spread", angle: -90, position: "insideLeft" }}
-/>
+              type="number"
+              dataKey="x"
+              name="Avg Mental"
+              domain={[xMin, xMax]}
+              label={{ value: "Avg Mental Score", position: "bottom", offset: 5 }}
+            />
+            <YAxis
+              type="number"
+              dataKey="y"
+              name="Mental Spread"
+              domain={[yMin, yMax]}
+              label={{ value: "Mental Spread", angle: -90, position: "insideLeft" }}
+            />
             <ZAxis type="number" dataKey="z" range={[50, 300]} name="Squad Size" />
             <Tooltip
-            
+
               cursor={{ strokeDasharray: "3 3" }}
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {

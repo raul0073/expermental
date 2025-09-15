@@ -15,7 +15,6 @@ export async function GET(
     query ? `?${query}` : ""
   }`;
 
-  console.log("[DEBUG] Proxying request to backend:", backendUrl);
 
   return apiHandler(req, backendUrl);
 }

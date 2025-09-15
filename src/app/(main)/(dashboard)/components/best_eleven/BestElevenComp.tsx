@@ -21,7 +21,7 @@ interface BestXIProps {
 
 export const BestXIMentalFormation: React.FC<BestXIProps> = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-   if(!data) return <ScatterSkeleton />
+  if (!data) return <ScatterSkeleton />
 
   if (!data?.top_formations?.length) return <div>No formations available</div>;
 
@@ -35,29 +35,29 @@ export const BestXIMentalFormation: React.FC<BestXIProps> = ({ data, className }
 
   return (
     <Card className={cn("w-full h-full", className)}>
-        <CardHeader>
+      <CardHeader>
         <CardTitle>
-            Best Mentality XI
+          Best Mentality XI
         </CardTitle>
         <CardDescription>
-            {`Top players ranked by Mental Score.`}
+          {`Top players ranked by Mental Score.`}
         </CardDescription>
-    
-       
+
+
       </CardHeader>
 
       <CardContent className="w-full h-fit p-0 relative">
         <Pitch formation={selectedFormation} players={bestEleven} />
       </CardContent>
-      <CardFooter className="w-full mt-2 p-1">
-         <Select value={selectedIndex.toString()} onValueChange={(val) => setSelectedIndex(Number(val))}>
-          <SelectTrigger className="w-full">
+      <CardFooter className="w-full mt-2 p-1 ">
+        <Select value={selectedIndex.toString()} onValueChange={(val) => setSelectedIndex(Number(val))}>
+          <SelectTrigger className="w-full bg-muted rounded">
             <SelectValue placeholder="Select Formation" />
           </SelectTrigger>
           <SelectContent>
             {data.top_formations.map((d, i) => (
               <SelectItem key={i} value={i.toString()}>
-                {d.formation} | Score: {d.score.toFixed(1)}
+                <span className="text-sm text-muted-foreground">{d.formation} -</span> {d.score.toFixed(1)} <span className="text-xs">M rating</span>
               </SelectItem>
             ))}
           </SelectContent>

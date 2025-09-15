@@ -67,7 +67,6 @@ export const PlayersTable = ({
       {players.map((player, idx) => {
         const leagueKey = leagueName ?? player.league ?? player.__meta__?.league
         const team = teamName ?? player.team ?? player.__meta__?.team;
-        console.log("REAM NAME: ", leagueName, teamName)
         const breakdown = player.mental?.breakdown ?? {};
         const bestTrait = Object.entries(player.mental.breakdown).reduce<string | null>((best, [trait, data]) => {
           if (!best) return trait;

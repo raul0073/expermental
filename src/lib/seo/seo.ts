@@ -16,16 +16,16 @@ export const seoMeta: Metadata = {
     "team stats",
     "football visualizations",
   ],
-  authors: [{ name: "Your Name or Brand", url: "https://yourdomain.com" }],
+  authors: [{ name: "Raz Massami", url: "https://football-experimental.vercel.app/" }],
   openGraph: {
     title: "Top 5 European Leagues Stats 24-25",
     description:
       "Dive into EPL, La Liga, Serie A, Bundesliga, and Ligue 1 24-25 stats with interactive team and player visualizations.",
-    url: "https://yourdomain.com",
+    url: "https://football-experimental.vercel.app/",
     siteName: "European Football Stats Visualizer",
     images: [
       {
-        url: "https://yourdomain.com/og-image.png",
+        url: "https://football-experimental.vercel.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Top 5 European Leagues Stats 24-25",

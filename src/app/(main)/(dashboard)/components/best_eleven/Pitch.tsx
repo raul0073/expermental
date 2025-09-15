@@ -1,10 +1,10 @@
 "use client";
 
 import pitchBG from "@/../public/images/pitch.png";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image, { StaticImageData } from "next/image";
-import React from "react";
+import { StaticImageData } from "next/image";
+import React, { useEffect, useRef } from "react";
 import { FormationType } from "../../utils/types";
+import { FORMATION_POSITIONS } from "./utils";
 
 export interface FormationPlayer {
   name: string;
@@ -13,101 +13,114 @@ export interface FormationPlayer {
   profile_img: string | StaticImageData;
 }
 
+
+
+
 interface PitchProps {
   formation: FormationType;
   players: FormationPlayer[];
 }
 
-interface PlayerPosition {
-  x: number;
-  y: number;
-}
-
-const FORMATION_POSITIONS: Record<FormationType, PlayerPosition[]> = {
-  "433": [
-    { x: 50, y: 95 }, // GK
-    { x: 65, y: 75 }, // RCB
-    { x: 35, y: 75 }, // LCB
-    { x: 15, y: 70 }, // LB
-    { x: 85, y: 70 }, // RB
-    { x: 30, y: 45 }, // CM
-    { x: 70, y: 45 }, // CM
-    { x: 50, y: 60 }, // CM
-    { x: 20, y: 25 }, // LW
-    { x: 80, y: 25 }, // RW
-    { x: 50, y: 15 }, // ST
-  ],
-  "4231": [
-    { x: 50, y: 95 }, // GK
-    { x: 65, y: 80 }, // RCB
-    { x: 35, y: 80 }, // LCB
-    { x: 15, y: 70 }, // LB
-    { x: 85, y: 70 }, // RB
-    { x: 30, y: 50 }, // CM
-    { x: 70, y: 50 }, // CM
-    { x: 50, y: 35 }, // AM
-    { x: 20, y: 25 }, // LW
-    { x: 80, y: 25 }, // RW
-    { x: 50, y: 15 }, // ST
-  ],
-  "532": [
-    { x: 50, y: 95 }, // GK
-    { x: 25, y: 80 }, // LCB
-    { x: 50, y: 80 }, // CB
-    { x: 75, y: 80 }, // RCB
-    { x: 10, y: 60 }, // LWB
-    { x: 90, y: 60 }, // RWB
-    { x: 35, y: 45 }, // LCM
-    { x: 65, y: 45 }, // RCM
-    { x: 50, y: 30 }, // CM
-    { x: 35, y: 15 }, // ST
-    { x: 65, y: 15 }, // ST
-  ],
-};
-
-
 
 export const Pitch: React.FC<PitchProps> = ({ formation, players }) => {
-  const positions = FORMATION_POSITIONS[formation];
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const pitchImg = document.createElement("img")
+    pitchImg.src = pitchBG.src;
+
+    // Preload all player images
+    const playerImages: HTMLImageElement[] = players.map((p) => {
+      const playerImg = document.createElement("img")
+      playerImg.src = p.profile_img as string;
+      return playerImg;
+    });
+
+    const resizeCanvas = () => {
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+      draw();
+    };
+
+    const draw = () => {
+      if (!ctx) return;
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Draw pitch background
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(pitchImg, 0, 0, width, height);
+
+      const positions = FORMATION_POSITIONS[formation] || [];
+
+      // Draw players
+      players.forEach((player, idx) => {
+        const pos = positions[idx] || { x: 50, y: 50 };
+        const x = (pos.x / 100) * canvas.width;
+        const y = (pos.y / 100) * canvas.height;
+        const radius = 20;
+
+        const img = playerImages[idx];
+
+        // Draw shadow first (outside clipped circle)
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(0,0,0,0.65)";
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 4;
+        ctx.fillStyle = "white"; // fill is needed to actually render the shadow
+        ctx.fill();
+        ctx.restore();
+
+        // Draw avatar clipped inside circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+
+        if (img.complete) {
+          ctx.drawImage(img, x - radius, y - radius, radius * 2, radius * 2);
+        } else {
+          img.onload = () => ctx.drawImage(img, x - radius, y - radius, radius * 2, radius * 2);
+        }
+        ctx.restore();
+
+        // Draw name below
+        const parts = String(player.name || "").trim().split(/\s+/).filter(Boolean);
+        const firstName = parts[0] || "";
+        const rest = parts.length > 1 ? parts.slice(1).join(" ") : "";
+        const displayName = parts.length > 1 ? `${firstName[0]}. ${rest}` : firstName;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(displayName, x, y + radius + 4);
+      });
+    };
+
+    pitchImg.onload = () => resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    return () => window.removeEventListener("resize", resizeCanvas);
+  }, [formation, players]);
 
   return (
-    <div className="relative w-full h-full min-h-[670px]">
-      {/* Pitch background */}
-      <Image
-        src={pitchBG}
-        alt="Pitch Background"
-        className="absolute left-0 top-0 w-full h-full object-cover md:object-fill aspect-square"
-        priority
-      />
-
-      {/* Players */}
-      {players.map((player, idx) => {
-        const pos = positions[idx] || { x: 50, y: 50 };
-
-        return (
-          <div
-            key={idx}
-            className="absolute flex flex-col items-center justify-center cursor-pointer"
-            style={{
-              left: `${pos.x}%`,
-              top: `${pos.y}%`,
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={String(player.profile_img)} alt={player.name} />
-              <AvatarFallback>
-                {player.name.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-
-            <div className="mt-1 text-xs text-white/80 text-center">
-              {player.name} 
-          
-            </div>
-          </div>
-        );
-      })}
+    <div ref={containerRef} className="relative w-full h-[670px]">
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
 };
+
+export default Pitch;
